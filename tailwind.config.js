@@ -20,6 +20,11 @@ export default {
                     dark: '#1a1a1a',
                     gray: '#f5f5f5'
                 },
+                sumba: {
+                    green: '#16a34a',
+                    gold: '#d97706',
+                    brown: '#78350f'
+                },
                 primary: {
                     50: '#faf5ff',
                     100: '#f3e8ff',

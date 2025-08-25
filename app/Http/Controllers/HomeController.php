@@ -58,6 +58,14 @@ class HomeController extends Controller
             ->latest()
             ->take(5) // ambil max 5
             ->get();
-        return view('home', compact('hero', 'latestArticles', 'trending', 'categories',  'breakingNews'));
+
+        // Cek apakah slug karir
+        if ($slug === 'karir') {
+            // Tampilkan view khusus karir
+            return view('karir.index', compact('categories'));
+        } else {
+
+            return view('home', compact('hero', 'latestArticles', 'trending', 'categories',  'breakingNews'));
+        }
     }
 }
