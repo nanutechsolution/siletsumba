@@ -13,11 +13,16 @@ class ArticleFactory extends Factory
 {
     public function definition(): array
     {
+        $title = $this->faker->sentence(mt_rand(4, 8));
+
         return [
-            'title' => $this->faker->sentence(mt_rand(3, 8)),
-            'slug' => $this->faker->unique()->slug(),
+            'title' => $title,
+            'slug' => Str::slug($title) . '-' . Str::random(5), // biar unik
             'content' => $this->faker->paragraphs(mt_rand(5, 10), true),
-            'category_id' => Category::factory(),
+            'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory(),
+            'views' => $this->faker->numberBetween(10, 5000),
+            // 'image' => "https://picsum.photos/seed/" . Str::random(8) . "/800/400", // random image placeholder
+            'author' => $this->faker->name(),
         ];
     }
 }

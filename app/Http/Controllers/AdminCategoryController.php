@@ -21,10 +21,11 @@ class AdminCategoryController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|unique:categories']);
+        $request->validate(['name' => 'required|unique:categories',   'color' => 'nullable|string',]);
         Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'color' => $request->color ?? '#000000',
         ]);
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan!');
@@ -37,10 +38,11 @@ class AdminCategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $request->validate(['name' => 'required|unique:categories,name,' . $category->id]);
+        $request->validate(['name' => 'required|unique:categories,name,' . $category->id, 'color' => 'nullable|string',]);
         $category->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'color' => $request->color ?? '#000000',
         ]);
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diperbarui!');

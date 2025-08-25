@@ -26,6 +26,7 @@
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b dark:border-gray-600 text-left">Nama</th>
+                                <th class="py-2 px-4 border-b dark:border-gray-600 text-center">Warna</th>
                                 <th class="py-2 px-4 border-b dark:border-gray-600 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -33,7 +34,16 @@
                             @forelse ($categories as $category)
                                 <tr>
                                     <td class="py-2 px-4 border-b dark:border-gray-700">{{ $category->name }}</td>
+                                    <td class="py-2 px-4 border-b dark:border-gray-700">
+                                        <span class="px-3 py-1 rounded"
+                                            style="background-color: {{ $category->color }}; color: #fff;">
+                                            {{ $category->name }}
+                                        </span>
+                                    </td>
+
                                     <td class="py-2 px-4 border-b dark:border-gray-700 text-center">
+
+
                                         <a href="{{ route('admin.categories.edit', $category) }}"
                                             class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200">Edit</a>
                                         <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
@@ -45,6 +55,7 @@
                                                 class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200 ml-4">Hapus</button>
                                         </form>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>

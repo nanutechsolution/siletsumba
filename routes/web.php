@@ -11,10 +11,17 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/tag/{slug}', [ArticleController::class, 'show'])->name('tags.show');
+Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
+Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategorys'])
+    ->name('articles.category');
+
+
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
+Route::get('/articles/category/{slug}', [App\Http\Controllers\HomeController::class, 'getArticlesByCategory']);
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

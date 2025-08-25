@@ -21,9 +21,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'silet@sumba.com',
         ]);
-
-        Category::factory(5)->create(); // Membuat 5 kategori dummy
-
-        Article::factory(20)->create(); // Membuat 20 artikel dummy
+        $this->call([
+            CategorySeeder::class,
+            ArticleSeeder::class,
+            TagSeeder::class,
+            TagSeeder::class,
+            ArticleTagSeeder::class,
+        ]);
     }
 }

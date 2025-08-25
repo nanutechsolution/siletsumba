@@ -1,101 +1,146 @@
-<nav x-data="{ open: false }" class="fixed w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+<div class="container mx-auto px-4">
+    <!-- Header -->
+    <div class="flex items-center justify-between py-3 border-b flex-wrap">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 bg-red-600 rounded flex items-center justify-center flex-shrink-0">
+                <span class="text-white font-bold text-lg">S</span>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-red-600">SILET SUMBA</h1>
+                <p class="text-xs text-gray-600">Berita & Inspirasi dari Sumba</p>
+            </div>
+        </div>
+
+        <!-- Info Cuaca & Waktu (desktop only) -->
+        <div class="hidden md:flex items-center space-x-4">
             <div class="flex items-center">
-                <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <a href="{{ route('admin.dashboard') }}"> <x-application-logo
-                            class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                    {{-- <img src="{{ asset('storage/logo-silet.png') }}" class="h-8" alt="Silet Sumba Logo" /> --}}
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Silet
-                        Sumba</span>
-                </a>
+                <!-- Matahari -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-2" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m8.66-9H21M3 12H2m15.36-6.36l-.7.7M6.34 17.66l-.7.7m12.02 0l.7.7M6.34 6.34l.7.7M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span class="text-sm">28°C, Waingapu</span>
             </div>
+            <div class="flex items-center">
+                <!-- Jam -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 mr-2" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6l4 2m6-4a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-sm" id="current-time"></span>
+            </div>
+        </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-8">
-                <a href="{{ route('home') }}"
-                    class="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition duration-150 ease-in-out">
-                    Beranda
+        <div class="flex items-center space-x-2 mt-3 md:mt-0">
+            <!-- Jika user belum login -->
+            @guest
+                <a href="{{ route('login') }}"
+                    class="bg-red-600 text-white px-3 md:px-4 py-2 rounded hover:bg-red-700 text-sm md:text-base flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.121 17.804A9 9 0 1118.879 6.196 9 9 0 015.121 17.804zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Login
                 </a>
-                <a href="#"
-                    class="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition duration-150 ease-in-out">
-                    Kategori
+            @endguest
+
+            <!-- Jika user sudah login -->
+            @auth
+                <a href="{{ route('profile.edit') }}"
+                    class="bg-gray-800 text-white px-3 md:px-4 py-2 rounded hover:bg-gray-700 text-sm md:text-base flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5.121 17.804A9 9 0 1118.879 6.196 9 9 0 015.121 17.804zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {{ auth()->user()->name }}
                 </a>
-            </div>
+            @endauth
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <button id="theme-toggle-frontend" type="button"
-                    class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-2">
-                    <svg id="theme-toggle-dark-icon-frontend" class="hidden w-5 h-5" fill="currentColor"
-                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M17.293 13.593a.999.999 0 01-1.414 0L10 8.414l-5.879 5.179a.999.999 0 11-1.414-1.414l6.586-5.879a.999.999 0 011.414 0l6.586 5.879a.999.999 0 010 1.414z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                    </svg>
-                    <svg id="theme-toggle-light-icon-frontend" class="hidden w-5 h-5" fill="currentColor"
-                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm3.707 3.707a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm15 0a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-3.707-3.707a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3.707-3.707a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414zM4.3 12.7a1 1 0 01-1.4 1.4L2.2 14.1a1 1 0 011.4-1.4l.7.7zM14.1 2.2a1 1 0 011.4 1.4l-.7.7a1 1 0 01-1.4-1.4l.7-.7z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                    </svg>
-                </button>
-            </div>
 
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            <!-- Burger menu -->
+            <button id="menu-toggle" class="md:hidden text-gray-600 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
         </div>
     </div>
 
-    <div x-show="open" x-cloak class="sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <a href="{{ route('home') }}"
-                class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">Beranda</a>
-            <a href="#"
-                class="block px-4 py-2 text-base font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">Kategori</a>
-        </div>
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4 py-2">
-                <button id="theme-toggle-mobile-frontend" type="button"
-                    class="flex w-full ps-3 pe-4 py-2 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:text-gray-800 dark:focus:text-gray-200 focus:bg-gray-100 dark:focus:bg-gray-900 transition duration-150 ease-in-out">
-                    <svg id="theme-toggle-dark-icon-mobile-frontend" class="hidden w-5 h-5 me-2" fill="currentColor"
-                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M17.293 13.593a.999.999 0 01-1.414 0L10 8.414l-5.879 5.179a.999.999 0 11-1.414-1.414l6.586-5.879a.999.999 0 011.414 0l6.586 5.879a.999.999 0 010 1.414z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
+    <!-- Navbar -->
+    <nav class="py-3">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <!-- Links -->
+            <div id="menu"
+                class="hidden flex-col space-y-2 md:flex md:flex-row md:space-x-6 md:space-y-0 w-full md:w-auto mt-3 md:mt-0">
+                <a href="/" class="font-medium text-red-600 hover:text-red-700 flex items-center">
+                    <!-- Home icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 9.75L12 3l9 6.75V21H3V9.75z" />
                     </svg>
-                    <svg id="theme-toggle-light-icon-mobile-frontend" class="hidden w-5 h-5 me-2" fill="currentColor"
-                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm3.707 3.707a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm15 0a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-3.707-3.707a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-3.707-3.707a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414zM4.3 12.7a1 1 0 01-1.4 1.4L2.2 14.1a1 1 0 011.4-1.4l.7.7zM14.1 2.2a1 1 0 011.4 1.4l-.7.7a1 1 0 01-1.4-1.4l.7-.7z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                    </svg>
-                    <span class="ms-2">Ganti Mode Tema</span>
-                </button>
+                    Home
+                </a>
+                @php
+                    $currentSlug = request()->route('slug'); // ambil slug dari route
+                @endphp
+                <div class="flex space-x-4">
+                    @foreach ($categories as $category)
+                        <a href="{{ route('articles.category', $category->slug) }}"
+                            class="font-medium px-2 py-1 rounded
+                  {{ $currentSlug === $category->slug ? 'bg-red-600 text-white' : 'text-gray-700 hover:text-red-600' }}">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
+                </div>
+
+
             </div>
+            @if (!request()->routeIs('articles.search'))
+                <div class="hidden md:flex items-center mt-3 md:mt-0">
+                    <form action="{{ route('articles.search') }}" method="GET" class="relative w-full md:w-64">
+                        <input type="text" name="q" placeholder="Cari berita..."
+                            class="border border-gray-300 rounded-full px-4 py-2 w-full focus:outline-none focus:border-red-600"
+                            value="{{ request('q') }}">
+                        <button type="submit" class="absolute right-0 top-0 mt-2 mr-3 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            @endif
+
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
+
+<!-- Script Mobile Menu -->
 <script>
-    // ... Kode JS untuk dark mode (gunakan ID yang berbeda) ...
-    var themeToggleDarkIconFrontend = document.getElementById('theme-toggle-dark-icon-frontend');
-    var themeToggleLightIconFrontend = document.getElementById('theme-toggle-light-icon-frontend');
-    var themeToggleBtnFrontend = document.getElementById('theme-toggle-frontend');
+    const menuToggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("menu");
 
-    // ... (dan untuk mobile) ...
-    var themeToggleDarkIconMobileFrontend = document.getElementById('theme-toggle-dark-icon-mobile-frontend');
-    var themeToggleLightIconMobileFrontend = document.getElementById('theme-toggle-light-icon-mobile-frontend');
-    var themeToggleBtnMobileFrontend = document.getElementById('theme-toggle-mobile-frontend');
+    menuToggle.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+    });
 
-    // Initial check and logic (replicate from Admin Panel but with new IDs)
-    // ... (kode dari langkah 12) ...
+    // Waktu realtime
+    function updateTime() {
+        const now = new Date();
+        document.getElementById("current-time").textContent =
+            now.toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
 </script>
