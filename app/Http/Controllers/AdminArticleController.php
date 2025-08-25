@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\ArticleImage;
 use App\Models\Category;
+use App\Models\Tag;
 use Gemini;
 use Gemini\Enums\ModelVariation;
 use Gemini\GeminiHelper;
@@ -19,14 +20,19 @@ class AdminArticleController extends Controller
 
     public function index()
     {
-        $articles = Article::with('category')->latest()->paginate(10);
-        return view('admin.articles.index', compact('articles'));
+        $categories = Category::all();
+        $articles = Article::with('category', 'tags')
+            ->latest()
+            ->paginate(10);
+
+        return view('welcome', compact('articles', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('admin.articles.create', compact('categories'));
+        $tags = Tag::all(); // <- ini wajib dikirim
+        return view('admin.articles.create', compact('categories', 'tags'));
     }
 
     public function store(Request $request)
@@ -56,7 +62,8 @@ class AdminArticleController extends Controller
     {
         $categories = Category::all();
         $article->load('images');
-        return view('admin.articles.edit', compact('article', 'categories'));
+        $tags = Tag::all();
+        return view('admin.articles.edit', compact('article', 'categories', 'tags'));
     }
     public function update(Request $request, Article $article)
     {

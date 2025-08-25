@@ -5,17 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\SearchLog;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
     public function index()
     {
+        $tags = Tag::all();
         $articles = Article::with('category')
             ->latest()
             ->paginate(10); // Mengambil 10 artikel per halaman
 
-        return view('welcome', compact('articles'));
+        return view('welcome', compact('articles', 'tags'));
     }
 
 
@@ -46,7 +49,13 @@ class ArticleController extends Controller
         $query = $request->input('q');
         $categorySlug = $request->input('category');
         $sort = $request->input('sort');
-
+        if ($query) {
+            // Simpan log pencarian
+            \App\Models\SearchLog::updateOrCreate(
+                ['query' => $query],
+                ['count' => DB::raw('count + 1')]
+            );
+        }
         $queryBuilder = Article::query()->with(['category', 'tags']);
 
         if ($query) {
