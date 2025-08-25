@@ -17,14 +17,14 @@ class HomeController extends Controller
         }
         $articles = $query->latest()->take(5)->get();
         $hero = $articles->first();
-        $latestArticles = $articles->skip(1);
+        $latestArticles = Article::latest()->offset(1)->paginate(10);
 
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
         // breaking news
         $breakingNews = Article::where('is_breaking', true)
             ->latest()
-            ->take(5) // ambil max 5
+            ->take(5)
             ->get();
         return view('home', compact('hero', 'latestArticles', 'trending', 'categories',  'breakingNews'));
     }
@@ -51,7 +51,7 @@ class HomeController extends Controller
         $articlesCollection = $articles->getCollection();
 
         $hero = $articlesCollection->first();
-        $latestArticles = $articlesCollection->skip(1);
+        $latestArticles = Article::latest()->offset(1)->paginate(10);
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
         $breakingNews = Article::where('is_breaking', true)

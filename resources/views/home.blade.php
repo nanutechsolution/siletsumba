@@ -10,15 +10,18 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                     <div class="relative">
                         <a href="{{ route('articles.show', $hero->slug) }}">
-                            <img src="https://images.unsplash.com/photo-1572947650440-e8a97ef053b2?w=1200&h=600&fit=crop"
-                                alt="{{ $hero->title }}" class="w-full h-96 object-cover">
+                            <img src="{{ $hero->image_url ?? 'https://via.placeholder.com/300x200' }}"
+                                alt="{{ $hero->title }}"
+                                class="w-full h-[50vh] object-cover group-hover:opacity-90 transition duration-300">
+
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
                                 <span class=" text-white px-3 py-1 rounded text-sm font-medium"
                                     style="background-color: {{ $hero->category->color }}">
                                     {{ $hero->category->name ?? 'Umum' }}
                                 </span>
-                                <h2 class="text-3xl font-bold text-white mt-2"> {{ $hero->title }}</h2>
-                                <p class="text-gray-200 mt-2"> {{ Str::limit($hero->content, 150) }}</p>
+                                <h2 class="text-3xl font-bold text-white mt-2"> {!! $hero->title !!}</h2>
+                                <p class="text-white mt-2">{{ Str::limit(strip_tags($hero->content), 150) }}</p>
+
                                 <div class="flex items-center text-gray-300 text-sm mt-3">
                                     <span><i class="fas fa-user mr-1"></i>{{ $hero->author ?? 'Redaksi' }}</span>
                                     <span class="mx-3">•</span>
@@ -73,6 +76,9 @@
                         </div>
                     </a>
                 @endforeach
+            </div>
+            <div class="mt-6">
+                {{ $latestArticles->links() }}
             </div>
 
         </div>

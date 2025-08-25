@@ -6,9 +6,6 @@ use App\Models\Article;
 use App\Models\ArticleImage;
 use App\Models\Category;
 use App\Models\Tag;
-use Gemini;
-use Gemini\Enums\ModelVariation;
-use Gemini\GeminiHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -17,7 +14,6 @@ use Illuminate\Support\Facades\Storage;
 class AdminArticleController extends Controller
 {
 
-
     public function index()
     {
         $categories = Category::all();
@@ -25,7 +21,7 @@ class AdminArticleController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('welcome', compact('articles', 'categories'));
+        return view('admin.articles.index', compact('articles', 'categories'));
     }
 
     public function create()
@@ -42,11 +38,13 @@ class AdminArticleController extends Controller
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Tambahkan .* untuk validasi array
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+            'is_breaking' => 'nullable|boolean'
         ]);
-
         $validated['slug'] = Str::slug($validated['title']);
-
         $article = Article::create($validated);
+
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {

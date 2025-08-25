@@ -16,18 +16,25 @@
                      <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube text-xl"></i></a>
                  </div>
              </div>
-
+             @php
+                 $currentSlug = request()->route('slug'); // ambil slug dari route
+             @endphp
              <!-- Categories -->
              <div>
                  <h4 class="font-bold text-lg mb-4">KATEGORI</h4>
                  <ul class="space-y-2">
-                     <li><a href="#" class="text-gray-300 hover:text-tribun-red">Nasional</a></li>
-                     <li><a href="#" class="text-gray-300 hover:text-tribun-red">Internasional</a></li>
-                     <li><a href="#" class="text-gray-300 hover:text-tribun-red">Ekonomi</a></li>
-                     <li><a href="#" class="text-gray-300 hover:text-tribun-red">Olahraga</a></li>
-                     <li><a href="#" class="text-gray-300 hover:text-tribun-red">Teknologi</a></li>
+                     @foreach ($categories as $category)
+                         <li>
+                             <a href="{{ route('articles.category', $category->slug) }}"
+                                 class="text-gray-300 hover:text-tribun-red 
+                                     {{ request()->routeIs('articles.category') && request()->route('slug') == $category->slug ? 'text-tribun-red font-bold' : '' }}">
+                                 {{ $category->name }}
+                             </a>
+                         </li>
+                     @endforeach
                  </ul>
              </div>
+
 
              <!-- Links -->
              <div>

@@ -19,7 +19,8 @@
                 </div>
 
                 {{-- Form --}}
-                <form action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
+                <form id="article-form" action="{{ route('admin.articles.store') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
 
                     {{-- Judul --}}
@@ -52,7 +53,15 @@
                         @enderror
                     </div>
 
-
+                    <select name="tags[]" multiple
+                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}"
+                                {{ in_array($tag->id, old('tags', isset($article) ? $article->tags->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
+                                {{ $tag->name }}
+                            </option>
+                        @endforeach
+                    </select>
                     {{-- Gambar --}}
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
@@ -123,7 +132,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Konten asli
             const quill = new Quill('#editor', {
-                plaehoder: '',
+                placeholder: 'Tulis konten disini...',
                 theme: 'snow',
                 modules: {
                     toolbar: [
@@ -314,7 +323,6 @@ Batasan & Aturan Penulisan:
 - Gunakan tag HTML berikut: <h1> untuk judul, <p> untuk paragraf, <b> untuk kata kunci.
 - Gaya bahasa harus lugas, faktual, dan objektif.
 - Panjang artikel minimal 400 kata.
-
 Pastikan tanggapan Anda hanya berupa HTML yang telah diformat, tanpa kalimat pengantar atau penutup.`;
                 const prompt =
                     `${instructions}\nTeks asli untuk diolah: ${original} dengan judull: ${title}\nTanggapan Anda harus berisi HTML yang telah diformat, dan tidak ada teks lain.`;
@@ -344,10 +352,13 @@ Pastikan tanggapan Anda hanya berupa HTML yang telah diformat, tanpa kalimat pen
             });
 
 
-            // Sync sebelum submit
-            document.querySelector('form').addEventListener('submit', () => {
+            const form = document.getElementById('article-form');
+            form.addEventListener('submit', function(e) {
+                console.log('Form submit ter-trigger!');
+                document.getElementById('content').value = quill.root.innerHTML;
                 document.getElementById('ai-content').value = aiQuill.root.innerHTML;
             });
+
         });
     </script>
 </x-app-layout>

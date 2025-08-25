@@ -1,333 +1,281 @@
 @extends('welcome')
 @section('content')
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-sumba-green to-sumba-gold text-white py-16">
+    <section class="bg-gradient-to-r from-tribun-red to-red-600 text-white py-16">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Karir di Sumba</h1>
-            <p class="text-xl mb-8">Temukan Peluang Kerja dan Mengembangkan Karir di Pulau Sumba</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                    <i class="fas fa-briefcase text-3xl mb-2"></i>
-                    <h3 class="font-bold">250+</h3>
-                    <p>Lowongan Tersedia</p>
-                </div>
-                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                    <i class="fas fa-building text-3xl mb-2"></i>
-                    <h3 class="font-bold">50+</h3>
-                    <p>Perusahaan Mitra</p>
-                </div>
-                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                    <i class="fas fa-graduation-cap text-3xl mb-2"></i>
-                    <h3 class="font-bold">15+</h3>
-                    <p>Program Pelatihan</p>
-                </div>
-            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Bergabung dengan Tim TRIBUN NEWS</h1>
+            <p class="text-xl max-w-3xl mx-auto mb-8">
+                Jadilah bagian dari media berita terdepan dan berkontribusi dalam menyebarkan informasi yang akurat dan
+                bermanfaat
+            </p>
+            <a href="#lowongan"
+                class="bg-white text-tribun-red px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                Lihat Lowongan
+            </a>
         </div>
     </section>
-
     <!-- Main Content -->
-    <!-- Search and Filter -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Cari Lowongan</label>
-                <div class="relative">
-                    <input type="text" placeholder="Posisi, perusahaan, atau kata kunci..."
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-tribun-red">
-                    <i class="fas fa-search absolute right-3 top-3.5 text-gray-400"></i>
-                </div>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
-                <select
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-tribun-red">
-                    <option value="">Semua Lokasi</option>
-                    <option value="waikabubak">Waikabubak</option>
-                    <option value="waingapu">Waingapu</option>
-                    <option value="west-sumba">Sumba Barat</option>
-                    <option value="east-sumba">Sumba Timur</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                <select
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-tribun-red">
-                    <option value="">Semua Kategori</option>
-                    <option value="hospitality">Hospitality & Pariwisata</option>
-                    <option value="education">Pendidikan</option>
-                    <option value="healthcare">Kesehatan</option>
-                    <option value="government">Pemerintahan</option>
-                    <option value="agriculture">Pertanian</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <!-- Job Categories -->
-    <div class="mb-12">
-        <h2 class="text-3xl font-bold text-center mb-8">Kategori Pekerjaan</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="category-badge bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg cursor-pointer">
-                <i class="fas fa-hotel text-3xl text-sumba-green mb-3"></i>
-                <h3 class="font-semibold">Hospitality</h3>
-                <p class="text-sm text-gray-600">125 lowongan</p>
-            </div>
-            <div class="category-badge bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg cursor-pointer">
-                <i class="fas fa-graduation-cap text-3xl text-tribun-blue mb-3"></i>
-                <h3 class="font-semibold">Pendidikan</h3>
-                <p class="text-sm text-gray-600">68 lowongan</p>
-            </div>
-            <div class="category-badge bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg cursor-pointer">
-                <i class="fas fa-heartbeat text-3xl text-tribun-red mb-3"></i>
-                <h3 class="font-semibold">Kesehatan</h3>
-                <p class="text-sm text-gray-600">42 lowongan</p>
-            </div>
-            <div class極端な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。 <div
-                class="category-badge bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg cursor-pointer">
-                <i class="fas fa-tractor text-3xl text-sumba-brown mb-3"></i>
-                <h3 class="font-semibold">Pertanian</h3>
-                <p class="text-sm text-gray-600">35 lowongan</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Featured Jobs -->
-    <div class="mb-12">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold">Lowongan Terbaru</h2>
-            <a href="#" class="text-tribun-red hover:underline">Lihat Semua →</a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Job 1 -->
-            <div class="job-card bg-white p-6 rounded-lg shadow-md">
-                <div class="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 class="text-xl font-bold text-tribun-red mb-2">Manajer Hotel</h3>
-                        <p class="text-gray-600">PT. Sumba Hospitality Group</p>
+    <main class="container mx-auto px-4 py-12">
+        <!-- Why Join Us -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-12">Mengapa Bergabung dengan Kami?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-white text-2xl"></i>
                     </div>
-                    <img src="https://placehold.co/60x60" alt="Logo PT. Sumba Hospitality Group"
-                        class="w-12 h-12 object-cover rounded">
+                    <h3 class="text-xl font-semibold mb-3">Tim Profesional</h3>
+                    <p class="text-gray-600">Bekerja dengan para profesional media yang berpengalaman dan berdedikasi
+                        tinggi</p>
                 </div>
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="bg-sumba-green/10 text-sumba-green px-3 py-1 rounded-full text-sm">Waikabubak</span>
-                    <span class="bg-tribun-blue/10 text-tribun-blue px-3 py-1 rounded-full text-sm">Full-time</span>
-                    <span class="bg-tribun-red/10 text-tribun-red px-3 py-1 rounded-full text-sm">Rp 8-12
-                        Juta</span>
+
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Pengembangan Karir</h3>
+                    <p class="text-gray-600">Kesempatan pengembangan karir dan pelatihan yang berkelanjutan</p>
                 </div>
-                <p class="text-gray-600 mb-4">Dicari Manajer Hotel berpengalaman untuk mengelola resort mewah di
-                    Sumba Barat. Pengalaman min. 3 tahun di industri hospitality.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Dibuka 2 hari lalu</span>
-                    <button class="bg-tribun-red text-white px-4 py-2 rounded hover:bg-red-700">
+
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-newspaper text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Dampak Nyata</h3>
+                    <p class="text-gray-600">Berkontribusi pada masyarakat melalui penyebaran informasi yang bermanfaat
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Openings -->
+        <section id="lowongan" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">Lowongan Pekerjaan</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Job 1 -->
+                <div class="job-card bg-white rounded-lg shadow-md p-6">
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full mb-4 inline-block">
+                        Full-time
+                    </span>
+                    <h3 class="text-xl font-bold text-tribun-red mb-2">Jurnalis</h3>
+                    <p class="text-gray-600 mb-4">Mencari berita, melakukan investigasi, dan menulis artikel berkualitas
+                        untuk berbagai platform media</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">S1 Jurnalistik</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">2+ Tahun
+                            Pengalaman</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Jakarta</span>
+                    </div>
+                    <button class="bg-tribun-red text-white px-6 py-2 rounded hover:bg-red-700 transition-colors">
                         Lamar Sekarang
                     </button>
                 </div>
-            </div>
 
-            <!-- Job 2 -->
-            <div class="job-card bg-white p-6 rounded-lg shadow-md">
-                <div class="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 class="text-xl font-bold text-tribun-red mb-2">Guru SD</h3>
-                        <p class="text-gray-600">SD Negeri 1 Waingapu</p>
+                <!-- Job 2 -->
+                <div class="job-card bg-white rounded-lg shadow-md p-6">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full mb-4 inline-block">
+                        Part-time
+                    </span>
+                    <h3 class="text-xl font-bold text-tribun-red mb-2">Kontributor Wilayah</h3>
+                    <p class="text-gray-600 mb-4">Meliput berita lokal di daerah, memberikan laporan langsung dari
+                        lapangan</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">SMA/D3</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">1+ Tahun
+                            Pengalaman</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Sumba</span>
                     </div>
-                    <img src="https://placehold.co/60x60" alt="Logo SD Negeri 1 Waingapu"
-                        class="w-12 h-12 object-cover rounded">
+                    <button class="bg-tribun-red text-white px-6 py-2 rounded hover:bg-red-700 transition-colors">
+                        Lamar Sekarang
+                    </button>
                 </div>
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="bg-sumba-green/10 text-sumba-green px-3 py-1 rounded-full text-sm">Waingapu</span>
-                    <极端な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。 <span
-                        class="bg-tribun-blue/10 text-tribun-blue px-3 py-1 rounded-full text-sm">Full-time</span>
-                        <span class="bg-tribun-red/10 text-tribun-red px-3 py-1 rounded-full text-sm">Rp 4-6
-                            Juta</span>
-                </div>
-                <p class="text-gray-600 mb-4">Dibutuhkan Guru SD untuk mata pelajaran umum. Pria/Wanita, S1
-                    Pendidikan, bersedia ditempatkan di daerah pedesaan Sumba Timur.</p>
-                <div class="flex justify-between items-center">
-                    <span极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。 <span class="text-sm text-gray-500">Dibuka 1 minggu
-                        lalu</span>
-                        <button class="bg-tribun-red text-white px-4 py-2 rounded hover:bg-red-700">
+
+                <!-- Job 3 -->
+                <div class="job-card bg-white rounded-lg shadow-md p-6">
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full mb-4 inline-block">
+                        Full-time
+                    </span>
+                    <h极 class="text-xl font-bold text-tribun-red mb-2">Editor Berita</h3>
+                        <p class="text-gray-600 mb-4">Mengedit dan menyunting naskah berita, memastikan kualitas dan
+                            akurasi konten</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">S1
+                                Bahasa/Sastra</span>
+                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">3+ Tahun
+                                Pengalaman</span>
+                            <span class="bg-gray-100 text-gray-700 px-3py-1 rounded-full text-sm">Jakarta</span>
+                        </div>
+                        <button class="bg-tribun-red text-white px-6 py-2 rounded hover:bg-red-700 transition-colors">
                             Lamar Sekarang
                         </button>
                 </div>
-            </div>
 
-            <!-- Job 3 -->
-            <div class="job-card bg-white p-6 rounded-lg shadow-md">
-                <div class="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 class="text-xl font-bold text-tribun-red mb-2">Perawat</h3>
-                        <p class="text-gray-600">Rumah Sakit Umum Sumba</p>
-                    </div>
-                    <img src="https://placehold.co/60x60" alt="Logo Rumah Sakit Umum Sumba"
-                        class="w-12极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。
-                        <img src="https://placehold.co/60x60"
-                        alt="Logo Rumah Sakit Umum Sumba" class="w-12 h-12 object-cover rounded">
-                </div>
-                <div class="flex flex-wrap gap极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。
-                    <div class="flex
-                    flex-wrap gap-2 mb-4">
-                    <span class="bg-sumba-green/10 text-sumba-green px-3 py-1 rounded-full text-sm">West
-                        Sumba</span>
+                <!-- Job 4 -->
+                <div class="job-card bg-white rounded-lg shadow-md p-6">
                     <span
-                        class="bg-tribun-blue/极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。
-                        <span class="bg-tribun-blue/10
-                        text-tribun-blue px极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。 <span
-                        class="bg-tribun-blue/10 text-tribun-blue px-3 py-1 rounded-full text-sm">Shift</span>
-                    <span class="bg-tribun-red/10 text-tribun-red px-3 py-1 rounded-full text-sm">Rp 5-7
-                        Juta</span>
-                </div>
-                <p class="text-gray-600 mb-4">Dibutuhkan Perawat profesional untuk rumah sakit umum. D3/S1
-                    Keperawatan, memiliki STR aktif, pengalaman min. 2 tahun.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Dibuka 3 hari lalu</span>
-                    <button class="bg-tribun-red text-white px-4 py-2 rounded hover:bg-red-700">
+                        class="bg-purple-100 text-purple-800 text-xs font-medium px-3 py-1 rounded-full mb-4 inline-block">
+                        Internship
+                    </span>
+                    <h3 class="text-xl font-bold text-tribun-red mb-2">Magang Jurnalistik</h3>
+                    <p class="text-gray-600 mb-4">Program magang untuk mahasiswa yang ingin belajar praktik jurnalistik
+                        langsung</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Mahasiswa Aktif</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Min. Semester 5</span>
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Jakarta/Sumba</span>
+                    </div>
+                    <button class="bg-tribun-red text-white px-6 py-2 rounded hover:bg-red-700 transition-colors">
                         Lamar Sekarang
                     </button>
                 </div>
             </div>
 
-            <!-- Job 4 -->
-            <div class="job-card bg-white p-6 rounded-lg shadow-md">
-                <div class="flex items-start justify-between mb-4">
+            <!-- Karir di Sumba Section -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-8 mt-12">
+                <h3 class="text-2xl font-bold text-center mb-6 text-blue-800">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Kesempatan Karir di Sumba
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="text-xl font-bold text-tribun-red mb-2">Agricultural Specialist</h3>
-                        <p class="text-gray-600">Sumba Agriculture Development</p>
+                        <h4 class="font-semibold text-lg mb-3">Posisi yang Tersedia:</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Kontributor Berita Lokal Sumba
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Fotografer Wilayah Sumba
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Jurnalis Wisata Sumba
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Staf Administrasi Regional
+                            </li>
+                        </ul>
                     </div>
-                    <img src="https://placehold.co/60x60" alt="Logo Sumba Agriculture Development"
-                        class="w-12 h-12 object-cover rounded">
+                    <div>
+                        <h4 class="font-semibold text-lg mb-3">Keuntungan Bekerja di Sumba:</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fas fa-home text-blue-500 mr-2"></i>
+                                Dekat dengan tempat tinggal
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-tree text-green-500 mr-2"></i>
+                                Lingkungan kerja yang asri
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-users text-purple-500 mr-2"></i>
+                                Komunitas lokal yang mendukung
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-gem text-yellow-500 mr-2"></i>
+                                Peluang mengembangkan potensi daerah
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="bg-sumba-green/10 text-sumba-green px-3 py-1 rounded-full text-sm">East
-                        Sumba</span>
-                    <span
-                        class="bg-tribun-blue/10 text-t极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。
-                        <span class="bg-tribun-blue/10
-                        text-tribun-blue px-3 py-1 rounded-full text-sm">Full-time</span>
-                    <span
-                        class="bg-tribun-red/10 text-tribun-red px-3 py-1 rounded-full text极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。
-                        <span class="bg极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。
-                        <span class="bg-tribun-red/10 text-tribun-red px-3 py-1 rounded-full text-sm">Rp 6-9
-                        Juta</span>
-                </div>
-                <p class="text-gray-600 mb-4">Spesialis pertanian untuk mengembangkan teknik pertanian modern di
-                    Sumba. S1 Pertanian, pengalaman di bidang agricultural development.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Dibuka 5 hari lalu</极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。 <span
-                            class="text-sm text-gray-500">Dibuka 5 hari lalu</span>
-                    <button class="bg-tribun-red text-white px-4 py-2 rounded hover:bg-red-700">
-                        Lamar Sekarang
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Training Programs -->
-    <div class="bg-sumba-green text-white rounded-lg p-8 mb-12">
-        <div class="text-center">
-            <h2 class="text-3xl font-bold mb-4">Program Pelatihan & Pengembangan</h2>
-            <p class="text-xl mb-6">Tingkatkan skill dan kompetensi Anda dengan program pelatihan kami</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white/20 p-6 rounded-lg">
-                    <i class="fas fa-laptop-code text-3xl mb-3"></i>
-                    <h3 class="font-bold mb-2">Digital Marketing</h3>
-                    <p>Pelatihan pemasaran digital untuk UMKM Sumba</p>
-                </div>
-                <div class="bg-white/20 p-6 rounded-lg">
-                    <i class="fas fa-hands-helping text-3xl mb-3"></i>
-                    <h3 class="font-bold mb-2">Hospitality Training</h3>
-                    <p>Pelatihan service excellence untuk industri pariwisata</p>
-                </div>
-                <div class="bg-white/20 p-6 rounded-lg">
-                    <i class="fas fa-seedling text-3xl mb-3"></i>
-                    <h3 class极端的な簡潔さを避け、適切な詳細を提供するバランスの取れた応答を提供します。 <h3 class="font-bold mb-2">Agricultural Skills
-                    </h3>
-                    <p>Pelatihan teknik pertanian modern dan berkelanjutan</p>
+                <div class="text-center mt-6">
+                    <a href="mailto:karir.sumba@tribunnews.com"
+                        class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-envelope mr-2"></i>Kirim Lamaran untuk Sumba
+                    </a>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Success Stories -->
-    <div class="mb-12">
-        <h2 class="text-3xl font-bold text-center mb-8">Kisah Sukses</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                <img src="https://placehold.co/100x100" alt="Maria - Guru di Sumba"
-                    class="w-20 h-20 rounded-full mx-auto mb-4">
-                <h3 class="font-bold text-lg mb-2">Maria</h3>
-                <p class="text-tribun-red mb-2">Guru - SD Negeri Waikabubak</p>
-                <p class="text-gray-600">"Program pengembangan guru memberikan saya skills baru untuk mengajar
-                    dengan lebih efektif."</p>
+        </section>
+        <!-- Application Process -->
+        <section class="bg-white rounded-lg shadow-md p-8 mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">Proses Lamaran</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold">1</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Kirim CV</h3>
+                    <p class="text-sm text-gray-600">Kirim CV dan portofolio ke email kami</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold">2</span>
+                    </div>
+                    <h3 class="font-semib极 mb-2">Seleksi Administrasi</h3>
+                    <p class="text-sm text-gray-600">Tim HR akan meninjau dokumen Anda</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold">3</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Wawancara</h3>
+                    <p class="text-sm text-gray-600">Proses wawancara dengan tim terkait</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-tribun-red rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold">4</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Bergabung</h3>
+                    <p class="text-sm text-gray-600">Selamat bergabung dengan tim!</p>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                <img src="https://placehold.co/100x100" alt="Yohanes - Hotel Manager"
-                    class="w-20 h-20 rounded-full mx-auto mb-4">
-                <h3 class="font-bold text-lg mb-2">Yohanes</h3>
-                <p class="text-tribun-red mb-2">Manajer Hotel - Nihi Sumba</p>
-                <p class="text-gray-600">"Karir saya berkembang pesat sejak mengikuti program hospitality training
-                    di Sumba."</p>
+        </section>
+        <!-- Contact Info -->
+        <section class="text-center">
+            <h2 class="text-3xl font-bold mb-4">Tertarik Bergabung?</h2>
+            <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+                Kirim lamaran Anda dan jadilah bagian dari tim profesional kami yang berdedikasi menyebarkan informasi
+                berkualitas
+            </p>
+            <div class="bg-gray-100 rounded-lg p-6 max-w-md mx-auto">
+                <h3 class="font-semibold mb-4">Informasi Kontak Karir:</h3>
+                <p class="mb-2">
+                    <i class="fas fa-envelope text-tribun-red mr-2"></i>
+                    karir@tribunnews.com
+                </p>
+                <p class="mb-2">
+                    <i class="fas fa-phone text-tribun-red mr-2"></i>
+                    (021) 1234-5678
+                </p>
+                <p>
+                    <i class="fas fa-clock text-tribun-red mr-2"></i>
+                    Senin - Jumat, 09:00 - 17:00
+                </p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-md text-center">
-                <img src="https://placehold.co/100x100" alt="Siti - Agricultural Specialist"
-                    class="w-20 h-20 rounded-full mx-auto mb-4">
-                <h3 class="font-bold text-lg mb-2">Siti</h3>
-                <p class="text-tribun-red mb-2">Spesialis Pertanian</p>
-                <p class="text-gray-600">"Pelatihan pertanian modern membantu saya meningkatkan produktivitas
-                    lahan."</p>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- JavaScript -->
-    <script>
-        // Simple filter functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.querySelector('input[type="text"]');
-            const locationSelect = document.querySelector('select:nth-of-type(1)');
-            const categorySelect = document.querySelector('select:nth-of-type(2)');
-
-            function filterJobs() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const locationValue = locationSelect.value;
-                const categoryValue = categorySelect.value;
-
-                document.querySelectorAll('.job-card').forEach(card => {
-                    const title = card.querySelector('h3').textContent.toLowerCase();
-                    const location = card.querySelector('.bg-sumba-green').textContent.toLowerCase();
-                    const category = card.querySelector('p.text-gray-600').textContent.toLowerCase();
-
-                    const matchesSearch = title.includes(searchTerm) || searchTerm === '';
-                    const matchesLocation = location.includes(locationValue) || locationValue === '';
-                    const matchesCategory = category.includes(categoryValue) || categoryValue === '';
-
-                    if (matchesSearch && matchesLocation && matchesCategory) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
+        </section>
+        <script>
+            // Smooth scrolling untuk anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
                 });
-            }
-
-            searchInput.addEventListener('input', filterJobs);
-            locationSelect.addEventListener('change', filterJobs);
-            categorySelect.addEventListener('change', filterJobs);
-
-            // Smooth scrolling for category badges
-            document.querySelectorAll('.category-badge').forEach(badge => {
-                badge.addEventListener('click', function() {
-                    const category = this.querySelector('h3').textContent.toLowerCase();
-                    categorySelect.value = category;
-                    filterJobs();
-                    window.scrollTo({
-                        top: document.querySelector('.mb-12').offsetTop - 100,
-                        behavior: 'smooth'
-                    });
-                });
             });
-        });
-    </script>
-@endsection
+
+            // Animasi untuk job cards
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.job-card').forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        </script>
+    @endsection

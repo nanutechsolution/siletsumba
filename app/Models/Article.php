@@ -39,8 +39,9 @@ class Article extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image
-            ? asset('storage/' . $this->image)
+        $firstImage = $this->images()->first();
+        return $firstImage
+            ? asset('storage/' . $firstImage->path) // sesuaikan field 'path' di ArticleImage
             : 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef45b1f9-f063-4044-83e2-a9a97cb7c150.png';
     }
 

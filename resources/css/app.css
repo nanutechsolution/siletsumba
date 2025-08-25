@@ -88,3 +88,24 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
+
+        
+        .job-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+            border-left-color: #E41E2D;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-card {
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+        }

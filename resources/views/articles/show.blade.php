@@ -21,7 +21,7 @@
                 <span class="mx-1">></span>
 
                 <span class="text-tribun-red">
-                    {{ Str::limit($article->title, 30) }}
+                    {{ Str::limit(strip_tags($article->title, 30)) }}
                 </span>
             </nav>
         </div>
@@ -38,7 +38,7 @@
                     {{ $article->category->name }}
                 </span>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
-                    {{ $article->title }}
+                    {!! $article->title !!}
                 </h1>
 
                 <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400 mb-6">
@@ -70,17 +70,16 @@
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <img src="https://images.unsplash.com/photo-1572947650440-e8a97ef053b2?w=1200&h=600&fit=crop"
-                        alt="Presiden Jokowi meresmikan proyek infrastruktur di Jawa Timur"
-                        class="w-full h-auto rounded-lg">
+                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}" class="w-full h-96 object-cover">
                     <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
-                        {{ $article->title }}
+                        {!! $article->title !!}
                     </p>
                 </div>
 
                 <!-- Article Content -->
                 <div class="article-content prose dark:prose-invert max-w-none">
-                    {!! nl2br(e($article->content)) !!}
+                    {!! $article->content !!}
+
                 </div>
 
 
@@ -116,7 +115,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     @forelse ($related as $rel)
                         <a href="{{ route('articles.show', $rel->slug) }}" class="flex items-start space-x-4 group">
-                            <img src="{{ $rel->thumbnail ?? 'https://via.placeholder.com/100x80' }}"
+                            <img src="{{ $rel->image_url ?? 'https://via.placeholder.com/100x80' }}"
                                 alt="{{ $rel->title }}" class="w-20 h-16 object-cover rounded">
                             <div>
                                 <h3
