@@ -62,7 +62,7 @@
          <!-- Copyright -->
          <div class="border-t border-gray-700 mt-8 pt-6 text-center">
              <p class="text-gray-400 text-sm">
-                 © 2023 TRIBUN NEWS. All rights reserved. Berita terkini dan terpercaya dari Indonesia.
+                 © 2023 SILET SUMBA. All rights reserved. Berita terkini dan terpercaya dari Indonesia.
              </p>
          </div>
      </div>
