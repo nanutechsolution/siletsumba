@@ -1,61 +1,222 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Silet Sumba
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)]()
+[![Made by](https://img.shields.io/badge/made%20by-NanutechSolution-orange.svg)]()
 
-## About Laravel
+> **Silet Sumba** — Portal berita lokal untuk Sumba dan Nusa Tenggara Timur. Tajam pada fakta, hangat pada budaya.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Ringkasan singkat
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Silet Sumba adalah situs berita lokal yang dirancang untuk menyajikan laporan mendalam, liputan adat, dan informasi praktis bagi masyarakat Sumba dan sekitarnya. Fokus kami: akurasi, kecepatan, inovasi, dan menghormati kearifan lokal.
 
-## Learning Laravel
+## Fitur utama
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* Liputan berita lokal (politik, adat, komunitas, keamanan, ekonomi mikro)
+* Halaman artikel dengan SEO-friendly metadata
+* Sistem kategori & tag
+* Penulis multi-user dengan level peran (Admin / Editor / Contributor)
+* Manajemen media (gambar & video)
+* Komentar (opsional: termoderasi)
+* Newsletter / subscribe (opsional)
+* Integrasi sosial media (share & embed)
+* Support untuk mobile-first responsive design
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 🤖 Fitur AI
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **Auto Description**: sistem AI membaca artikel lalu menghasilkan deskripsi singkat yang SEO-friendly.
+* **AI Opinion**: memberikan opini netral atau perspektif tambahan untuk memperkaya sudut pandang pembaca.
+* **Content Helper**: membantu jurnalis/editor menyusun draft artikel lebih cepat.
+* **Moderasi Komentar (opsional)**: AI dapat memfilter spam atau komentar bermuatan negatif.
 
-## Laravel Sponsors
+> AI diintegrasikan dengan model NLP modern (OpenAI / HuggingFace) dan dapat dikustomisasi sesuai konteks lokal (Bahasa Indonesia & dialek Sumba).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Tech stack
 
-### Premium Partners
+* **Framework**: Laravel 12 (PHP 8.2+)
+* **Frontend**: Blade, TailwindCSS, Alpine.js (bisa ditambah React/Vue jika perlu)
+* **Database**: MySQL / MariaDB
+* **Storage**: Local / S3-compatible
+* **AI Integration**: OpenAI API (GPT models)
+* **CI/CD**: GitHub Actions
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Struktur proyek
 
-## Contributing
+```
+/ (root)
+├─ app/
+│   ├─ Http/
+│   ├─ Models/
+│   └─ Services/       # integrasi AI
+├─ bootstrap/
+├─ config/
+├─ database/
+│   ├─ migrations/
+│   └─ seeders/
+├─ public/
+├─ resources/
+│   ├─ views/
+│   └─ css/js
+├─ routes/
+│   └─ web.php
+├─ tests/
+├─ .env.example
+├─ composer.json
+└─ README.md
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Langkah cepat (Quick Start)
 
-## Code of Conduct
+### 1. Clone repository
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/nanutechsolution/siletsumba.git
+cd siletsumba
+```
 
-## Security Vulnerabilities
+### 2. Install dependency
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+npm install && npm run build
+```
+
+### 3. Konfigurasi environment
+
+Salin file `.env.example` ke `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Lalu isi dengan konfigurasi database & AI API Key:
+
+```
+APP_NAME=SiletSumba
+APP_ENV=local
+APP_KEY=
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=siletsumba
+DB_USERNAME=root
+DB_PASSWORD=
+
+OPENAI_API_KEY=your_openai_api_key
+```
+
+### 4. Generate key
+
+```bash
+php artisan key:generate
+```
+
+### 5. Jalankan migrasi & seeder
+
+```bash
+php artisan migrate --seed
+```
+
+### 6. Jalankan server
+
+```bash
+php artisan serve
+```
+
+Akses di `http://localhost:8000`
+
+---
+
+## Integrasi AI di Laravel
+
+Buat service baru: `app/Services/AIService.php`
+
+```php
+namespace App\Services;
+
+use OpenAI;
+
+class AIService
+{
+    protected $client;
+
+    public function __construct()
+    {
+        $this->client = OpenAI::client(env('OPENAI_API_KEY'));
+    }
+
+    public function generateDescription(string $content): string
+    {
+        $result = $this->client->chat()->create([
+            'model' => 'gpt-4o-mini',
+            'messages' => [
+                ['role' => 'system', 'content' => 'Buat deskripsi berita singkat dan SEO-friendly'],
+                ['role' => 'user', 'content' => $content],
+            ],
+        ]);
+
+        return $result->choices[0]->message->content ?? '';
+    }
+}
+```
+
+Contoh penggunaan di Controller:
+
+```php
+use App\Services\AIService;
+
+public function store(Request $request, AIService $ai)
+{
+    $content = $request->input('content');
+    $description = $ai->generateDescription($content);
+
+    Article::create([
+        'title' => $request->title,
+        'content' => $content,
+        'description' => $description,
+    ]);
+}
+```
+
+---
+
+## Testing
+
+```bash
+php artisan test
+```
+
+## Deployment
+
+* Gunakan Laravel Forge / Envoyer atau manual ke VPS
+* Pastikan queue worker aktif jika menggunakan job untuk AI request
+* Setup cache & storage (Redis, S3, dsb.)
+
+## Security best practices
+
+* Jangan commit secret ke Git
+* Gunakan `.env` dan `.gitignore`
+* Validasi & sanitasi input user (prevent XSS/SQLi)
+* Batasi upload file type & size
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT © NanutechSolution
+
+## Kontak
+
+* Maintainer: NanutechSolution / Ranus
+* Email: `your-email@example.com`
+* Repo: [https://github.com/nanutechsolution/siletsumba](https://github.com/nanutechsolution/siletsumba)
+
+## Acknowledgements
+
+Terima kasih pada kontributor, komunitas Sumba, dan pihak yang mendukung pelestarian budaya lokal.
+
+---
+
+> *Notes*: README ini sudah diadaptasi untuk **Laravel 12** dengan integrasi **AI (OpenAI)**. Pastikan library OpenAI PHP SDK sudah diinstall (`composer require openai-php/client`).
