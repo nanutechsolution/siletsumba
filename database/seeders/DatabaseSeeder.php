@@ -22,13 +22,14 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Yakobus Tena',
             'email' => 'silet@sumba.com',
+            'role' => 'admin'
         ]);
         $this->call([
             CategorySeeder::class,
             ArticleSeeder::class,
             PromptSeeder::class,
-            // TagSeeder::class,
-            // ArticleTagSeeder::class,
+            TagSeeder::class,
+            ArticleTagSeeder::class,
         ]);
     }
 }
