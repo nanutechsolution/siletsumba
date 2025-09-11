@@ -53,15 +53,19 @@
                         @enderror
                     </div>
 
-                    <select name="tags[]" multiple
-                        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        @foreach ($tags as $tag)
-                            <option value="{{ $tag->id }}"
-                                {{ in_array($tag->id, old('tags', isset($article) ? $article->tags->pluck('id')->toArray() : [])) ? 'selected' : '' }}>
-                                {{ $tag->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                    {{-- is Breaking News --}}
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="is_breaking" value="1"
+                                class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-400 rounded">
+                            <span class="ml-2 text-gray-700 dark:text-gray-300 font-medium">Breaking News</span>
+                        </label>
+                        @error('is_breaking')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
                     {{-- Gambar --}}
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
@@ -107,7 +111,6 @@
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Konten AI</label>
                         <div id="ai-editor"
                             class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded h-64">
-                            <!-- AI output akan muncul disini dan bisa diedit -->
                         </div>
                         <textarea name="ai_content" id="ai-content" class="hidden"></textarea>
                     </div>

@@ -20,6 +20,7 @@ class Article extends Model
         'content',
         'image',
         'category_id',
+        'is_breaking',
     ];
 
     public function category()

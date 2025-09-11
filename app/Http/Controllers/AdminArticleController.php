@@ -72,6 +72,7 @@ class AdminArticleController extends Controller
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'delete_images' => 'nullable|array',
             'delete_images.*' => 'exists:article_images,id',
+            'is_breaking' => 'nullable|boolean',
         ]);
 
         $article->update([
