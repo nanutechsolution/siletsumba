@@ -17,16 +17,15 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'silet@sumba.com',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'silet@sumba.com',
+        // ]);
         $this->call([
             CategorySeeder::class,
             ArticleSeeder::class,
-            TagSeeder::class,
-            TagSeeder::class,
-            ArticleTagSeeder::class,
+            // TagSeeder::class,
+            // ArticleTagSeeder::class,
         ]);
     }
 }

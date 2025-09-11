@@ -11,12 +11,16 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Nasional' => '#FF0000',        // merah
-            'Internasional' => '#1E90FF',   // biru
-            'Ekonomi' => '#32CD32',         // hijau
-            'Olahraga' => '#FFA500',        // oranye
-            'Teknologi' => '#8A2BE2',       // ungu
-            'Hiburan' => '#FF69B4',         // pink
+            'Lokal Sumba' => '#6A5ACD',
+            'Budaya & Tradisi' => '#008000',
+            'Pendidikan & Sosial' => '#20B2AA',
+            'Politik & Pemerintahan' => '#1E3A8A',
+            'Ekonomi & Bisnis' => '#32CD32',
+            'Olahraga & Prestasi' => '#FFA500',
+            'Kecelakaan & Kejadian' => '#B22222',
+            'Hiburan & Lifestyle' => '#FF69B4',
+            'Teknologi & Inovasi' => '#8A2BE2',
+            'Nasional' => '#FF0000',
         ];
 
         foreach ($categories as $name => $color) {

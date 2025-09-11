@@ -21,6 +21,7 @@ class Article extends Model
         'image',
         'category_id',
         'is_breaking',
+        'user_id',
     ];
 
     public function category()
@@ -49,5 +50,36 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getFormattedContentAttribute()
+    {
+        $domain = '<strong class="text-red-600">siletsumba.com</strong>';
+        $content = $this->content;
+
+        // Cari paragraf pertama
+        if (preg_match('#<p>(.*?)</p>#s', $content, $matches)) {
+            $firstParagraph = $matches[1];
+
+            // Case: pembuka dengan <strong>LOKASI</strong> -
+            if (preg_match('#^<strong.*?>(.*?)</strong>\s*-\s*#', $firstParagraph, $loc)) {
+                $replace = '<strong style="font-size: 13px;">' . $loc[1] . '</strong>, ' . $domain . ' - ';
+                $newFirstParagraph = preg_replace(
+                    '#^<strong.*?>(.*?)</strong>\s*-\s*#',
+                    $replace,
+                    $firstParagraph
+                );
+
+                // Ganti hanya paragraf pertama
+                $content = preg_replace('#<p>.*?</p>#s', '<p>' . $newFirstParagraph . '</p>', $content, 1);
+            }
+        }
+
+        return $content;
     }
 }

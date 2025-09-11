@@ -7,6 +7,7 @@ use App\Models\ArticleImage;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -40,9 +41,12 @@ class AdminArticleController extends Controller
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Tambahkan .* untuk validasi array
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
-            'is_breaking' => 'nullable|boolean'
+            'is_breaking' => 'nullable|boolean',
+            // author dari user yang login
+            'author' => 'nullable|string|max:100',
         ]);
         $validated['slug'] = Str::slug($validated['title']);
+        $validated['user_id'] = auth()->id();
         $article = Article::create($validated);
 
 
@@ -79,6 +83,9 @@ class AdminArticleController extends Controller
             'title' => $validated['title'],
             'content' => $validated['content'],
             'category_id' => $validated['category_id'],
+            'slug' => Str::slug($validated['title']),
+            'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
+            'user_id' => auth()->id(),
         ]);
 
         // Hapus gambar yang dicentang

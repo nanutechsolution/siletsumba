@@ -45,13 +45,13 @@
                     <!-- Author -->
                     <div class="flex items-center mr-6 mb-2">
                         <i class="fas fa-user-circle mr-2"></i>
-                        <span>{{ $article->author ?? 'Redaksi' }}</span>
+                        <span>{{ $article->user->name ?? 'Redaksi' }}</span>
                     </div>
 
                     <!-- Tanggal -->
                     <div class="flex items-center mr-6 mb-2">
                         <i class="far fa-clock mr-2"></i>
-                        <span>{{ $article->created_at->format('d F Y - H:i') }} WIB</span>
+                        <span>{{ $article->created_at->format('d F Y - H:i') }} WITA</span>
                     </div>
 
                     <!-- Views -->
@@ -78,12 +78,8 @@
 
                 <!-- Article Content -->
                 <div class="article-content prose dark:prose-invert max-w-none">
-                    {!! $article->content !!}
-
+                    {!! $article->formatted_content !!}
                 </div>
-
-
-
                 <!-- Article Tags -->
                 @if ($article->tags->count())
                     <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -98,15 +94,40 @@
                         </div>
                     </div>
                 @endif
+                @php
+                    $shareUrl = urlencode(request()->fullUrl());
+                    $shareTitle = urlencode($article->title);
+                @endphp
+
                 <!-- Social Share -->
                 <div class="mt-6 flex items-center gap-4">
                     <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
-                    <a href="#" class="text-blue-600 hover:text-blue-800"><i class="fab fa-facebook text-xl"></i></a>
-                    <a href="#" class="text-blue-400 hover:text-blue-600"><i class="fab fa-twitter text-xl"></i></a>
-                    <a href="#" class="text-red-600 hover:text-red-800"><i class="fab fa-whatsapp text-xl"></i></a>
-                    <a href="#" class="text-blue-700 hover:text-blue-900"><i class="fab fa-linkedin text-xl"></i></a>
-                    <a href="#" class="text-gray-800 hover:text-black"><i class="fab fa-telegram text-xl"></i></a>
+                    <!-- WhatsApp -->
+                    <a href="https://api.whatsapp.com/send?text={{ $shareTitle }}%20{{ $shareUrl }}" target="_blank"
+                        rel="noopener noreferrer" class="text-green-600 hover:text-green-800">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank"
+                        rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+
+                    <!-- Twitter (X) -->
+                    <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}"
+                        target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-600">
+                        <i class="fab fa-x text-xl"></i>
+                    </a>
+
+
+
+                    <!-- Telegram -->
+                    <a href="https://t.me/share/url?url={{ $shareUrl }}&text={{ $shareTitle }}" target="_blank"
+                        rel="noopener noreferrer" class="text-gray-800 hover:text-black">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
                 </div>
+
             </article>
 
             <!-- Related News -->

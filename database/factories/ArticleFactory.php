@@ -21,7 +21,6 @@ class ArticleFactory extends Factory
             'content' => $this->faker->paragraphs(mt_rand(5, 10), true),
             'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory(),
             'views' => $this->faker->numberBetween(10, 5000),
-            // 'image' => "https://picsum.photos/seed/" . Str::random(8) . "/800/400", // random image placeholder
             'author' => $this->faker->name(),
         ];
     }

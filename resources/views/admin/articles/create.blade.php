@@ -64,8 +64,34 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    {{-- Lokasi --}}
+                    <div class="mb-4">
+                        <label for="location" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Lokasi
+                            Detail</label>
+                        <input type="text" name="location" id="location" value="{{ old('location') }}"
+                            placeholder="Desa / Kecamatan / Kota, Sumba"
+                            class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                    </div>
 
+                    {{-- Fakta / Kronologi --}}
+                    <div class="mb-4">
+                        <label for="facts" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Fakta /
+                            Kronologi</label>
+                        <textarea name="facts" id="facts" rows="4"
+                            placeholder="Masukkan kronologi, data, atau poin penting yang AI gunakan untuk menulis berita"
+                            class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('facts') }}</textarea>
 
+                    </div>
+
+                    {{-- Kutipan / Narasumber --}}
+                    <div class="mb-4">
+                        <label for="quotes" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Kutipan /
+                            Narasumber</label>
+                        <textarea name="quotes" id="quotes" rows="3"
+                            placeholder="Masukkan pernyataan narasumber atau kutipan yang relevan"
+                            class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('quotes') }}</textarea>
+
+                    </div>
                     {{-- Gambar --}}
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
@@ -76,7 +102,6 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     {{-- Konten Asli --}}
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Konten Asli</label>
@@ -88,23 +113,20 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     {{-- Tombol AI --}}
                     <div class="flex flex-wrap gap-2 mb-4 overflow-x-auto">
-                        <button type="button" id="ai-generate-btn"
-                            class="bg-purple-600 text-white py-1 px-3 rounded hover:bg-purple-700">Generate AI</button>
-                        <button type="button" id="ai-tidy-btn"
-                            class="bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700">Rapi-kan & Tambahkan
-                            Konten</button>
-                        <button type="button" id="ai-aida-btn"
-                            class="bg-emerald-600 text-white py-1 px-3 rounded hover:bg-emerald-700">Generate
-                            AIDA</button>
-                        <button type="button" id="ai-copy-btn"
-                            class="bg-gray-500 text-white py-1 px-3 rounded hover:bg-gray-600">Copy Hasil AI</button>
-                        <button type="button" id="ai-critical-btn"
-                            class="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700">Opini Kritis</button>
+                        <button type="button" id="ai-generate-local-btn"
+                            class="bg-purple-600 text-white py-1 px-3 rounded hover:bg-purple-700">Generate Berita
+                            Lokal</button>
                         <button type="button" id="ai-silet-sumba-btn"
-                            class="bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-700">Silet Sumba</button>
+                            class="bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700">Silet Sumba</button>
+                        <button type="button" id="ai-budaya-sumba-btn"
+                            class="bg-emerald-600 text-white py-1 px-3 rounded hover:bg-emerald-700">Budaya
+                            Sumba</button>
+                        <button type="button" id="ai-opini-sumba-btn"
+                            class="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700">Opini Sumba</button>
+                        <button type="button" id="ai-aida-lokal-btn"
+                            class="bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-700">AIDA Lokal</button>
                     </div>
 
                     <div class="mb-4">
@@ -133,8 +155,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Konten asli
-            const quill = new Quill('#editor', {
+            // ====== Editor utama ======
+            const editorQuill = new Quill('#editor', {
                 placeholder: 'Tulis konten disini...',
                 theme: 'snow',
                 modules: {
@@ -153,36 +175,42 @@
                     ]
                 }
             });
-            const contentTextarea = document.getElementById('content');
 
-            // Hasil AI
+            // Restore old content jika ada
+            const contentTextarea = document.getElementById('content');
+            if (contentTextarea.value) editorQuill.root.innerHTML = contentTextarea.value;
+
+            // ====== Editor AI ======
             const aiQuill = new Quill('#ai-editor', {
                 theme: 'snow',
                 modules: {
                     toolbar: [
                         [{
-                            'header': [1, 2, 3, false]
+                            header: [1, 2, 3, false]
                         }],
                         ['bold', 'italic', 'underline', 'strike'],
                         ['link', 'image'],
                         [{
-                            'list': 'ordered'
+                            list: 'ordered'
                         }, {
-                            'list': 'bullet'
+                            list: 'bullet'
                         }],
                         [{
-                            'align': []
+                            align: []
                         }],
                         ['clean']
                     ]
                 }
             });
-            const aiTextarea = document.getElementById('ai-content');
 
-            // Preview gambar
+            const aiTextarea = document.getElementById('ai-content');
+            if (aiTextarea.value) aiQuill.root.innerHTML = aiTextarea.value;
+
+            // ====== Preview gambar ======
             let allFiles = [];
             const inputImages = document.getElementById('images');
             const previewContainer = document.getElementById('image-preview');
+
             inputImages.addEventListener('change', function(e) {
                 const files = Array.from(e.target.files);
                 allFiles = allFiles.concat(files);
@@ -202,7 +230,7 @@
                 inputImages.files = dt.files;
             });
 
-            // Tombol Loading
+            // ====== Tombol Loading ======
             function setButtonLoading(button, loading = true) {
                 if (loading) {
                     button.dataset.originalText = button.textContent;
@@ -214,6 +242,7 @@
                 }
             }
 
+            // ====== Fungsi generate AI ======
             async function callAI(prompt, button) {
                 try {
                     const res = await fetch("{{ route('admin.articles.generate-content') }}", {
@@ -229,7 +258,16 @@
                     });
                     const data = await res.json();
                     if (res.ok) {
-                        aiQuill.root.innerHTML = data.content;
+                        try {
+                            let content = data.content;
+                            content = content.replace(/^```html\s*/, '').replace(/```$/, '');
+                            const delta = aiQuill.clipboard.convert(content);
+                            aiQuill.setContents(delta, 'silent');
+                        } catch (err) {
+                            console.error("Gagal set aiQuill content:", err);
+                            alert("Gagal memuat konten AI.");
+                        }
+
                     } else {
                         alert('Gagal generate: ' + data.error);
                     }
@@ -241,127 +279,157 @@
                 }
             }
 
-            // Tombol AI
-            document.getElementById('ai-generate-btn').addEventListener('click', async function() {
-                const prompt = document.getElementById('title').value.trim();
-                if (!prompt) return alert('Masukkan judul!');
-
-                this.disabled = true;
-                this.textContent = 'Membuat...';
-                try {
-                    const res = await fetch("{{ route('admin.articles.generate-content') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            prompt: `Bertindaklah sebagai jurnalis senior di sebuah kantor berita. Buatlah sebuah artikel berita lengkap tentang topik berikut: "${prompt}". 
-                        Pastikan artikel memiliki:
-                        - Judul menarik
-                        - Minimal 3 paragraf
-                        - Heading (H1/H2) untuk subjudul jika perlu
-                        - Teks **bold** untuk hal penting
-                        - Teks *italic* (garis miring) untuk penekanan
-                        - Teks <u>underline</u> untuk highlight
-                        - Paragraf otomatis menjorok (indentasi)
-                        Gunakan bahasa yang lugas, informatif, dan akurat seperti gaya penulisan berita.
-                        Hasil artikel dikembalikan dalam format yang bisa langsung di-copy ke editor HTML/contenteditable tanpa kehilangan format.`
-                        })
-
-                    });
-                    const data = await res.json();
-                    if (res.ok) setAIContent(data.content);
-                    else alert('Gagal generate: ' + data.error);
-                } catch (e) {
-                    console.log(e);
-                    alert('Kesalahan jaringan/server');
-                } finally {
-                    this.disabled = false;
-                    this.textContent = 'Generate AI';
-                }
-            });
-            // Fungsi untuk update AI content ke Quill
-            function setAIContent(htmlContent) {
-                aiQuill.root.innerHTML = htmlContent;
-            }
-            document.getElementById('ai-tidy-btn').addEventListener('click', function() {
-                const original = quill.root.innerHTML.trim();
-                if (!original) {
-                    alert('Tulis konten asli dulu!');
-                    return;
-                }
-                const instructions = `Anda adalah seorang jurnalis investigasi senior dengan pengalaman lebih dari 15 tahun. Tugas Anda adalah membuat artikel berita mendalam dan objektif berdasarkan topik: "${title}".
-    Ikuti struktur "Piramida Terbalik" (Inverted Pyramid) dalam penulisan:
-    1.  Paragraf pertama (lead) harus merangkum 5W+1H (Apa, Siapa, Kapan, Di mana, Mengapa, Bagaimana).
-    2.  Paragraf berikutnya berisi detail penting yang mendukung lead.
-    3.  Paragraf akhir berisi informasi tambahan atau konteks yang kurang penting.
-    Batasan & Aturan Penulisan:
-    -   Gunakan tag HTML berikut: <h1> untuk judul, <p> untuk paragraf, <b> untuk kata kunci.
-    -   Gaya bahasa harus lugas, faktual, dan objektif.
-    -   Panjang artikel minimal 400 kata.
-    Pastikan tanggapan Anda hanya berupa HTML yang telah diformat, tanpa kalimat pengantar atau penutup.`;
-                const prompt =
-                    `${instructions}\nTeks asli untuk diolah: ${original}\nTanggapan Anda harus berisi HTML yang telah diformat, dan tidak ada teks lain.`;
-                setButtonLoading(this, true);
-                callAI(prompt, this);
-            });
-
-            document.getElementById('ai-aida-btn').addEventListener('click', function() {
-                const original = quill.root.innerHTML.trim();
+            // ====== Event tombol generate AI ======
+            document.getElementById('ai-generate-local-btn').addEventListener('click', function() {
                 const title = document.getElementById('title').value.trim();
-                if (!title) {
-                    alert('Masukkan judul!');
-                    return;
-                }
-                const instructions = `Anda adalah seorang jurnalis investigasi senior dengan pengalaman lebih dari 15 tahun. Tugas Anda adalah membuat artikel berita mendalam dan objektif berdasarkan topik: "${title}".
+                const categorySelect = document.querySelector('select[name="category_id"]');
+                const category = categorySelect.options[categorySelect.selectedIndex].text;
+                const location = document.getElementById('location').value.trim();
+                const facts = document.getElementById('facts').value.trim();
+                const quotes = document.getElementById('quotes').value.trim();
+                if (!title) return alert('Masukkan judul!');
+                const prompt = `Bertindaklah sebagai jurnalis profesional di Sumba yang menulis berita untuk media online.
+                        Buat artikel berita dengan informasi berikut:
+                        Judul: ${title}
+                                Kategori: ${category}
+                                Lokasi (jangan tulis di awal artikel): ${location || "Tidak disebutkan"}
+                                Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
+                                Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
+                                Instruksi penting:
+                                - TIDAK BOLEH menulis lokasi dan domain di awal artikel
+                                - Lead paragraph langsung masuk ke inti berita
+                                - Minimal 3 paragraf, maksimal 5 paragraf
+                                - Boleh ada subjudul jika relevan
+                                - Gunakan <strong>, <em>, atau <u> sesuai konteks penting
+                                - Gunakan bahasa jurnalistik profesional, lugas, akurat
+                                - Sertakan konteks sosial atau dampak bagi masyarakat jika relevan
+                                Output HANYA dalam format HTML siap publish, tanpa markdown (\`\`\`).`;
 
-Ikuti struktur "Piramida Terbalik" (Inverted Pyramid) dalam penulisan:
-1. Paragraf pertama (lead) harus merangkum 5W+1H (Apa, Siapa, Kapan, Di mana, Mengapa, Bagaimana).
-2. Paragraf berikutnya berisi detail penting yang mendukung lead.
-3. Paragraf akhir berisi informasi tambahan atau konteks yang kurang penting.
+            setButtonLoading(this, true);
+            callAI(prompt, this);
+        });
 
-Batasan & Aturan Penulisan:
-- Gunakan tag HTML berikut: <h1> untuk judul, <p> untuk paragraf, <b> untuk kata kunci.
-- Gaya bahasa harus lugas, faktual, dan objektif.
-- Panjang artikel minimal 400 kata.
-Pastikan tanggapan Anda hanya berupa HTML yang telah diformat, tanpa kalimat pengantar atau penutup.`;
-                const prompt =
-                    `${instructions}\nTeks asli untuk diolah: ${original} dengan judull: ${title}\nTanggapan Anda harus berisi HTML yang telah diformat, dan tidak ada teks lain.`;
+        // ====== Event tombol generate AI Silet Sumba ======
+        document.getElementById('ai-silet-sumba-btn').addEventListener('click', function() {
+            const title = document.getElementById('title').value.trim();
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const category = categorySelect.options[categorySelect.selectedIndex].text;
+            const location = document.getElementById('location').value.trim();
+            const facts = document.getElementById('facts').value.trim();
+            const quotes = document.getElementById('quotes').value.trim();
+            if (!title) return alert('Masukkan judul!');
+            const prompt =
+                `Bertindaklah sebagai jurnalis profesional di Sumba untuk website Silet Sumba.
+                                                                                                        Tulisan ini harus sesuai gaya Silet Sumba: ringkas, tajam, tapi akurat.
+                                                                                                        Judul: ${title}
+                                                                                                        Kategori: ${category}
+                                                                                                        Lokasi: ${location || "Tidak disebutkan"}
+                                                                                                        Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
+                                                                                                        Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
+                                                                                                        Petunjuk penulisan:
+                                                                                                        - Lead paragraph memuat inti berita
+                                                                                                        - 2-5 paragraf maksimal
+                                                                                                        - Gunakan bold/italic/underline untuk highlight
+                                                                                                        - Tambahkan subjudul jika perlu
+                                                                                                        - Sertakan konteks lokal, adat, atau dampak sosial jika relevan
+                                                                                                        Hasil kembalikan dalam format HTML/contenteditable siap dipublish.`;
+            setButtonLoading(this, true);
+            callAI(prompt, this);
+        });
+
+        // ====== Event tombol generate AI Budaya Sumba ======
+        document.getElementById('ai-budaya-sumba-btn').addEventListener('click', function() {
+            const title = document.getElementById('title').value.trim();
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const category = categorySelect.options[categorySelect.selectedIndex].text;
+            const location = document.getElementById('location').value.trim();
+            const facts = document.getElementById('facts').value.trim();
+            const quotes = document.getElementById('quotes').value.trim();
+            if (!title) return alert('Masukkan judul!');
+
+            const prompt =
+                `Bertindaklah sebagai jurnalis Silet Sumba yang mengulas budaya Sumba. 
+                                                                                            Buat artikel berita atau liputan budaya dengan gaya ringkas, tajam, dan menarik:
+                                                                                            Judul: ${title}
+                                                                                            Kategori: ${category}
+                                                                                            Lokasi: ${location || "Tidak disebutkan"}
+                                                                                            Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
+                                                                                            Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
+                                                                                            
+                                                                                            Buat artikel dengan:
+                                                                                            - 2-5 paragraf, padat informasi
+                                                                                            - Fokus pada aspek budaya, tradisi, seni, atau event lokal
+                                                                                            - Gunakan kalimat tajam, lugas, dan sensasional
+                                                                                            - Highlight poin penting dengan bold atau underline
+                                                                                            Hasil kembalikan dalam format HTML/contenteditable.`;
+
+            setButtonLoading(this, true);
+            callAI(prompt, this);
+        });
+
+        // ====== Event tombol generate AI Opini Sumba ======
+        document.getElementById('ai-opini-sumba-btn').addEventListener('click', function() {
+            const title = document.getElementById('title').value.trim();
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const category = categorySelect.options[categorySelect.selectedIndex].text;
+            const location = document.getElementById('location').value.trim();
+            const facts = document.getElementById('facts').value.trim();
+            const quotes = document.getElementById('quotes').value.trim();
+            if (!title) return alert('Masukkan judul!');
+
+            const prompt =
+                `Bertindaklah sebagai kolumnis atau penulis opini di Sumba. 
+                                                                                            Buat artikel opini yang:
+                                                                                            - Tajam, lugas, dan menarik
+                                                                                            - Mencerminkan perspektif lokal Sumba
+                                                                                            - Berdasarkan informasi berikut:
+                                                                                                Judul: ${title}
+                                                                                                Kategori: ${category}
+                                                                                                Lokasi: ${location || "Tidak disebutkan"}
+                                                                                                Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
+                                                                                                Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
+                                                                                            - Panjang 2-5 paragraf
+                                                                                            - Bisa menggunakan teks bold/italic untuk highlight pendapat penting
+                                                                                            Hasil kembalikan dalam format HTML/contenteditable.`;
+            setButtonLoading(this, true);
+            callAI(prompt, this);
+        });
+        // ====== Event tombol generate AI AIDA Lokal ======
+        document.getElementById('ai-aida-lokal-btn').addEventListener('click', function() {
+            const title = document.getElementById('title').value.trim();
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const category = categorySelect.options[categorySelect.selectedIndex].text;
+            const location = document.getElementById('location').value.trim();
+            const facts = document.getElementById('facts').value.trim();
+            const quotes = document.getElementById('quotes').value.trim();
+            if (!title) return alert('Masukkan judul!');
+
+            const prompt =
+                `Bertindaklah sebagai copywriter lokal di Sumba. Buat konten persuasif dengan metode AIDA (Attention, Interest, Desire, Action) menggunakan informasi berikut:
+                                                                                            Judul / Produk / Event: ${title}
+                                                                                            Kategori: ${category}
+                                                                                            Lokasi: ${location || "Tidak disebutkan"}
+                                                                                            Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
+                                                                                            Kutipan / Narasumber (jika ada): ${quotes || "Tidak ada kutipan"}
+
+                                                                                            Buat konten yang:
+                                                                                            - Menarik perhatian pembaca (Attention)
+                                                                                            - Membangkitkan minat (Interest)
+                                                                                            - Membuat pembaca ingin berinteraksi atau membeli (Desire)
+                                                                                            - Mendorong tindakan jelas (Action)
+                                                                                            - Ringkas, lugas, dan sesuai konteks lokal Sumba
+                                                                                            Hasil kembalikan dalam format HTML/contenteditable.`;
                 setButtonLoading(this, true);
                 callAI(prompt, this);
             });
-            document.getElementById('ai-critical-btn').addEventListener('click', function() {
-                const title = document.getElementById('title').value.trim();
-                const original = quill.root.innerHTML.trim();
-                if (!title) return alert('Mohon masukkan judul terlebih dahulu.');
-                const instructions = `Anda adalah seorang kolumnis opini senior dengan nada penulisan yang kritis dan tajam. Tuliskan sebuah artikel opini yang menganalisis dan memberikan pandangan kritis terhadap topik berikut: '${title}'.
-                    Aturan penulisan:
-                        -   Artikel harus memiliki argumen yang jelas dan didukung oleh setidaknya dua poin.
-                        -   Gaya bahasa harus persuasif dan provokatif, namun tetap logis.
-                        -   Gunakan tag HTML berikut: <h1> untuk judul, <p> untuk paragraf.
-                    Pastikan tanggapan Anda hanya berupa HTML, tanpa kalimat pengantar atau penutup.`;
-                const prompt =
-                    `${instructions}\nTeks asli untuk diolah: ${original} dengan judull: ${title}\nTanggapan Anda harus berisi HTML yang telah diformat, dan tidak ada teks lain.`;
-                setButtonLoading(this, true);
-                callAI(prompt, this);
-            });
-
-            document.getElementById('ai-copy-btn').addEventListener('click', function() {
-                const html = aiQuill.root.innerHTML;
-                if (!html.trim()) return alert('Belum ada hasil AI!');
-                navigator.clipboard.writeText(html).then(() => alert('Hasil AI berhasil dicopy!'));
-            });
-
-
+            // ====== Submit form ======
             const form = document.getElementById('article-form');
-            form.addEventListener('submit', function(e) {
-                console.log('Form submit ter-trigger!');
-                document.getElementById('content').value = quill.root.innerHTML;
-                document.getElementById('ai-content').value = aiQuill.root.innerHTML;
+            form.addEventListener('submit', function() {
+                // Ambil konten dari Quill dan simpan ke textarea
+                contentTextarea.value = editorQuill.root.innerHTML;
+                aiTextarea.value = aiQuill.root.innerHTML;
             });
-
         });
     </script>
+
 </x-app-layout>
