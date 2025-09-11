@@ -10,7 +10,7 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                     <div class="relative">
                         <a href="{{ route('articles.show', $hero->slug) }}">
-                            <img src="{{ $hero->image_url ?? 'https://via.placeholder.com/300x200' }}"
+                            <img src="{{ Storage::url($hero->image_url) ?? 'https://via.placeholder.com/300x200' }}"
                                 alt="{{ $hero->title }}"
                                 class="w-full h-[50vh] object-cover group-hover:opacity-90 transition duration-300">
 
