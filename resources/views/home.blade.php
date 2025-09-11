@@ -117,7 +117,7 @@
                     @foreach ($latestArticles as $article)
                         <a href="{{ route('articles.show', $article->slug) }}"
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
-                            <img src="{{ $article->image_url ?? 'https://via.placeholder.com/80x60' }}"
+                            <img src="{{ Storage::url($article->image_url) ?? 'https://via.placeholder.com/80x60' }}"
                                 alt="{{ $article->title }}" class="w-20 h-15 object-cover rounded">
                             <div>
                                 <h4 class="font-medium text-sm hover:text-tribun-red cursor-pointer">
