@@ -117,7 +117,7 @@
                                 alt="{{ $article->author->name }}" class="w-16 h-16 rounded-full mr-4 object-cover">
                             <div>
                                 <h3 class="font-semibold text-lg">{{ $article->author->name }}</h3>
-                                <p class="text-gray-600 mb-2">Reporter Tribun News</p>
+                                <p class="text-gray-600 mb-2">Reporter Silet Sumba</p>
                                 <p class="text-sm text-gray-500">
                                     {{ $article->author->bio ?? 'Penulis profesional dengan pengalaman dalam jurnalisme berita.' }}
                                 </p>

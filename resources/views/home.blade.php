@@ -10,10 +10,9 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                     <div class="relative">
                         <a href="{{ route('articles.show', $hero->slug) }}">
-                            <img src="{{ Storage::url($hero->image_url) ?? 'https://via.placeholder.com/300x200' }}"
+                            <img src="{{ $hero->image_url ?? 'https://via.placeholder.com/300x200' }}"
                                 alt="{{ $hero->title }}"
                                 class="w-full h-[50vh] object-cover group-hover:opacity-90 transition duration-300">
-
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
                                 <span class=" text-white px-3 py-1 rounded text-sm font-medium"
                                     style="background-color: {{ $hero->category->color }}">
