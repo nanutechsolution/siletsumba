@@ -16,8 +16,9 @@ class HomeController extends Controller
             $query->where('category_id', $category->id);
         }
         $hero = Article::latest()->first();
-        $latestArticles = Article::where('id', '!=', $hero->id)
-            ->where('is_published', true)
+        $latestArticles = Article::when($hero, function ($query) use ($hero) {
+            $query->where('id', '!=', $hero->id);
+        })
             ->latest()
             ->paginate(10)
             ->withQueryString();
