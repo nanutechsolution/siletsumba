@@ -23,7 +23,6 @@ class HomeController extends Controller
             ->withQueryString();
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
-        // breaking news
         $breakingNews = Article::where('is_breaking', true)
             ->latest()
             ->take(5)
@@ -34,7 +33,7 @@ class HomeController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        $articles = Article::with('category') // <-- eager load category
+        $articles = Article::with('category')
             ->where('category_id', $category->id)
             ->latest()
             ->take(6)
