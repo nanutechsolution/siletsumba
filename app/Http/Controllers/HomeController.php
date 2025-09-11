@@ -22,7 +22,9 @@ class HomeController extends Controller
             ->paginate(10)
             ->withQueryString();
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
-        $categories = Category::all();
+        $categories = Category::whereHas('articles', function ($q) {
+            $q->where('is_published', 1);
+        })->get();
         $breakingNews = Article::where('is_breaking', true)
             ->latest()
             ->take(5)
@@ -31,8 +33,11 @@ class HomeController extends Controller
     }
     public function getArticlesByCategory($slug)
     {
-        $category = Category::where('slug', $slug)->firstOrFail();
-
+        $category = Category::where('slug', $slug)
+            ->with(['articles' => function ($query) {
+                $query->where('is_published', 1)->orderBy('created_at', 'desc');
+            }])
+            ->firstOrFail();
         $articles = Article::with('category')
             ->where('category_id', $category->id)
             ->latest()
@@ -44,7 +49,12 @@ class HomeController extends Controller
 
     public function getArticlesByCategorys($slug)
     {
-        $category = \App\Models\Category::where('slug', $slug)->firstOrFail();
+        $category = \App\Models\Category::where('slug', $slug)
+            ->with(['articles' => function ($query) {
+                $query->where('is_published', 1)->orderBy('created_at', 'desc');
+            }])
+            ->firstOrFail();
+
         $articles = \App\Models\Article::where('category_id', $category->id)
             ->latest()
             ->paginate(6);
@@ -52,10 +62,13 @@ class HomeController extends Controller
         $articlesCollection = $articles->getCollection();
 
         $hero = $articlesCollection->first();
-        $latestArticles = Article::where('id', '!=', $hero->id)
+        $latestArticles = Article::when($hero, function ($query) use ($hero) {
+            $query->where('id', '!=', $hero->id);
+        })
             ->latest()
             ->paginate(10)
             ->withQueryString();
+
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
         $breakingNews = Article::where('is_breaking', true)

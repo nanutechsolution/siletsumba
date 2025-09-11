@@ -74,10 +74,11 @@
                 @foreach ($categories as $category)
                     <a href="{{ route('articles.category', $category->slug) }}"
                         class="px-2 py-2 flex-shrink-0 
-                    {{ $currentSlug === $category->slug ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-700 hover:text-red-600' }}">
+        {{ $currentSlug === $category->slug ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-700 hover:text-red-600' }}">
                         {{ $category->name }}
                     </a>
                 @endforeach
+
             </div>
         </div>
     </nav>
