@@ -15,7 +15,7 @@ class HomeController extends Controller
             $category = Category::where('slug', $request->category)->firstOrFail();
             $query->where('category_id', $category->id);
         }
-        $articles = $query->latest()->take(5)->get();
+        $hero = Article::latest()->first();
         $hero = $articles->first();
         $latestArticles = Article::where('id', '!=', $hero->id)
             ->latest()
