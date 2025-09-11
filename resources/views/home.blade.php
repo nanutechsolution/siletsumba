@@ -49,7 +49,7 @@
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
                         <!-- Image -->
                         <div class="relative h-48">
-                            <img src="{{ $article->image_url ?? 'https://via.placeholder.com/300x200' }}"
+                            <img src="{{ Storage::url($article->image_url) ?? 'https://via.placeholder.com/300x200' }}"
                                 alt="{{ $article->title }}"
                                 class="w-full h-full object-cover group-hover:opacity-90 transition duration-300">
 
