@@ -16,7 +16,6 @@ class HomeController extends Controller
             $query->where('category_id', $category->id);
         }
         $hero = Article::latest()->first();
-        $hero = $articles->first();
         $latestArticles = Article::where('id', '!=', $hero->id)
             ->latest()
             ->paginate(10)
