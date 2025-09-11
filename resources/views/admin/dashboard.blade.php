@@ -40,10 +40,6 @@
 
             {{-- Quick Action Buttons --}}
             <div class="flex flex-wrap gap-4">
-                <button
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-200">
-                    Generate Content
-                </button>
                 <a href="{{ route('admin.articles.create') }}"
                     class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition duration-200">
                     Buat Artikel Baru
