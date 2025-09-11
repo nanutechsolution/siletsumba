@@ -152,7 +152,7 @@ class AdminArticleController extends Controller
             'contents' => [
                 [
                     'parts' => [
-                        ['text' =>  "Bertindak sebagai jurnalis senior di sebuah kantor berita. Buatlah sebuah artikel berita lengkap tentang topik berikut: '" . $request->prompt . "'. Pastikan artikel itu memiliki judul yang menarik, dan setidaknya 3 paragraf. Gunakan bahasa yang lugas, informatif, dan akurat seperti gaya penulisan berita. Berikan judul sebagai baris pertama, diikuti oleh isi artikel."]
+                        ['text' =>  $request->prompt]
                     ]
                 ]
             ]

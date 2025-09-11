@@ -332,7 +332,18 @@
             }
 
             async function callAI(prompt, button) {
+                // Disable all other buttons
+                const aiButtons = document.querySelectorAll('[data-prompt-name]');
+                aiButtons.forEach(btn => {
+                    if (btn !== button) {
+                        btn.disabled = true;
+                        btn.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
+                });
+
+                // Show loading state for clicked button
                 setButtonLoading(button, true);
+
                 try {
                     const res = await fetch("{{ route('admin.articles.generate-content') }}", {
                         method: 'POST',
@@ -344,7 +355,9 @@
                             prompt
                         })
                     });
+
                     const data = await res.json();
+
                     if (res.ok) {
                         try {
                             let content = data.content;
@@ -362,9 +375,17 @@
                     console.log(e);
                     alert('Kesalahan server/jaringan.');
                 } finally {
+                    // Hide loading state
                     setButtonLoading(button, false);
+
+                    // Re-enable all buttons
+                    aiButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
                 }
             }
+
 
             // ====== Unified Event Listener for All AI Buttons ======
             const aiButtons = document.querySelectorAll('[data-prompt-name]');
@@ -380,6 +401,18 @@
 
                     if (!title) {
                         alert('Masukkan judul terlebih dahulu!');
+                        document.getElementById('title').focus();
+                        return;
+                    }
+                    if (!location) {
+                        alert('Masukkan Detail Lokasi terlebih dahulu!');
+                        document.getElementById('location').focus();
+                        return;
+                    }
+
+                    if (!facts) {
+                        alert('Masukkan Fakta / Kronologi terlebih dahulu!');
+                        document.getElementById('facts').focus();
                         return;
                     }
 

@@ -10,7 +10,9 @@
 
             {{-- Welcome Card --}}
             <div
-                class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+                class="bg-white dark:bg-gray-800 shadow-lg sm:rounded-xl p-6 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+
+                {{-- Foto profil --}}
                 @if (Auth::user()->profile_photo_path)
                     <img src="{{ Storage::url(Auth::user()->profile_photo_path) }}" alt="{{ Auth::user()->name }}"
                         class="h-16 w-16 object-cover rounded-full flex-shrink-0">
@@ -23,11 +25,33 @@
                         </svg>
                     </div>
                 @endif
+
+                {{-- Konten teks --}}
                 <div class="text-center sm:text-left">
-                    <h1 class="text-xl font-bold text-gray-800 dark:text-white">Halo, {{ Auth::user()->name }}!</h1>
-                    <p class="text-gray-600 dark:text-gray-400 mt-1">Selamat datang kembali di panel administrasi Silet
-                        Sumba. Mari kelola berita hari ini!</p>
+                    <h1 class="text-2xl font-extrabold text-gray-800 dark:text-white">
+                        Yo, {{ Auth::user()->name }}!
+                    </h1>
+                    <p id="dailyMessage"
+                        class="text-gray-600 dark:text-gray-400 mt-1 opacity-0 transition-opacity duration-700">
+                        <!-- Kalimat motivasi akan diisi JS -->
+                    </p>
                 </div>
+            </div>
+
+            {{-- Quick Action Buttons --}}
+            <div class="flex flex-wrap gap-4">
+                <button
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-200">
+                    Generate Content
+                </button>
+                <a href="{{ route('admin.articles.create') }}"
+                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition duration-200">
+                    Buat Artikel Baru
+                </a>
+                <a href="{{ route('admin.comments.index') }}"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow transition duration-200">
+                    Moderasi Komentar
+                </a>
             </div>
 
             {{-- Stats Cards --}}
@@ -35,22 +59,26 @@
                 <div
                     class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 border-l-4 border-blue-500 dark:border-blue-400">
                     <h3 class="text-md font-bold text-gray-800 dark:text-white">Total Artikel</h3>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $totalArticles }}</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100" data-target="{{ $totalArticles }}">0
+                    </p>
                 </div>
                 <div
                     class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 border-l-4 border-green-500 dark:border-green-400">
                     <h3 class="text-md font-bold text-gray-800 dark:text-white">Total Views</h3>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ number_format($totalViews) }}</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100" data-target="{{ $totalViews }}">0
+                    </p>
                 </div>
                 <div
                     class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 border-l-4 border-yellow-500 dark:border-yellow-400">
                     <h3 class="text-md font-bold text-gray-800 dark:text-white">Komentar Pending</h3>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $pendingComments }}</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100" data-target="{{ $pendingComments }}">
+                        0</p>
                 </div>
                 <div
                     class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 border-l-4 border-red-500 dark:border-red-400">
                     <h3 class="text-md font-bold text-gray-800 dark:text-white">Penulis Aktif</h3>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $activeWriters }}</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-gray-100" data-target="{{ $activeWriters }}">0
+                    </p>
                 </div>
             </div>
 
@@ -66,7 +94,7 @@
                     <ul class="space-y-4">
                         @forelse ($recentArticles as $article)
                             <li
-                                class="flex flex-col sm:flex-row sm:items-center justify-between border-b dark:border-gray-700 pb-2 last:border-b-0">
+                                class="flex flex-col sm:flex-row sm:items-center justify-between border-b dark:border-gray-700 pb-2 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <div class="flex-1 min-w-0">
                                     <p class="font-medium text-gray-800 dark:text-white truncate">{{ $article->title }}
                                     </p>
@@ -96,7 +124,7 @@
                     <ul class="space-y-4">
                         @forelse ($recentComments as $comment)
                             <li
-                                class="flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3 border-b dark:border-gray-700 pb-2 last:border-b-0">
+                                class="flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3 border-b dark:border-gray-700 pb-2 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <div
                                     class="w-10 h-10 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
                                     <svg class="w-6 h-6 text-gray-500 dark:text-gray-300" fill="none"
@@ -132,7 +160,7 @@
                 <ul class="space-y-4">
                     @forelse ($trendingArticles as $article)
                         <li
-                            class="flex flex-col sm:flex-row sm:items-center justify-between border-b dark:border-gray-700 pb-2 last:border-b-0">
+                            class="flex flex-col sm:flex-row sm:items-center justify-between border-b dark:border-gray-700 pb-2 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                             <div class="flex-1 min-w-0">
                                 <p class="font-medium text-gray-800 dark:text-white truncate">{{ $article->title }}</p>
                                 <p class="text-xs text-gray-600 dark:text-gray-400">Kategori:
@@ -157,4 +185,59 @@
 
         </div>
     </div>
+
+    {{-- Scripts --}}
+    <script>
+        // Welcome Card Motivasi
+        const messages = [
+            "Siap jadi storyteller hari ini? 🚀 Mulai bikin berita keren dan tarik perhatian pembaca!",
+            "Hari ini waktunya bikin konten luar biasa untuk Silet Sumba! 🌟",
+            "Ayo tunjukkan kehebatanmu di dunia berita hari ini! 💪",
+            "Waktunya jadi kreator berita yang inspiratif! ✨",
+            "Jangan tunggu lama, buat berita hari ini jadi viral! 🔥",
+            "Buka dashboard, tulis, dan buat berita yang bikin pembaca terpukau! 🌈",
+            "Hari baru, ide baru! Saatnya bikin berita yang luar biasa! ⚡"
+        ];
+
+        const msgElement = document.getElementById('dailyMessage');
+        let index = 0;
+        const todayKey = `welcomeShown-${new Date().toDateString()}`;
+        const showWelcome = !localStorage.getItem(todayKey);
+
+        function showNextMessage() {
+            msgElement.classList.remove('opacity-100');
+            msgElement.classList.add('opacity-0');
+
+            setTimeout(() => {
+                msgElement.textContent = messages[index];
+                msgElement.classList.remove('opacity-0');
+                msgElement.classList.add('opacity-100');
+                index = (index + 1) % messages.length;
+            }, 700);
+        }
+
+        if (showWelcome) {
+            showNextMessage();
+            setInterval(showNextMessage, 5000);
+            localStorage.setItem(todayKey, 'true');
+        } else {
+            msgElement.textContent = "Selamat datang kembali!";
+            msgElement.classList.remove('opacity-0');
+            msgElement.classList.add('opacity-100');
+        }
+
+        // Stats Cards Count-Up
+        document.querySelectorAll('[data-target]').forEach(el => {
+            const target = +el.dataset.target;
+            let count = 0;
+            const increment = Math.ceil(target / 100);
+            const update = () => {
+                count += increment;
+                if (count >= target) count = target;
+                el.textContent = count.toLocaleString();
+                if (count < target) requestAnimationFrame(update);
+            };
+            update();
+        });
+    </script>
 </x-app-layout>
