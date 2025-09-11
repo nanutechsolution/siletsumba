@@ -66,7 +66,7 @@
                     <div class="search-result-card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                         <div class="flex flex-col md:flex-row gap-6">
                             <div class="md:w-1/4">
-                                <img src="https://images.unsplash.com/photo-1572947650440-e8a97ef053b2?w=300&h=200&fit=crop"
+                                <img src="{{ $item->image ? Storage::url($item->image) : 'https://images.unsplash.com/photo-1572947650440-e8a97ef053b2?w=300&h=200&fit=crop' }}"
                                     alt="Presiden Jokowi meresmikan proyek infrastruktur"
                                     class="w-full h-40 object-cover rounded-lg">
                             </div>
@@ -78,8 +78,13 @@
                                     {{ $item->title }}
                                 </h2>
                                 <p class="text-gray-600 dark:text-gray-300 mt-2 line-clamp-3">
-                                    {{ $item->content }}
+                                    {{ Str::limit(strip_tags($item->content), 150) }}
                                 </p>
+                                <a href="{{ route('articles.show', $item->slug) }}"
+                                    class="text-tribun-red mt-1 inline-block font-medium">
+                                    Baca selengkapnya
+                                </a>
+
                                 <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-3">
                                     <span><i class="far fa-clock mr-1"></i> {{ $item->created_at->diffForHumans() }}</span>
                                     <span class="mx-2">•</span>
