@@ -66,6 +66,17 @@
                     </div>
                     {{-- Lokasi --}}
                     <div class="mb-4">
+                        <label for="location_short" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Lokasi
+                            Singkat</label>
+                        <input type="text" name="location_short" id="location_short"
+                            value="{{ old('location_short') }}" placeholder="Wewewa Barat, Sumba Barat Daya"
+                            class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                        @error('location_short')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    {{-- Lokasi --}}
+                    <div class="mb-4">
                         <label for="location" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Lokasi
                             Detail</label>
                         <input type="text" name="location" id="location" value="{{ old('location') }}"
@@ -92,16 +103,35 @@
                             class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('quotes') }}</textarea>
 
                     </div>
-                    {{-- Gambar --}}
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
                         <input type="file" name="images[]" id="images" multiple
                             class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                         <div id="image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+
+                        {{-- Pesan error untuk seluruh input gambar --}}
+                        @error('images')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                         @error('images.*')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div class="mb-4">
+                        <label for="is_published" class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_published" id="is_published" value="1"
+                                class="sr-only peer" {{ old('is_published', true) ? 'checked' : '' }}>
+                            <div
+                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                            </div>
+                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                id="is-published-label">
+                                {{ old('is_published') ? 'Terpublikasi' : 'Draft' }}
+                            </span>
+                        </label>
+                    </div>
+
                     {{-- Konten Asli --}}
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Konten Asli</label>
@@ -113,20 +143,19 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+
+
                     {{-- Tombol AI --}}
                     <div class="flex flex-wrap gap-2 mb-4 overflow-x-auto">
-                        <button type="button" id="ai-generate-local-btn"
-                            class="bg-purple-600 text-white py-1 px-3 rounded hover:bg-purple-700">Generate Berita
-                            Lokal</button>
-                        <button type="button" id="ai-silet-sumba-btn"
-                            class="bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700">Silet Sumba</button>
-                        <button type="button" id="ai-budaya-sumba-btn"
-                            class="bg-emerald-600 text-white py-1 px-3 rounded hover:bg-emerald-700">Budaya
-                            Sumba</button>
-                        <button type="button" id="ai-opini-sumba-btn"
-                            class="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-700">Opini Sumba</button>
-                        <button type="button" id="ai-aida-lokal-btn"
-                            class="bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-700">AIDA Lokal</button>
+                        @foreach ($prompts as $prompt)
+                            <button type="button" class="py-1 px-3 rounded text-white hover:opacity-80 transition"
+                                data-prompt-name="{{ $prompt->name }}"
+                                data-prompt-template="{{ $prompt->prompt_template }}"
+                                style="background-color: {{ $prompt->color ?? 'gray' }};">
+                                {{ $prompt->button_text }}
+                            </button>
+                        @endforeach
                     </div>
 
                     <div class="mb-4">
@@ -155,7 +184,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ====== Editor utama ======
+
+            // Scroll to first error on page load
+            const firstError = document.querySelector('.text-red-500.text-sm');
+            if (firstError) {
+                firstError.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+
+            // ====== Quill Editors ======
             const editorQuill = new Quill('#editor', {
                 placeholder: 'Tulis konten disini...',
                 theme: 'snow',
@@ -176,11 +215,6 @@
                 }
             });
 
-            // Restore old content jika ada
-            const contentTextarea = document.getElementById('content');
-            if (contentTextarea.value) editorQuill.root.innerHTML = contentTextarea.value;
-
-            // ====== Editor AI ======
             const aiQuill = new Quill('#ai-editor', {
                 theme: 'snow',
                 modules: {
@@ -203,54 +237,108 @@
                 }
             });
 
+            // Restore old content from textarea to Quill editors
+            const contentTextarea = document.getElementById('content');
             const aiTextarea = document.getElementById('ai-content');
+            if (contentTextarea.value) editorQuill.root.innerHTML = contentTextarea.value;
             if (aiTextarea.value) aiQuill.root.innerHTML = aiTextarea.value;
 
-            // ====== Preview gambar ======
-            let allFiles = [];
-            const inputImages = document.getElementById('images');
-            const previewContainer = document.getElementById('image-preview');
-
-            inputImages.addEventListener('change', function(e) {
-                const files = Array.from(e.target.files);
-                allFiles = allFiles.concat(files);
-                previewContainer.innerHTML = '';
-                allFiles.forEach(file => {
-                    const div = document.createElement('div');
-                    div.className = 'relative w-full overflow-hidden rounded-lg shadow-lg';
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(file);
-                    img.alt = file.name;
-                    img.className = 'w-full h-32 object-cover hover:scale-105 transition-transform';
-                    div.appendChild(img);
-                    previewContainer.appendChild(div);
-                });
-                const dt = new DataTransfer();
-                allFiles.forEach(f => dt.items.add(f));
-                inputImages.files = dt.files;
+            // Automatically update hidden textareas when Quill content changes
+            editorQuill.on('text-change', function() {
+                contentTextarea.value = editorQuill.root.innerHTML;
+            });
+            aiQuill.on('text-change', function() {
+                aiTextarea.value = aiQuill.root.innerHTML;
             });
 
-            // ====== Tombol Loading ======
+            const inputImages = document.getElementById('images');
+            const previewContainer = document.getElementById('image-preview');
+            let allFiles = []; // Array global untuk menyimpan semua file yang dipilih
+
+            inputImages.addEventListener('change', function(event) {
+                const newFiles = Array.from(event.target.files);
+                allFiles = allFiles.concat(newFiles); // Gabungkan file baru dengan yang sudah ada
+
+                updatePreviewAndInput();
+            });
+
+            // Event listener untuk tombol hapus pada pratinjau
+            previewContainer.addEventListener('click', function(event) {
+                const deleteBtn = event.target.closest('.delete-preview-image');
+                if (deleteBtn) {
+                    const fileIndex = deleteBtn.dataset.index;
+                    allFiles.splice(fileIndex, 1); // Hapus file dari array
+                    updatePreviewAndInput();
+                }
+            });
+
+            function updatePreviewAndInput() {
+                // Kosongkan pratinjau lama
+                previewContainer.innerHTML = '';
+
+                if (allFiles.length > 0) {
+                    // Tampilkan pratinjau dan tambahkan tombol hapus
+                    allFiles.forEach((file, index) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const container = document.createElement('div');
+                            container.className =
+                                'relative w-full overflow-hidden rounded-lg shadow-md group';
+
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = file.name;
+                            img.className = 'w-full h-32 object-cover';
+
+                            // Tombol hapus
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.type = 'button';
+                            deleteBtn.innerHTML = '&times;';
+                            deleteBtn.className =
+                                'absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition delete-preview-image';
+                            deleteBtn.dataset.index = index; // Simpan indeks file
+
+                            container.appendChild(img);
+                            container.appendChild(deleteBtn);
+                            previewContainer.appendChild(container);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+
+                // Perbarui input file agar hanya file yang tersisa yang akan diunggah
+                const dataTransfer = new DataTransfer();
+                allFiles.forEach(f => dataTransfer.items.add(f));
+                inputImages.files = dataTransfer.files;
+            }
+
+            // ====== AI Generation Functions ======
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             function setButtonLoading(button, loading = true) {
                 if (loading) {
                     button.dataset.originalText = button.textContent;
-                    button.textContent = 'Membuat...';
+                    button.innerHTML = `
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l2-2.647z"></path>
+                        </svg>
+                    `;
                     button.disabled = true;
                 } else {
-                    button.textContent = button.dataset.originalText;
+                    button.innerHTML = button.dataset.originalText;
                     button.disabled = false;
                 }
             }
 
-            // ====== Fungsi generate AI ======
             async function callAI(prompt, button) {
+                setButtonLoading(button, true);
                 try {
                     const res = await fetch("{{ route('admin.articles.generate-content') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
+                            'X-CSRF-TOKEN': csrfToken
                         },
                         body: JSON.stringify({
                             prompt
@@ -267,7 +355,6 @@
                             console.error("Gagal set aiQuill content:", err);
                             alert("Gagal memuat konten AI.");
                         }
-
                     } else {
                         alert('Gagal generate: ' + data.error);
                     }
@@ -279,156 +366,46 @@
                 }
             }
 
-            // ====== Event tombol generate AI ======
-            document.getElementById('ai-generate-local-btn').addEventListener('click', function() {
-                const title = document.getElementById('title').value.trim();
-                const categorySelect = document.querySelector('select[name="category_id"]');
-                const category = categorySelect.options[categorySelect.selectedIndex].text;
-                const location = document.getElementById('location').value.trim();
-                const facts = document.getElementById('facts').value.trim();
-                const quotes = document.getElementById('quotes').value.trim();
-                if (!title) return alert('Masukkan judul!');
-                const prompt = `Bertindaklah sebagai jurnalis profesional di Sumba yang menulis berita untuk media online.
-                        Buat artikel berita dengan informasi berikut:
-                        Judul: ${title}
-                                Kategori: ${category}
-                                Lokasi (jangan tulis di awal artikel): ${location || "Tidak disebutkan"}
-                                Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
-                                Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
-                                Instruksi penting:
-                                - TIDAK BOLEH menulis lokasi dan domain di awal artikel
-                                - Lead paragraph langsung masuk ke inti berita
-                                - Minimal 3 paragraf, maksimal 5 paragraf
-                                - Boleh ada subjudul jika relevan
-                                - Gunakan <strong>, <em>, atau <u> sesuai konteks penting
-                                - Gunakan bahasa jurnalistik profesional, lugas, akurat
-                                - Sertakan konteks sosial atau dampak bagi masyarakat jika relevan
-                                Output HANYA dalam format HTML siap publish, tanpa markdown (\`\`\`).`;
+            // ====== Unified Event Listener for All AI Buttons ======
+            const aiButtons = document.querySelectorAll('[data-prompt-name]');
+            aiButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const promptTemplate = this.dataset.promptTemplate;
+                    const title = document.getElementById('title').value.trim();
+                    const categorySelect = document.querySelector('select[name="category_id"]');
+                    const category = categorySelect.options[categorySelect.selectedIndex].text;
+                    const location = document.getElementById('location').value.trim();
+                    const facts = document.getElementById('facts').value.trim();
+                    const quotes = document.getElementById('quotes').value.trim();
 
-            setButtonLoading(this, true);
-            callAI(prompt, this);
-        });
+                    if (!title) {
+                        alert('Masukkan judul terlebih dahulu!');
+                        return;
+                    }
 
-        // ====== Event tombol generate AI Silet Sumba ======
-        document.getElementById('ai-silet-sumba-btn').addEventListener('click', function() {
-            const title = document.getElementById('title').value.trim();
-            const categorySelect = document.querySelector('select[name="category_id"]');
-            const category = categorySelect.options[categorySelect.selectedIndex].text;
-            const location = document.getElementById('location').value.trim();
-            const facts = document.getElementById('facts').value.trim();
-            const quotes = document.getElementById('quotes').value.trim();
-            if (!title) return alert('Masukkan judul!');
-            const prompt =
-                `Bertindaklah sebagai jurnalis profesional di Sumba untuk website Silet Sumba.
-                                                                                                        Tulisan ini harus sesuai gaya Silet Sumba: ringkas, tajam, tapi akurat.
-                                                                                                        Judul: ${title}
-                                                                                                        Kategori: ${category}
-                                                                                                        Lokasi: ${location || "Tidak disebutkan"}
-                                                                                                        Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
-                                                                                                        Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
-                                                                                                        Petunjuk penulisan:
-                                                                                                        - Lead paragraph memuat inti berita
-                                                                                                        - 2-5 paragraf maksimal
-                                                                                                        - Gunakan bold/italic/underline untuk highlight
-                                                                                                        - Tambahkan subjudul jika perlu
-                                                                                                        - Sertakan konteks lokal, adat, atau dampak sosial jika relevan
-                                                                                                        Hasil kembalikan dalam format HTML/contenteditable siap dipublish.`;
-            setButtonLoading(this, true);
-            callAI(prompt, this);
-        });
+                    // Replace placeholders using a regular expression with a global flag
+                    const finalPrompt = promptTemplate
+                        .replace(/{title}/g, title)
+                        .replace(/{category}/g, category)
+                        .replace(/{location}/g, location || "Tidak disebutkan")
+                        .replace(/{facts}/g, facts || "Tidak ada fakta tambahan")
+                        .replace(/{quotes}/g, quotes || "Tidak ada kutipan");
 
-        // ====== Event tombol generate AI Budaya Sumba ======
-        document.getElementById('ai-budaya-sumba-btn').addEventListener('click', function() {
-            const title = document.getElementById('title').value.trim();
-            const categorySelect = document.querySelector('select[name="category_id"]');
-            const category = categorySelect.options[categorySelect.selectedIndex].text;
-            const location = document.getElementById('location').value.trim();
-            const facts = document.getElementById('facts').value.trim();
-            const quotes = document.getElementById('quotes').value.trim();
-            if (!title) return alert('Masukkan judul!');
-
-            const prompt =
-                `Bertindaklah sebagai jurnalis Silet Sumba yang mengulas budaya Sumba. 
-                                                                                            Buat artikel berita atau liputan budaya dengan gaya ringkas, tajam, dan menarik:
-                                                                                            Judul: ${title}
-                                                                                            Kategori: ${category}
-                                                                                            Lokasi: ${location || "Tidak disebutkan"}
-                                                                                            Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
-                                                                                            Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
-                                                                                            
-                                                                                            Buat artikel dengan:
-                                                                                            - 2-5 paragraf, padat informasi
-                                                                                            - Fokus pada aspek budaya, tradisi, seni, atau event lokal
-                                                                                            - Gunakan kalimat tajam, lugas, dan sensasional
-                                                                                            - Highlight poin penting dengan bold atau underline
-                                                                                            Hasil kembalikan dalam format HTML/contenteditable.`;
-
-            setButtonLoading(this, true);
-            callAI(prompt, this);
-        });
-
-        // ====== Event tombol generate AI Opini Sumba ======
-        document.getElementById('ai-opini-sumba-btn').addEventListener('click', function() {
-            const title = document.getElementById('title').value.trim();
-            const categorySelect = document.querySelector('select[name="category_id"]');
-            const category = categorySelect.options[categorySelect.selectedIndex].text;
-            const location = document.getElementById('location').value.trim();
-            const facts = document.getElementById('facts').value.trim();
-            const quotes = document.getElementById('quotes').value.trim();
-            if (!title) return alert('Masukkan judul!');
-
-            const prompt =
-                `Bertindaklah sebagai kolumnis atau penulis opini di Sumba. 
-                                                                                            Buat artikel opini yang:
-                                                                                            - Tajam, lugas, dan menarik
-                                                                                            - Mencerminkan perspektif lokal Sumba
-                                                                                            - Berdasarkan informasi berikut:
-                                                                                                Judul: ${title}
-                                                                                                Kategori: ${category}
-                                                                                                Lokasi: ${location || "Tidak disebutkan"}
-                                                                                                Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
-                                                                                                Kutipan / Narasumber (harus persis sama, jangan diubah): ${quotes || "Tidak ada kutipan"}
-                                                                                            - Panjang 2-5 paragraf
-                                                                                            - Bisa menggunakan teks bold/italic untuk highlight pendapat penting
-                                                                                            Hasil kembalikan dalam format HTML/contenteditable.`;
-            setButtonLoading(this, true);
-            callAI(prompt, this);
-        });
-        // ====== Event tombol generate AI AIDA Lokal ======
-        document.getElementById('ai-aida-lokal-btn').addEventListener('click', function() {
-            const title = document.getElementById('title').value.trim();
-            const categorySelect = document.querySelector('select[name="category_id"]');
-            const category = categorySelect.options[categorySelect.selectedIndex].text;
-            const location = document.getElementById('location').value.trim();
-            const facts = document.getElementById('facts').value.trim();
-            const quotes = document.getElementById('quotes').value.trim();
-            if (!title) return alert('Masukkan judul!');
-
-            const prompt =
-                `Bertindaklah sebagai copywriter lokal di Sumba. Buat konten persuasif dengan metode AIDA (Attention, Interest, Desire, Action) menggunakan informasi berikut:
-                                                                                            Judul / Produk / Event: ${title}
-                                                                                            Kategori: ${category}
-                                                                                            Lokasi: ${location || "Tidak disebutkan"}
-                                                                                            Fakta / Kronologi: ${facts || "Tidak ada fakta tambahan"}
-                                                                                            Kutipan / Narasumber (jika ada): ${quotes || "Tidak ada kutipan"}
-
-                                                                                            Buat konten yang:
-                                                                                            - Menarik perhatian pembaca (Attention)
-                                                                                            - Membangkitkan minat (Interest)
-                                                                                            - Membuat pembaca ingin berinteraksi atau membeli (Desire)
-                                                                                            - Mendorong tindakan jelas (Action)
-                                                                                            - Ringkas, lugas, dan sesuai konteks lokal Sumba
-                                                                                            Hasil kembalikan dalam format HTML/contenteditable.`;
-                setButtonLoading(this, true);
-                callAI(prompt, this);
+                    // Call the main AI function
+                    callAI(finalPrompt, this);
+                });
             });
-            // ====== Submit form ======
-            const form = document.getElementById('article-form');
-            form.addEventListener('submit', function() {
-                // Ambil konten dari Quill dan simpan ke textarea
-                contentTextarea.value = editorQuill.root.innerHTML;
-                aiTextarea.value = aiQuill.root.innerHTML;
+
+            const publishedToggle = document.getElementById('is_published');
+            const publishedLabel = document.getElementById('is-published-label');
+
+            publishedToggle.addEventListener('change', function() {
+                publishedLabel.textContent = this.checked ? 'Terpublikasi' : 'Draft';
             });
+
+            // Set initial label text on page load
+            publishedLabel.textContent = publishedToggle.checked ? 'Terpublikasi' : 'Draft';
+
         });
     </script>
 

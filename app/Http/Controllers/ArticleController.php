@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\SearchLog;
 use App\Models\Tag;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -104,5 +105,15 @@ class ArticleController extends Controller
             'trendingArticles',
             'categories'
         ));
+    }
+
+    public function like(string $slug): RedirectResponse
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+
+        // Logika untuk mencatat like
+        $article->increment('likes');
+
+        return back()->with('success', 'Artikel berhasil disukai!');
     }
 }

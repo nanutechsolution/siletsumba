@@ -21,7 +21,10 @@ class Article extends Model
         'image',
         'category_id',
         'is_breaking',
+        'location_short',
         'user_id',
+        'views',
+        'is_published',
     ];
 
     public function category()
@@ -56,30 +59,27 @@ class Article extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function getFormattedContentAttribute()
+    public function getFullContentAttribute()
     {
-        $domain = '<strong class="text-red-600">siletsumba.com</strong>';
-        $content = $this->content;
+        $domain = 'siletsumba.com';
 
-        // Cari paragraf pertama
-        if (preg_match('#<p>(.*?)</p>#s', $content, $matches)) {
-            $firstParagraph = $matches[1];
-
-            // Case: pembuka dengan <strong>LOKASI</strong> -
-            if (preg_match('#^<strong.*?>(.*?)</strong>\s*-\s*#', $firstParagraph, $loc)) {
-                $replace = '<strong style="font-size: 13px;">' . $loc[1] . '</strong>, ' . $domain . ' - ';
-                $newFirstParagraph = preg_replace(
-                    '#^<strong.*?>(.*?)</strong>\s*-\s*#',
-                    $replace,
-                    $firstParagraph
-                );
-
-                // Ganti hanya paragraf pertama
-                $content = preg_replace('#<p>.*?</p>#s', '<p>' . $newFirstParagraph . '</p>', $content, 1);
-            }
+        if ($this->location_short) {
+            $prefix = "<strong>{$this->location_short}, <span style='color:red;'>{$domain}</span></strong> - ";
+        } else {
+            $prefix = "<strong><span style='color:red;'>{$domain}</span></strong> - ";
         }
 
-        return $content;
+        // masukkan prefix ke dalam <p> pertama jika ada
+        if (str_starts_with($this->content, '<p>')) {
+            return preg_replace('/^<p>/', "<p>{$prefix}", $this->content, 1);
+        }
+
+        // jika tidak ada <p>, tambahkan prefix di depan
+        return $prefix . $this->content;
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }

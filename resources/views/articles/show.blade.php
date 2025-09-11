@@ -59,7 +59,30 @@
                         <i class="fas fa-eye mr-2"></i>
                         <span>{{ number_format($article->views) }} Views</span>
                     </div>
+                    <div class="flex items-center mr-6 mb-2  space-x-4">
+                        <p class="text-sm text-gray-600">
+                            <span class="font-medium">{{ number_format($article->likes) }}</span> Suka
+                        </p>
 
+                        @guest
+                            <button type="button" class="text-gray-400 cursor-not-allowed">
+                                <i class="far fa-thumbs-up mr-2"></i>
+                            </button>
+                            <p class="text-sm text-gray-500">
+                                <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> untuk menyukai
+                                artikel ini.
+                            </p>
+                        @endguest
+
+                        @auth
+                            <form action="{{ route('articles.like', $article->slug) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-blue-500 hover:text-blue-700 transition">
+                                    <i class="far fa-thumbs-up mr-2"></i>
+                                </button>
+                            </form>
+                        @endauth
+                    </div>
                     <!-- Komentar -->
                     <div class="flex items-center mb-2">
                         <i class="far fa-comment mr-2"></i>
@@ -78,8 +101,9 @@
 
                 <!-- Article Content -->
                 <div class="article-content prose dark:prose-invert max-w-none">
-                    {!! $article->formatted_content !!}
+                    {!! $article->full_content !!}
                 </div>
+
                 <!-- Article Tags -->
                 @if ($article->tags->count())
                     <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">

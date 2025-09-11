@@ -3,137 +3,145 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
-use App\Models\User;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ArticleSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        $user = User::first() ?? User::factory()->create([
-            'name' => 'Redaksi Silet Sumba',
-            'email' => 'redaksi@siletsumba.com',
-            'password' => bcrypt('password'),
-        ]);
+        // Menonaktifkan pemeriksaan foreign key sementara
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // Ambil kategori berdasarkan slug
-        $categories = Category::pluck('id', 'slug');
+        // Mengosongkan tabel yang memiliki foreign key
+        Article::truncate();
+
+        // Mengaktifkan kembali pemeriksaan foreign key
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $articles = [
+            // Berita 1: Investigasi (Silet Sumba)
             [
-                'title' => 'Kecelakaan Maut di Jalan Trans Sumba, Dua Korban Meninggal',
-                'slug' => Str::slug('Kecelakaan Maut di Jalan Trans Sumba, Dua Korban Meninggal'),
-                'category' => 'kecelakaan-kejadian',
-                'content' => '
-                    <h2>Kronologi Kejadian</h2>
-                    <p><strong>Kecelakaan tragis</strong> terjadi di Jalan Trans Sumba, Selasa sore (10/09/2025). 
-                    Dua remaja pengendara motor tewas di tempat setelah bertabrakan dengan truk bermuatan bahan bangunan.</p>
-                ',
+                'title' => 'Proyek Sumur Bor Mangkrak, Warga Desa di Sumba Timur Krisis Air Bersih',
+                'is_published' => true,
+                'content' => '<p>WAINGAPU — Proyek pembangunan sumur bor di Desa Elar, Sumba Timur, senilai Rp 500 juta kini mangkrak. Proyek vital ini terhenti sejak tiga bulan lalu, menyisakan tumpukan material yang tak berguna. Akibatnya, ratusan warga kembali menghadapi krisis air bersih, dan harus menempuh jarak 3 km untuk mendapatkan air.</p><p>Seorang warga, Rato (55), mengungkapkan kekecewaannya. "Kami sudah mengeluh berkali-kali, tapi tidak ada respons. Jangankan air, janji saja tidak ada," ujarnya dengan nada putus asa. Kontraktor proyek diduga menghilang dan tidak bisa dihubungi pihak desa.</p><p>Maria (42), seorang ibu rumah tangga, juga merasakan dampak buruknya. "Ini proyek vital bagi kami, tapi sekarang hanya jadi tumpukan besi tak berguna," katanya. Kasus ini kini tengah diselidiki oleh dinas terkait, namun belum ada kejelasan kapan proyek akan dilanjutkan.</p>',
+                'location_short' => 'Elar, Sumba Timur',
                 'is_breaking' => true,
+                'views' => 15200,
+                'likes' => 450,
             ],
+            // Berita 2: Budaya
             [
-                'title' => 'Festival Tenun Ikat Sumba 2025 Resmi Dibuka di Waingapu',
-                'slug' => Str::slug('Festival Tenun Ikat Sumba 2025 Resmi Dibuka di Waingapu'),
-                'category' => 'budaya-tradisi',
-                'content' => '
-                    <h2>Pesona Tenun Ikat</h2>
-                    <p>Ratusan penenun lokal menampilkan karya terbaik mereka dalam <em>Festival Tenun Ikat Sumba 2025</em>. 
-                    Acara dibuka dengan tarian tradisional dan pameran produk UMKM.</p>
-                ',
+                'title' => 'Makna di Balik Tradisi Pasola, Tontonan Penuh Ketenangan Batin di Sumba',
+                'is_published' => true,
+                'content' => '<p>SUMBA BARAT DAYA — Ritual Pasola kembali digelar di Lapangan Adat Waihura, Sumba Barat Daya, menarik ribuan pasang mata, baik dari warga lokal maupun turis mancanegara. Pasola adalah ritual perang-perangan antara dua kelompok ksatria berkuda yang saling melempar lembing kayu. Namun, di balik ketegangan ritual, tersimpan makna mendalam tentang permohonan restu leluhur.</p><p>Umbu Kahi (60), seorang tokoh adat, menjelaskan bahwa Pasola bukan sekadar tontonan. "Pasola adalah permohonan kami kepada leluhur agar tanah subur dan panen berhasil," katanya. Ketenangan hati dan keberanian adalah nilai utama yang dijunjung tinggi selama ritual.</p><p>Acara ini juga menjadi ajang promosi pariwisata. Kepala Dinas Pariwisata Sumba Barat Daya menyatakan, "Kami sangat bangga bisa menampilkan tradisi ini kepada dunia. Ini adalah cerminan kekayaan budaya kita."</p>',
+                'location_short' => 'Sumba Barat Daya',
                 'is_breaking' => false,
+                'views' => 9850,
+                'likes' => 320,
             ],
+            // Berita 3: Berita Lokal
             [
-                'title' => 'Harga Jagung di Pasar Waikabubak Melonjak Tajam',
-                'slug' => Str::slug('Harga Jagung di Pasar Waikabubak Melonjak Tajam'),
-                'category' => 'ekonomi-bisnis',
-                'content' => '
-                    <p>Harga jagung di Pasar Waikabubak naik hingga 40% dalam dua pekan terakhir. 
-                    Para petani menyambut baik kenaikan ini, meski dikhawatirkan membebani konsumen.</p>
-                ',
+                'title' => 'Jalan Rusak Parah di Waingapu Sebabkan Kemacetan dan Keluhan Warga',
+                'is_published' => true,
+                'content' => '<p>WAINGAPU — Kondisi jalan rusak parah di beberapa titik Kota Waingapu kembali menuai keluhan dari masyarakat. Lubang-lubang besar di jalan utama sering menyebabkan kemacetan dan kecelakaan kecil, terutama saat musim hujan.</p><p>Jalur menuju Pelabuhan Waingapu menjadi salah satu titik terparah. Pengendara motor dan mobil harus ekstra hati-hati. Warga berharap pemerintah segera mengambil tindakan untuk memperbaiki infrastruktur yang vital ini.</p>',
+                'location_short' => 'Waingapu',
                 'is_breaking' => false,
+                'views' => 7300,
+                'likes' => 180,
             ],
+            // Berita 4: Lingkungan
             [
-                'title' => 'Banjir Bandang Terjang Desa di Sumba Timur',
-                'slug' => Str::slug('Banjir Bandang Terjang Desa di Sumba Timur'),
-                'category' => 'lokal-sumba',
-                'content' => '
-                    <p>Banjir bandang melanda Desa Prailiu, Sumba Timur, akibat hujan deras semalaman. 
-                    Puluhan rumah terendam dan ratusan warga mengungsi ke balai desa.</p>
-                ',
+                'title' => 'Petani Sumba Mulai Beralih ke Pertanian Organik, Dukungan Pemerintah Diharapkan',
+                'is_published' => true,
+                'content' => '<p>SUMBA BARAT — Kesadaran akan pentingnya pertanian ramah lingkungan mulai tumbuh di kalangan petani Sumba. Sejumlah kelompok petani di Sumba Barat mulai mencoba metode organik, mengurangi penggunaan pupuk dan pestisida kimia. Langkah ini bertujuan menjaga kesuburan tanah dan menghasilkan produk yang lebih sehat.</p><p>Salah satu petani, Imanuel (45), mengatakan bahwa hasil panen dengan metode organik memang sedikit berbeda, namun kualitasnya lebih baik. "Kami berharap ada dukungan dari pemerintah, baik itu dalam hal bibit, pelatihan, atau pemasaran," ujarnya.</p>',
+                'location_short' => 'Sumba Barat',
+                'is_breaking' => false,
+                'views' => 4500,
+                'likes' => 95,
+            ],
+            // Berita 5: Sosial
+            [
+                'title' => 'Ratusan Mahasiswa Sumba Gelar Aksi Damai, Tuntut Penyelesaian Sengketa Tanah',
+                'is_published' => true,
+                'content' => '<p>WAINGAPU — Ratusan mahasiswa yang tergabung dalam Aliansi Mahasiswa Peduli Sumba menggelar aksi damai di depan Kantor Bupati Sumba Timur. Mereka menuntut pemerintah daerah untuk menuntaskan sengketa lahan adat yang tak kunjung selesai.</p><p>Aksi ini berlangsung tertib dan mendapat pengawalan ketat dari kepolisian. Perwakilan mahasiswa sudah diterima oleh Sekretaris Daerah untuk berdialog, meskipun belum ada kesepakatan final, pihak pemerintah berjanji akan menindaklanjuti tuntutan tersebut.</p>',
+                'location_short' => 'Waingapu',
+                'is_breaking' => false,
+                'views' => 12100,
+                'likes' => 512,
+            ],
+            // Berita 6: Promosi (AIDA Lokal)
+            [
+                'title' => 'Nikmati Keindahan Tersembunyi Pantai Watu Parunu, Surga Baru di Sumba',
+                'is_published' => true,
+                'content' => '<p>SUMBA — Pernahkah Anda membayangkan berlibur di pantai dengan tebing karang yang menjulang tinggi, ombak yang tenang, dan hamparan pasir putih bersih? Pantai Watu Parunu menawarkan semua itu! Destinasi wisata tersembunyi ini adalah surga bagi para pencari ketenangan dan keindahan alam. Jangan lewatkan keindahan matahari terbenam yang memukau di sini. Segera rencanakan perjalanan Anda dan jadikan Watu Parunu bagian dari cerita liburan Anda. Kunjungi Sumba, kunjungi Watu Parunu!</p>',
+                'location_short' => 'Watu Parunu',
+                'is_breaking' => false,
+                'views' => 6400,
+                'likes' => 289,
+            ],
+            // Berita 7: Draft
+            [
+                'title' => 'Persiapan Festival Kuda Sandelwood Terkendala Anggaran, Panitia Berharap Donasi',
+                'is_published' => false,
+                'content' => '<p>WAINGAPU — Panitia Festival Kuda Sandelwood 2025 mengungkapkan bahwa persiapan mereka menghadapi kendala anggaran. Meskipun antusiasme masyarakat tinggi, kekurangan dana membuat beberapa rangkaian acara terancam dibatalkan. Panitia saat ini sedang membuka donasi dari masyarakat maupun pihak swasta.</p>',
+                'location_short' => 'Waingapu',
+                'is_breaking' => false,
+                'views' => 1100,
+                'likes' => 15,
+            ],
+            // Berita 8: Investigasi (Silet Sumba)
+            [
+                'title' => 'Dugaan Pungutan Liar Dana Bantuan Sosial Gegerkan Warga Desa',
+                'is_published' => true,
+                'content' => '<p>KODI UTARA — Dugaan pungutan liar yang melibatkan oknum perangkat desa di Kodi Utara mencuat ke publik. Dana bantuan sosial yang seharusnya disalurkan utuh kepada masyarakat justru dipotong. Warga yang berani berbicara mengaku diintimidasi. Kasus ini telah dilaporkan ke pihak berwajib dan diharapkan dapat segera diusut tuntas.</p>',
+                'location_short' => 'Kodi Utara',
                 'is_breaking' => true,
+                'views' => 18000,
+                'likes' => 670,
             ],
+            // Berita 9: Budaya (Draft)
             [
-                'title' => 'Pariwisata Sumba Masuk 10 Besar Destinasi Favorit Indonesia',
-                'slug' => Str::slug('Pariwisata Sumba Masuk 10 Besar Destinasi Favorit Indonesia'),
-                'category' => 'lokal-sumba',
-                'content' => '
-                    <p>Pantai Nihiwatu dan Bukit Wairinding membuat Sumba semakin dikenal wisatawan mancanegara. 
-                    Data terbaru Kemenparekraf menunjukkan kunjungan wisatawan meningkat 35% tahun ini.</p>
-                ',
+                'title' => 'Mengenal Kain Tenun Ikat Sumba, Simbol Kekayaan Budaya yang Mendunia',
+                'is_published' => false,
+                'content' => '<p>SUMBA — Kain tenun ikat Sumba bukan sekadar kain, melainkan media cerita tentang kehidupan, mitologi, dan status sosial. Setiap motif memiliki makna dan sejarah yang dalam, diwariskan secara turun-temurun. Proses pembuatannya yang rumit dan memakan waktu menjadikannya salah satu warisan budaya tak benda yang paling berharga di Indonesia.</p>',
+                'location_short' => 'Seluruh Sumba',
                 'is_breaking' => false,
+                'views' => 320,
+                'likes' => 50,
             ],
+            // Berita 10: Berita Lokal
             [
-                'title' => 'Listrik Padam 8 Jam di Anakalang, Aktivitas Warga Terganggu',
-                'slug' => Str::slug('Listrik Padam 8 Jam di Anakalang, Aktivitas Warga Terganggu'),
-                'category' => 'lokal-sumba',
-                'content' => '
-                    <p>PLN Sumba Barat menjelaskan pemadaman terjadi karena perbaikan jaringan. 
-                    Warga mengeluh aktivitas terganggu, terutama pelaku usaha kecil.</p>
-                ',
+                'title' => 'Pemerintah Kabupaten Sumba Tengah Gelar Rapat Koordinasi, Bahas Peningkatan Kualitas Pendidikan',
+                'is_published' => true,
+                'content' => '<p>SUMBA TENGAH — Pemerintah Kabupaten Sumba Tengah mengadakan Rapat Koordinasi dengan seluruh kepala sekolah dan dinas terkait. Fokus utama rapat adalah membahas strategi peningkatan kualitas pendidikan, termasuk perbaikan fasilitas sekolah dan peningkatan kompetensi guru. Rapat ini diharapkan dapat menghasilkan langkah-langkah konkret untuk kemajuan pendidikan di Sumba Tengah.</p>',
+                'location_short' => 'Sumba Tengah',
                 'is_breaking' => false,
-            ],
-            [
-                'title' => 'Petani Sumba Barat Daya Panen Padi Melimpah',
-                'slug' => Str::slug('Petani Sumba Barat Daya Panen Padi Melimpah'),
-                'category' => 'ekonomi-bisnis',
-                'content' => '
-                    <p>Musim panen kali ini membawa senyum bagi petani di Kodi. 
-                    Produksi padi meningkat 20% berkat curah hujan yang cukup dan bantuan pupuk subsidi.</p>
-                ',
-                'is_breaking' => false,
-            ],
-            [
-                'title' => 'Sekolah Adat Sumba Ajarkan Generasi Muda Tentang Marapu',
-                'slug' => Str::slug('Sekolah Adat Sumba Ajarkan Generasi Muda Tentang Marapu'),
-                'category' => 'budaya-tradisi',
-                'content' => '
-                    <p>Sebuah sekolah adat di Sumba Tengah mengajarkan anak-anak tentang kepercayaan Marapu, 
-                    seni tenun, dan tarian tradisional. Program ini mendapat dukungan penuh dari tokoh adat.</p>
-                ',
-                'is_breaking' => false,
-            ],
-            [
-                'title' => 'Turnamen Sepak Bola Antar Desa di Sumba Barat Meriah',
-                'slug' => Str::slug('Turnamen Sepak Bola Antar Desa di Sumba Barat Meriah'),
-                'category' => 'olahraga-prestasi',
-                'content' => '
-                    <p>Lapangan Mandaelu dipadati ribuan penonton yang antusias mendukung tim desa masing-masing. 
-                    Turnamen ini digelar untuk mempererat persaudaraan antarwarga.</p>
-                ',
-                'is_breaking' => false,
-            ],
-            [
-                'title' => 'Bandara Tambolaka Siap Sambut Penerbangan Malam',
-                'slug' => Str::slug('Bandara Tambolaka Siap Sambut Penerbangan Malam'),
-                'category' => 'lokal-sumba',
-                'content' => '
-                    <p>Pihak otoritas bandara memastikan fasilitas penerangan dan navigasi sudah memenuhi standar. 
-                    Hal ini akan memperlancar arus kunjungan wisatawan ke Sumba.</p>
-                ',
-                'is_breaking' => false,
+                'views' => 2500,
+                'likes' => 85,
             ],
         ];
 
-        foreach ($articles as $data) {
+        foreach ($articles as $articleData) {
             Article::create([
-                'title' => $data['title'],
-                'slug' => $data['slug'],
-                'content' => $data['content'],
-                'category_id' =>  $categories[$data['category']] ?? null,
-                'user_id' => $user->id,
-                'is_breaking' => $data['is_breaking'],
+                'title' => $articleData['title'],
+                'slug' => Str::slug($articleData['title']),
+                'is_published' => $articleData['is_published'],
+                'content' => $articleData['content'],
+                'location_short' => $articleData['location_short'],
+                'is_breaking' => $articleData['is_breaking'],
+                'category_id' => Category::inRandomOrder()->first()->id,
+                'user_id' => User::inRandomOrder()->first()->id,
+                'views' => $articleData['views'],
+                'likes' => $articleData['likes'],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

@@ -1,5 +1,4 @@
 <?php
-// File: app/Http/Middleware/AdminMiddleware.php
 
 namespace App\Http\Middleware;
 
@@ -10,14 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah pengguna sudah login dan user_id-nya adalah 1 (contoh admin)
-        if (Auth::check() && Auth::user()->id === 1) {
+        if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
 
-        // Jika bukan admin, redirect ke halaman utama
-        return redirect('/');
+        return redirect('/')->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
     }
 }
