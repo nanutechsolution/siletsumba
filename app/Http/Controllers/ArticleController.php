@@ -31,7 +31,9 @@ class ArticleController extends Controller
 
         // update jumlah views
         $article->increment('views');
-        $categories = Category::all();
+        $categories = Category::whereHas('articles', function ($q) {
+            $q->where('is_published', 1);
+        })->get();
         // ambil artikel terkait (misal kategori sama)
         $related = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
