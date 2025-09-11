@@ -17,7 +17,6 @@ class HomeController extends Controller
         }
         $articles = $query->latest()->take(5)->get();
         $hero = $articles->first();
-        // Ambil artikel berikutnya untuk grid, excluding hero, dengan pagination
         $latestArticles = Article::where('id', '!=', $hero->id)
             ->latest()
             ->paginate(10)
