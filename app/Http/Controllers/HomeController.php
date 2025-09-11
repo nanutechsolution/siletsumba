@@ -17,8 +17,11 @@ class HomeController extends Controller
         }
         $articles = $query->latest()->take(5)->get();
         $hero = $articles->first();
-        $latestArticles = Article::latest()->offset(1)->paginate(10);
-
+        // Ambil artikel berikutnya untuk grid, excluding hero, dengan pagination
+        $latestArticles = Article::where('id', '!=', $hero->id)
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
         // breaking news
@@ -53,7 +56,8 @@ class HomeController extends Controller
         $hero = $articlesCollection->first();
         $latestArticles = Article::where('id', '!=', $hero->id)
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
         $breakingNews = Article::where('is_breaking', true)
