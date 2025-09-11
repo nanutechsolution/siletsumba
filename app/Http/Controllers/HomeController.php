@@ -51,8 +51,9 @@ class HomeController extends Controller
         $articlesCollection = $articles->getCollection();
 
         $hero = $articlesCollection->first();
-        // $latestArticles = Article::latest()->offset(1)->paginate(10);
-        $latestArticles = Article::latest()->skip(1)->take(10)->get();
+        $latestArticles = Article::where('id', '!=', $hero->id)
+            ->latest()
+            ->paginate(10);
         $trending = Article::orderBy('views', 'desc')->take(5)->get();
         $categories = Category::all();
         $breakingNews = Article::where('is_breaking', true)
