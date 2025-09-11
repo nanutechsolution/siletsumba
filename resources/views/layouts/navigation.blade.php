@@ -17,9 +17,9 @@
                     <x-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">
                         {{ __('Artikel') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.theme.index')" :active="request()->routeIs('admin.theme.*')">
+                    {{-- <x-nav-link :href="route('admin.theme.index')" :active="request()->routeIs('admin.theme.*')">
                         {{ __('Pengaturan Tema') }}
-                    </x-nav-link>
+                    </x-nav-link> --}}
                 </div>
             </div>
 
@@ -93,9 +93,9 @@
             <x-responsive-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">
                 {{ __('Artikel') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.theme.index')" :active="request()->routeIs('admin.theme.*')">
+            {{-- <x-responsive-nav-link :href="route('admin.theme.index')" :active="request()->routeIs('admin.theme.*')">
                 {{ __('Pengaturan Tema') }}
-            </x-responsive-nav-link>
+            </x-responsive-nav-link> --}}
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

@@ -21,15 +21,15 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $theme = ThemeSetting::firstOrCreate(
-            [],
-            [
-                'primary_color' => '#4299e1',
-                'secondary_color' => '#f56565',
-                'menu_background' => '#ffffff',
-            ]
-        );
+        // $theme = ThemeSetting::firstOrCreate(
+        //     [],
+        //     [
+        //         'primary_color' => '#4299e1',
+        //         'secondary_color' => '#f56565',
+        //         'menu_background' => '#ffffff',
+        //     ]
+        // );
 
-        View::share('theme', $theme);
+        // View::share('theme', $theme);
     }
 }
