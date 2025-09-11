@@ -42,7 +42,7 @@
             <div class="flex flex-wrap gap-4">
                 <a href="{{ route('admin.articles.create') }}"
                     class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition duration-200">
-                    Buat Artikel Baru
+                    Buat Berita Baru
                 </a>
                 <a href="{{ route('admin.comments.index') }}"
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow transition duration-200">
@@ -54,7 +54,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div
                     class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-4 border-l-4 border-blue-500 dark:border-blue-400">
-                    <h3 class="text-md font-bold text-gray-800 dark:text-white">Total Artikel</h3>
+                    <h3 class="text-md font-bold text-gray-800 dark:text-white">Total Berita</h3>
                     <p class="text-2xl font-bold text-gray-900 dark:text-gray-100" data-target="{{ $totalArticles }}">0
                     </p>
                 </div>
@@ -83,7 +83,7 @@
                 {{-- Recent Articles --}}
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">Artikel Terbaru</h3>
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white">Berita Terbaru</h3>
                         <a href="{{ route('admin.articles.index') }}"
                             class="text-blue-500 dark:text-blue-400 text-sm">Lihat Semua</a>
                     </div>
@@ -105,7 +105,7 @@
                                 </span>
                             </li>
                         @empty
-                            <p class="text-center text-gray-500 dark:text-gray-400">Tidak ada artikel terbaru.</p>
+                            <p class="text-center text-gray-500 dark:text-gray-400">Tidak ada Berita terbaru.</p>
                         @endforelse
                     </ul>
                 </div>
@@ -150,7 +150,7 @@
             {{-- Trending Articles --}}
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white">Artikel Terpopuler (7 Hari Terakhir)
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white">Berita Terpopuler (7 Hari Terakhir)
                     </h3>
                 </div>
                 <ul class="space-y-4">
@@ -174,7 +174,7 @@
                             </span>
                         </li>
                     @empty
-                        <p class="text-center text-gray-500 dark:text-gray-400">Tidak ada artikel terpopuler.</p>
+                        <p class="text-center text-gray-500 dark:text-gray-400">Tidak ada Berita terpopuler.</p>
                     @endforelse
                 </ul>
             </div>
