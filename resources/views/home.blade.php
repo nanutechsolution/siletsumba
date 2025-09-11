@@ -47,7 +47,6 @@
                 @foreach ($latestArticles as $article)
                     <a href="{{ route('articles.show', $article->slug) }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-
                         <!-- Image -->
                         <div class="relative h-48">
                             <img src="{{ $article->image_url ?? 'https://via.placeholder.com/300x200' }}"
