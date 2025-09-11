@@ -22,9 +22,7 @@ Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategorys']
 
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/articles/category/{slug}', [App\Http\Controllers\HomeController::class, 'getArticlesByCategory']);
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('categories', AdminCategoryController::class);
