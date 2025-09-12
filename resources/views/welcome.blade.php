@@ -102,7 +102,7 @@
                 bubble.style.padding = '8px 12px';
                 bubble.style.borderRadius = '15px';
                 bubble.style.maxWidth = '70%';
-                bubble.style.backgroundColor = from === 'user' ? '#edf2f7' : '#e53e3e';
+                bubble.style.backgroundColor = from === 'user' ? '#DCF8C6' : '#e53e3e'; // Hijau mirip WA
                 bubble.style.color = from === 'user' ? '#000' : '#fff';
                 bubble.style.wordWrap = 'break-word';
                 bubble.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
@@ -111,15 +111,24 @@
                 bubble.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
 
                 div.appendChild(bubble);
+
+                // Tambahkan pesan ke bawah chat
                 chatMessages.appendChild(div);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
 
                 requestAnimationFrame(() => {
                     bubble.style.opacity = 1;
                     bubble.style.transform = 'translateY(0)';
                 });
+
+                // Scroll otomatis jika user sudah dekat bagian bawah chat
+                const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop <= chatMessages.clientHeight +
+                    20;
+                if (isAtBottom) {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
             }
 
+            // Fungsi indikator mengetik ala WA
             function showTypingIndicator() {
                 const div = document.createElement('div');
                 div.style.display = 'flex';
@@ -133,10 +142,11 @@
                 bubble.style.color = '#fff';
                 bubble.style.fontStyle = 'italic';
                 bubble.textContent = '🤖 mengetik...';
-                div.appendChild(bubble);
 
+                div.appendChild(bubble);
                 chatMessages.appendChild(div);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+
                 return div;
             }
             async function siletBotReply(category = '', keyword = '') {
