@@ -31,17 +31,6 @@
                     </div>
                 </div>
             @endif
-
-            <div class="bg-white rounded-lg shadow-md mb-6">
-                <div class="flex overflow-x-auto scrollbar-hide border-b">
-                    @foreach ($categories as $item)
-                        <button data-slug="{{ $item->slug }}"
-                            class="category-tab px-6 py-3 font-medium whitespace-nowrap">
-                            {{ $item->name }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
             <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 @foreach ($latestArticles as $article)
                     <a href="{{ route('articles.show', $article->slug) }}"
@@ -90,19 +79,22 @@
                 </h3>
                 <div class="space-y-3">
                     @foreach ($trending as $index => $article)
-                        <div class="flex items-start space-x-3">
-                            <span class="bg-tribun-red text-white text-xs px-2 py-1 rounded mt-1">
-                                {{ $index + 1 }}
-                            </span>
-                            <div>
-                                <h4 class="font-medium hover:text-tribun-red cursor-pointer">
-                                    {{ $article->title }}
-                                </h4>
-                                <p class="text-xs text-gray-500">
-                                    {{ number_format($article->views) }} dibaca
-                                </p>
+                        <a href="{{ route('articles.show', $article->slug) }}"
+                            class="flex items-start space-x-3 hover:bg-gray-100 rounded p-2 transition">
+                            <div class="flex items-start space-x-3">
+                                <span class="bg-tribun-red text-white text-xs px-2 py-1 rounded mt-1">
+                                    {{ $index + 1 }}
+                                </span>
+                                <div>
+                                    <h4 class="font-medium hover:text-tribun-red cursor-pointer">
+                                        {{ $article->title }}
+                                    </h4>
+                                    <p class="text-xs text-gray-500">
+                                        {{ number_format($article->views) }} dibaca
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -116,8 +108,10 @@
                     @foreach ($latestArticles as $article)
                         <a href="{{ route('articles.show', $article->slug) }}"
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
-                            <img src="{{ Storage::url($article->image_url) ?? 'https://via.placeholder.com/80x60' }}"
-                                alt="{{ $article->title }}" class="w-20 h-15 object-cover rounded">
+                            @if ($article->image_url)
+                                <img src="{{ $article->image_url ?? 'https://via.placeholder.com/300x200' }}"
+                                    alt="{{ $article->title }}" class="w-20 h-15 object-cover rounded">
+                            @endif
                             <div>
                                 <h4 class="font-medium text-sm hover:text-tribun-red cursor-pointer">
                                     {{ $article->title }}
@@ -141,61 +135,4 @@
             </div>
         </div>
     </div>
-
-
-    <script>
-        document.querySelectorAll('.category-tab').forEach(btn => {
-            btn.addEventListener('click', function() {
-                let slug = this.dataset.slug;
-                // hilangkan aktif dari semua tab
-                document.querySelectorAll('.category-tab').forEach(b => {
-                    b.classList.remove('border-b-2', 'border-tribun-red', 'text-tribun-red');
-                    b.classList.add('text-gray-600');
-                });
-                // tab aktif
-                this.classList.add('border-b-2', 'border-tribun-red', 'text-tribun-red');
-                this.classList.remove('text-gray-600');
-                // Fetch artikel via AJAX
-                fetch(`/articles/category/${slug}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let container = document.getElementById('articles-container');
-                        container.innerHTML = '';
-                        if (data.length === 0) {
-                            container.innerHTML =
-                                `<p class="text-gray-500">Belum ada artikel di kategori ini.</p>`;
-                            return;
-                        }
-                        data.forEach(article => {
-                            const colorClass = article.category?.color || 'bg-gray-500';
-                            const categoryName = article.category?.name || 'Umum';
-                            container.innerHTML += `
-                        <a href="/articles/${article.slug}" class="block hover:shadow-lg transition-shadow duration-200">
-                            <div class="article-card bg-white rounded-lg shadow-md overflow-hidden">
-                                <img src="${article.image_url ?? 'https://via.placeholder.com/300x200'}"
-                                    alt="${article.title}" class="w-full h-48 object-cover">
-                                <div class="p-4">
-                                <span class="${colorClass} text-white px-2 py-1 rounded text-xs font-medium">
-                                    ${categoryName}
-                                </span>
-                                <h3 class="font-bold text-lg mt-2 mb-2">${article.title}</h3>
-                                <p class="text-gray-600 text-sm mb-3">
-                                    ${article.content.substring(0, 100)}...
-                                </p>
-                                <div class="flex items-center justify-between text-xs text-gray-500">
-                                    <span>${new Date(article.created_at).toLocaleDateString()}</span>
-                                    <span>${article.views} dibaca</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-    `;
-                        });
-
-
-
-                    });
-            });
-        });
-    </script>
 @endsection

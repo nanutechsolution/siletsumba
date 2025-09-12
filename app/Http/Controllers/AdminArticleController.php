@@ -55,11 +55,14 @@ class AdminArticleController extends Controller
             'is_breaking' => 'nullable|boolean',
             'location_short' => 'required|string|max:255',
             'is_published' => 'nullable|boolean',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
 
         ]);
         $validated['slug'] = Str::slug($validated['title']);
         $validated['user_id'] = auth()->id();
         $article = Article::create($validated);
+        $article->tags()->sync($validated['tags'] ?? []);
 
 
         if ($request->hasFile('images')) {
@@ -94,7 +97,9 @@ class AdminArticleController extends Controller
             'is_breaking' => 'nullable|boolean',
             'lokasi_short' => 'nullable|string|max:255',
             'location_short' => 'nullable|string|max:255',
-            'is_published' => 'nullable|boolean'
+            'is_published' => 'nullable|boolean',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $article->update([
@@ -108,7 +113,7 @@ class AdminArticleController extends Controller
             'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
             'user_id' => auth()->id(),
         ]);
-
+        $article->tags()->sync($validated['tags'] ?? []);
         // Hapus gambar yang dicentang
         if (!empty($validated['delete_images'])) {
             $imagesToDelete = ArticleImage::whereIn('id', $validated['delete_images'])->get();

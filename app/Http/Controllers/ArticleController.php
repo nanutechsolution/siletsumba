@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\SearchLog;
 use App\Models\Tag;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -13,21 +14,25 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): View
     {
-        $tags = Tag::all();
-        $articles = Article::with('category')
+        $categories = Category::withCount('articles')->get();
+        $articles = Article::with(['category', 'user', 'images', 'tags'])
+            ->where('is_published', 1)
             ->latest()
-            ->paginate(10); // Mengambil 10 artikel per halaman
+            ->paginate(10);
 
-        return view('welcome', compact('articles', 'tags'));
+        return view('welcome', compact('articles', 'tags', 'categories'));
     }
-
 
     public function show($slug, Request $request)
     {
         $article = Article::where('slug', $slug)
-            ->with(['category', 'tags']) // tambahin eager load tags
+            ->where('is_published', 1)
+            ->with(['category', 'tags'])
             ->firstOrFail();
         $ip = $request->ip();
         $expiresAt = now()->addHours(24);

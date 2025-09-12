@@ -7,21 +7,25 @@ use App\Models\Tag;
 
 class TagSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
         $tags = [
-            'Infrastruktur',
-            'Ekonomi',
-            'Jawa Timur',
-            'Pembangunan',
-            'Olahraga',
-            'Politik',
+            ['name' => 'Politik', 'slug' => 'politik'],
+            ['name' => 'Ekonomi', 'slug' => 'ekonomi'],
+            ['name' => 'Pendidikan', 'slug' => 'pendidikan'],
+            ['name' => 'Kesehatan', 'slug' => 'kesehatan'],
+            ['name' => 'Budaya', 'slug' => 'budaya'],
+            ['name' => 'Olahraga', 'slug' => 'olahraga'],
+            ['name' => 'Pariwisata', 'slug' => 'pariwisata'],
+            ['name' => 'Infrastruktur', 'slug' => 'infrastruktur'],
+            ['name' => 'Lingkungan', 'slug' => 'lingkungan'],
+            ['name' => 'Kriminal', 'slug' => 'kriminal'],
         ];
 
         foreach ($tags as $tag) {
-            Tag::firstOrCreate(
-                ['slug' => \Str::slug($tag)], // cek dulu berdasarkan slug
-                ['name' => $tag]
+            Tag::updateOrCreate(
+                ['slug' => $tag['slug']], // unik berdasarkan slug
+                ['name' => $tag['name']]
             );
         }
     }

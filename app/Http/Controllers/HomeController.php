@@ -4,86 +4,155 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Tag;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $query = Article::query();
-        if ($request->has('category')) {
-            $category = Category::where('slug', $request->category)->firstOrFail();
-            $query->where('category_id', $category->id);
-        }
-        $hero = Article::latest()->first();
-        $latestArticles = Article::when($hero, function ($query) use ($hero) {
-            $query->where('id', '!=', $hero->id);
-        })
+        // 1. Mengambil artikel hero (artikel terbaru pertama)
+        $hero = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->latest()
+            ->first();
+
+        // 2. Mengambil artikel terbaru (kecuali artikel hero)
+        $latestArticles = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->when($hero, function ($query) use ($hero) {
+                return $query->where('id', '!=', $hero->id);
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
-        $trending = Article::orderBy('views', 'desc')->take(5)->get();
+
+        // 3. Mengambil artikel terpopuler berdasarkan views
+        $trending = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+
+        // 4. Mengambil semua kategori yang memiliki artikel terpublikasi
         $categories = Category::whereHas('articles', function ($q) {
-            $q->where('is_published', 1);
-        })->get();
-        $breakingNews = Article::where('is_breaking', true)
+            $q->where('is_published', true);
+        })
+            ->withCount(['articles' => function ($q) {
+                $q->where('is_published', true);
+            }])
+            ->get();
+
+        // 5. Mengambil 5 berita breaking news terbaru
+        $breakingNews = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->where('is_breaking', true)
             ->latest()
             ->take(5)
             ->get();
-        return view('home', compact('hero', 'latestArticles', 'trending', 'categories',  'breakingNews'));
+
+        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews'));
     }
-    public function getArticlesByCategory($slug)
+    public function getArticlesByCategory(string $slug): View
     {
-        $category = Category::where('slug', $slug)
-            ->with(['articles' => function ($query) {
-                $query->where('is_published', 1)->orderBy('created_at', 'desc');
-            }])
-            ->firstOrFail();
-        $articles = Article::with('category')
+        // 1. Temukan kategori berdasarkan slug
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        // Cek apakah slug adalah 'karir' untuk view khusus
+        if ($slug === 'karir') {
+            $categories = Category::all();
+            return view('karir.index', compact('categories'));
+        }
+
+        // 2. Mengambil artikel hero dari kategori yang dipilih
+        $hero = Article::with(['category', 'images'])
             ->where('category_id', $category->id)
+            ->where('is_published', true)
             ->latest()
-            ->take(6)
-            ->get();
+            ->first();
 
-        return response()->json($articles);
-    }
-
-    public function getArticlesByCategorys($slug)
-    {
-        $category = \App\Models\Category::where('slug', $slug)
-            ->with(['articles' => function ($query) {
-                $query->where('is_published', 1)->orderBy('created_at', 'desc');
-            }])
-            ->firstOrFail();
-
-        $articles = \App\Models\Article::where('category_id', $category->id)
-            ->latest()
-            ->paginate(6);
-
-        $articlesCollection = $articles->getCollection();
-
-        $hero = $articlesCollection->first();
-        $latestArticles = Article::when($hero, function ($query) use ($hero) {
-            $query->where('id', '!=', $hero->id);
-        })
+        // 3. Mengambil artikel terbaru (kecuali hero) dari kategori yang dipilih
+        $latestArticles = Article::with(['category', 'images'])
+            ->where('category_id', $category->id)
+            ->where('is_published', true)
+            ->when($hero, function ($query) use ($hero) {
+                return $query->where('id', '!=', $hero->id);
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        $trending = Article::orderBy('views', 'desc')->take(5)->get();
-        $categories = Category::all();
-        $breakingNews = Article::where('is_breaking', true)
-            ->latest()
-            ->take(5) // ambil max 5
+        // 4. Mengambil 5 berita terpopuler
+        $trending = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->orderBy('views', 'desc')
+            ->take(5)
             ->get();
 
-        // Cek apakah slug karir
-        if ($slug === 'karir') {
-            // Tampilkan view khusus karir
-            return view('karir.index', compact('categories'));
-        } else {
+        // 5. Mengambil 5 berita breaking news
+        $breakingNews = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->where('is_breaking', true)
+            ->latest()
+            ->take(5)
+            ->get();
 
-            return view('home', compact('hero', 'latestArticles', 'trending', 'categories',  'breakingNews'));
-        }
+        // 6. Mengambil semua kategori untuk navigasi/sidebar
+        $categories = Category::whereHas('articles', function ($query) {
+            $query->where('is_published', true);
+        })->get();
+
+        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews'));
+    }
+
+    public function getByTag($slug)
+    {
+        $tag = Tag::where('slug', $slug)->firstOrFail();
+        // 1. Hero article (artikel terbaru dari tag)
+        $hero = $tag->articles()
+            ->with(['category', 'images'])
+            ->where('is_published', true)
+            ->latest()
+            ->first();
+
+        // 2. Artikel terbaru kecuali hero
+        $latestArticles = $tag->articles()
+            ->with(['category', 'user', 'images', 'tags'])
+            ->where('is_published', true)
+            ->when($hero, function ($query) use ($hero) {
+                return $query->where('articles.id', '!=', $hero->id);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        // 3. Artikel terpopuler (trending)
+        $trending = $tag->articles()
+            ->with(['category', 'user', 'images', 'tags'])
+            ->where('is_published', true)
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+
+        // 4. Semua kategori dengan artikel terpublikasi
+        $categories = Category::whereHas('articles', function ($q) {
+            $q->where('is_published', true);
+        })
+            ->withCount(['articles' => function ($q) {
+                $q->where('is_published', true);
+            }])
+            ->get();
+
+        // 5. 5 berita breaking news terbaru
+        $breakingNews = $tag->articles()
+            ->with(['category', 'user', 'images', 'tags'])
+            ->where('is_published', true)
+            ->where('is_breaking', true)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews', 'tag'));
     }
 }

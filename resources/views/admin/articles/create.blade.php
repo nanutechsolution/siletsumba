@@ -103,6 +103,24 @@
                             class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('quotes') }}</textarea>
 
                     </div>
+
+                    {{-- Input Tags --}}
+                    <div>
+                        <label for="tags" class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Tags</label>
+                        <select name="tags[]" id="tags"
+                            class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            multiple>
+                            @foreach ($tags as $tag)
+                                <option value="{{ $tag->id }}"
+                                    {{ in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>
+                                    {{ $tag->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('tags')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="mb-4">
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
                         <input type="file" name="images[]" id="images" multiple

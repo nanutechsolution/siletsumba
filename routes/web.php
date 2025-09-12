@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\PromptController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminCategoryController;
@@ -18,11 +19,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/tag/{slug}', [ArticleController::class, 'show'])->name('tags.show');
 Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
-Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategorys'])
+Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategory'])
     ->name('articles.category');
-
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
-Route::get('/articles/category/{slug}', [App\Http\Controllers\HomeController::class, 'getArticlesByCategory']);
+Route::get('/tags/{slug}', [HomeController::class, 'getByTag'])->name('tags.show');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -40,6 +40,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::resource('tags', TagController::class);
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
