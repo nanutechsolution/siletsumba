@@ -2,10 +2,9 @@
     <div class="flex items-center justify-between py-3 border-b flex-wrap">
         <!-- Logo -->
         <div class="flex items-center gap-4 flex-shrink-0">
-            <div class="w-10 h-10 bg-red-600 rounded flex items-center justify-center flex-shrink-0">
-                <span class="text-white font-bold text-lg">S</span>
+            <div class="w-20 h-20 bg-red-600 rounded flex items-center justify-center flex-shrink-0">
+                <img src="{{ Storage::url($settings['site_logo_url']->value) }}" alt="Site Logo">
             </div>
-
             <div class="min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 truncate">
                     {{ $settings['site_name']->value ?? 'SILET SUMBA' }}
