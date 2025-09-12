@@ -25,7 +25,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key' => 'site_description',
-                'value' => 'Berita dan informasi terkini dari Sumba. Tajam, lugas, dan terpercaya.',
+                'value' => 'Tajam, lugas, dan terpercaya.',
             ],
             [
                 'key' => 'site_logo_url',
