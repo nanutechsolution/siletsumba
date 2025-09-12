@@ -24,14 +24,14 @@ class ArticleController extends Controller
     }
 
 
-    public function show($slug)
+    public function show($slug, Request $request)
     {
         $article = Article::where('slug', $slug)
             ->with(['category', 'tags']) // tambahin eager load tags
             ->firstOrFail();
-
+        $ip = $request->ip();
         $expiresAt = now()->addHours(24);
-        $cacheKey = 'article_view_' . $article->id . '_' . Request::ip();
+        $cacheKey = 'article_view_' . $article->id . '_' . $ip;
         // update jumlah views
         if (!Cache::has($cacheKey)) {
             if (!$this->isBot(request()->header('User-Agent'))) {
