@@ -226,9 +226,8 @@
                 const fullMessage = message +
                     "\n\n" +
                     (articleTitle ? `Konteks artikel: ${articleTitle} (${articleURL}). ` : '') +
-                    "Jawab pertanyaan user dengan gaya santai, akrab, penuh emoji, humor kalau perlu. " +
+                    "Jawab pertanyaan user dengan gaya santai, akrab, humor kalau perlu" +
                     `Jika pertanyaan tentang berita terbaru, selalu ambil referensi dari ${APP_URL}`;
-
                 try {
                     const res = await fetch('{{ route('chat.send') }}', {
                         method: 'POST',
