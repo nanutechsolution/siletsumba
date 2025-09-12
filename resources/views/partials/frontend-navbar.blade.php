@@ -6,8 +6,10 @@
                 <span class="text-white font-bold text-lg">S</span>
             </div>
             <div>
-                <h1 class="text-xl md:text-2xl font-bold text-red-600">SILET SUMBA</h1>
-                <p class="text-xs text-gray-600">Berita & Inspirasi dari Sumba</p>
+                @if (isset($settings['site_description']->value))
+                    <h1 class="text-xl md:text-2xl font-bold text-red-600">{{ $settings['site_name']->value }}</h1>
+                    <p class="text-xs text-gray-600">{{ $settings['site_description']->value }}</p>
+                @endif
             </div>
         </div>
 
