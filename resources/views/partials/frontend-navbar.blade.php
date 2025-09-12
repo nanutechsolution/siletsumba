@@ -44,7 +44,7 @@
             @endguest
 
             @auth
-                <a href="{{ route('profile.edit') }}"
+                <a href="{{ route('admin.dashboard') }}"
                     class="bg-gray-800 text-white px-3 md:px-4 py-2 rounded hover:bg-gray-700 text-sm md:text-base flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
