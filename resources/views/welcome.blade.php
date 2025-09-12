@@ -222,6 +222,12 @@
                 addMessage("👤 " + message, 'user');
                 chatInput.value = '';
                 const typingDiv = showTypingIndicator();
+                const APP_URL = "{{ config('app.url') }}";
+                const fullMessage = message +
+                    "\n\n" +
+                    (articleTitle ? `Konteks artikel: ${articleTitle} (${articleURL}). ` : '') +
+                    "Jawab pertanyaan user dengan gaya santai, akrab, penuh emoji, humor kalau perlu. " +
+                    `Jika pertanyaan tentang berita terbaru, selalu ambil referensi dari ${APP_URL}`;
 
                 try {
                     const res = await fetch('{{ route('chat.send') }}', {
@@ -232,8 +238,7 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: JSON.stringify({
-                            message: message +
-                                `\n\n${articleTitle ? `Konteks artikel: ${articleTitle} (${articleURL}). ` : ''}Jawab pertanyaan user dengan gaya santai, akrab, penuh emoji, humor kalau perlu.`
+                            message: fullMessage
                         })
                     });
                     const data = await res.json();
