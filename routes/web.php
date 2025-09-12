@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminThemeController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +24,8 @@ Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategory'])
     ->name('articles.category');
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/tags/{slug}', [HomeController::class, 'getByTag'])->name('tags.show');
+Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

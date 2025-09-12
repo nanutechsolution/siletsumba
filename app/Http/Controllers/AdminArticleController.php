@@ -148,7 +148,6 @@ class AdminArticleController extends Controller
         $request->validate([
             'prompt' => 'required|string|min:5',
         ]);
-
         $apiKey = env('GEMINI_API_KEY');
 
         $response = Http::withHeaders([

@@ -7,7 +7,6 @@
             <nav class="text-sm text-gray-600 dark:text-gray-400">
                 <a href="{{ url('/') }}" class="hover:text-tribun-red">Home</a>
                 <span class="mx-1">></span>
-
                 @if ($article->category?->parent)
                     <a href="{{ route('home', $article->category->parent->slug) }}" class="hover:text-tribun-red">
                         {{ $article->category->parent->name }}
@@ -176,6 +175,8 @@
                         <p class="text-gray-500 dark:text-gray-400">Tidak ada berita terkait.</p>
                     @endforelse
                 </div>
+
+
             </div>
 
 
@@ -300,4 +301,6 @@
             </div>
         </div>
     </div>
+
+
 @endsection
