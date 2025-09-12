@@ -67,7 +67,7 @@
                         </button>
                     </x-slot>
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('/')">{{ __('Kembali Ke Web') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('home')">{{ __('Kembali Ke Web') }}</x-dropdown-link>
                         <x-dropdown-link :href="route('profile.edit')">{{ __('Profile') }}</x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
