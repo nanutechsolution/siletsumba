@@ -94,6 +94,7 @@ class AdminArticleController extends Controller
             'is_breaking' => 'nullable|boolean',
             'lokasi_short' => 'nullable|string|max:255',
             'location_short' => 'nullable|string|max:255',
+            'is_published' => 'nullable|boolean'
         ]);
 
         $article->update([
