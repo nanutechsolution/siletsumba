@@ -165,6 +165,12 @@
                         </div>
                         <textarea name="ai_content" id="ai-content" class="hidden"></textarea>
                     </div>
+                    <div class="flex justify-end">
+                        <button type="button" id="copy-ai-content-btn"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                            Salin Konten AI
+                        </button>
+                    </div>
 
                     {{-- Tombol Submit --}}
                     <div class="flex items-center justify-between">
@@ -184,7 +190,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             // Scroll to first error on page load
             const firstError = document.querySelector('.text-red-500.text-sm');
             if (firstError) {
@@ -253,51 +258,42 @@
 
             const inputImages = document.getElementById('images');
             const previewContainer = document.getElementById('image-preview');
-            let allFiles = []; // Array global untuk menyimpan semua file yang dipilih
+            let allFiles = [];
 
             inputImages.addEventListener('change', function(event) {
                 const newFiles = Array.from(event.target.files);
-                allFiles = allFiles.concat(newFiles); // Gabungkan file baru dengan yang sudah ada
-
+                allFiles = allFiles.concat(newFiles);
                 updatePreviewAndInput();
             });
 
-            // Event listener untuk tombol hapus pada pratinjau
             previewContainer.addEventListener('click', function(event) {
                 const deleteBtn = event.target.closest('.delete-preview-image');
                 if (deleteBtn) {
                     const fileIndex = deleteBtn.dataset.index;
-                    allFiles.splice(fileIndex, 1); // Hapus file dari array
+                    allFiles.splice(fileIndex, 1);
                     updatePreviewAndInput();
                 }
             });
 
             function updatePreviewAndInput() {
-                // Kosongkan pratinjau lama
                 previewContainer.innerHTML = '';
-
                 if (allFiles.length > 0) {
-                    // Tampilkan pratinjau dan tambahkan tombol hapus
                     allFiles.forEach((file, index) => {
                         const reader = new FileReader();
                         reader.onload = (e) => {
                             const container = document.createElement('div');
                             container.className =
                                 'relative w-full overflow-hidden rounded-lg shadow-md group';
-
                             const img = document.createElement('img');
                             img.src = e.target.result;
                             img.alt = file.name;
                             img.className = 'w-full h-32 object-cover';
-
-                            // Tombol hapus
                             const deleteBtn = document.createElement('button');
                             deleteBtn.type = 'button';
                             deleteBtn.innerHTML = '&times;';
                             deleteBtn.className =
                                 'absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition delete-preview-image';
-                            deleteBtn.dataset.index = index; // Simpan indeks file
-
+                            deleteBtn.dataset.index = index;
                             container.appendChild(img);
                             container.appendChild(deleteBtn);
                             previewContainer.appendChild(container);
@@ -305,8 +301,6 @@
                         reader.readAsDataURL(file);
                     });
                 }
-
-                // Perbarui input file agar hanya file yang tersisa yang akan diunggah
                 const dataTransfer = new DataTransfer();
                 allFiles.forEach(f => dataTransfer.items.add(f));
                 inputImages.files = dataTransfer.files;
@@ -314,34 +308,36 @@
 
             // ====== AI Generation Functions ======
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const aiButtons = document.querySelectorAll('[data-prompt-name]');
+            const copyAiContentBtn = document.getElementById('copy-ai-content-btn');
 
             function setButtonLoading(button, loading = true) {
+                const loadingText = 'Membuat...';
                 if (loading) {
                     button.dataset.originalText = button.textContent;
                     button.innerHTML = `
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l2-2.647z"></path>
-                        </svg>
-                    `;
+                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l2-2.647z"></path>
+                    </svg>
+                    ${loadingText}
+                `;
                     button.disabled = true;
+                    aiButtons.forEach(btn => {
+                        btn.disabled = true;
+                        btn.classList.add('opacity-50', 'cursor-not-allowed');
+                    });
                 } else {
                     button.innerHTML = button.dataset.originalText;
                     button.disabled = false;
+                    aiButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
                 }
             }
 
             async function callAI(prompt, button) {
-                // Disable all other buttons
-                const aiButtons = document.querySelectorAll('[data-prompt-name]');
-                aiButtons.forEach(btn => {
-                    if (btn !== button) {
-                        btn.disabled = true;
-                        btn.classList.add('opacity-50', 'cursor-not-allowed');
-                    }
-                });
-
-                // Show loading state for clicked button
                 setButtonLoading(button, true);
 
                 try {
@@ -357,7 +353,6 @@
                     });
 
                     const data = await res.json();
-
                     if (res.ok) {
                         try {
                             let content = data.content;
@@ -372,23 +367,13 @@
                         alert('Gagal generate: ' + data.error);
                     }
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                     alert('Kesalahan server/jaringan.');
                 } finally {
-                    // Hide loading state
                     setButtonLoading(button, false);
-
-                    // Re-enable all buttons
-                    aiButtons.forEach(btn => {
-                        btn.disabled = false;
-                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    });
                 }
             }
 
-
-            // ====== Unified Event Listener for All AI Buttons ======
-            const aiButtons = document.querySelectorAll('[data-prompt-name]');
             aiButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const promptTemplate = this.dataset.promptTemplate;
@@ -409,14 +394,12 @@
                         document.getElementById('location').focus();
                         return;
                     }
-
                     if (!facts) {
                         alert('Masukkan Fakta / Kronologi terlebih dahulu!');
                         document.getElementById('facts').focus();
                         return;
                     }
 
-                    // Replace placeholders using a regular expression with a global flag
                     const finalPrompt = promptTemplate
                         .replace(/{title}/g, title)
                         .replace(/{category}/g, category)
@@ -424,7 +407,6 @@
                         .replace(/{facts}/g, facts || "Tidak ada fakta tambahan")
                         .replace(/{quotes}/g, quotes || "Tidak ada kutipan");
 
-                    // Call the main AI function
                     callAI(finalPrompt, this);
                 });
             });
@@ -436,9 +418,20 @@
                 publishedLabel.textContent = this.checked ? 'Terpublikasi' : 'Draft';
             });
 
-            // Set initial label text on page load
             publishedLabel.textContent = publishedToggle.checked ? 'Terpublikasi' : 'Draft';
 
+            // Copy AI Content Button Logic
+            copyAiContentBtn.addEventListener('click', function() {
+                const aiContent = aiQuill.root.innerHTML;
+
+                if (!aiContent.trim()) {
+                    alert('Konten AI kosong, tidak ada yang bisa disalin!');
+                    return;
+                }
+
+                editorQuill.root.innerHTML = aiContent;
+                alert('Konten AI berhasil disalin ke editor utama!');
+            });
         });
     </script>
 
