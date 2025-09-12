@@ -52,7 +52,7 @@
                     <x-slot name="trigger">
                         <button
                             class="flex items-center text-sm font-medium text-gray-900 dark:text-gray-100 transition duration-150 ease-in-out hover:text-gray-700 dark:hover:text-gray-300">
-                            <div class="h-16 w-16 rounded-full overflow-hidden flex-shrink-0 mr-2">
+                            <div class="h-12 w-12 rounded-full overflow-hidden flex-shrink-0 mr-2">
                                 @if (Auth::user()->profile_photo_path)
                                     <img class="h-full w-full object-cover"
                                         src="{{ Storage::url(Auth::user()->profile_photo_path) }}"
