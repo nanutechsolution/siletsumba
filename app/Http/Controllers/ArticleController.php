@@ -8,6 +8,7 @@ use App\Models\SearchLog;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
@@ -29,8 +30,15 @@ class ArticleController extends Controller
             ->with(['category', 'tags']) // tambahin eager load tags
             ->firstOrFail();
 
+        $expiresAt = now()->addHours(24);
+        $cacheKey = 'article_view_' . $article->id . '_' . Request::ip();
         // update jumlah views
-        $article->increment('views');
+        if (!Cache::has($cacheKey)) {
+            if (!$this->isBot(request()->header('User-Agent'))) {
+                $article->increment('views');
+            }
+            Cache::put($cacheKey, true, $expiresAt);
+        }
         $categories = Category::whereHas('articles', function ($q) {
             $q->where('is_published', 1);
         })->get();
@@ -45,7 +53,28 @@ class ArticleController extends Controller
         return view('articles.show', compact('article', 'related', 'latest', 'popular', 'categories'));
     }
 
+    /**
+     * Cek apakah User-Agent adalah bot.
+     */
+    private function isBot($userAgent): bool
+    {
+        $bots = [
+            'Googlebot',
+            'Bingbot',
+            'Slurp',
+            'Baiduspider',
+            'YandexBot',
+            'DuckDuckBot',
+        ];
 
+        foreach ($bots as $bot) {
+            if (stripos($userAgent, $bot) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public function search(Request $request)
     {
         $start = microtime(true);
