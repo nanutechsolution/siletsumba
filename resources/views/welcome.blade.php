@@ -50,23 +50,22 @@
     </main>
     @include('partials.frontend-footer')
     @vite('resources/js/app.js')
-
-
-    <!-- Tombol Chat Gantung -->
+    <!-- Tombol Chat Floating -->
     <div id="chatButton"
-        style="position: fixed; bottom: 20px; right: 20px; background-color: #e53e3e; color:white; 
-            width:60px; height:60px; border-radius:50%; display:flex; align-items:center; 
-            justify-content:center; cursor:pointer; z-index:9999; font-size:24px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+        style="position: fixed; bottom: 20px; right: 20px; width:60px; height:60px; 
+        background:#e53e3e; color:white; border-radius:50%; 
+        display:flex; align-items:center; justify-content:center; 
+        cursor:pointer; z-index:9999; font-size:24px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
         💬
     </div>
 
     <!-- Chat Box -->
     <div id="chatBox"
         style="display:none; position:fixed; bottom:90px; right:20px; width:320px; max-height:450px; 
-            background:white; border-radius:15px; box-shadow:0 8px 16px rgba(0,0,0,0.3); 
-            z-index:9999; overflow:hidden; font-family:sans-serif;">
+        background:white; border-radius:15px; box-shadow:0 8px 16px rgba(0,0,0,0.3); 
+        z-index:9999; overflow:hidden; font-family:sans-serif;">
         <div style="background:#e53e3e; color:white; padding:12px; font-weight:bold; font-size:16px;">
-            Chat Asisten Sumba
+            Chat Asisten Silet Sumba
         </div>
         <div id="chatMessages"
             style="padding:10px; height:300px; overflow-y:auto; font-size:14px; display:flex; flex-direction:column;">
@@ -78,6 +77,7 @@
                 style="background:#e53e3e; color:white; border:none; padding:0 15px; cursor:pointer;">Kirim</button>
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const chatButton = document.getElementById('chatButton');
@@ -85,9 +85,10 @@
             const chatInput = document.getElementById('chatInput');
             const chatSend = document.getElementById('chatSend');
             const chatMessages = document.getElementById('chatMessages');
-            // Bisa kosong jika tidak ada artikel
+
             const articleTitle = @json($article->title ?? '');
-            const articleURL = @json($article->url ?? '');
+            const articleURL = window.location.href;
+            const isHome = articleTitle === '' || window.location.pathname === '/';
             let aiIntroduced = false;
 
             function addMessage(text, from) {
@@ -105,8 +106,6 @@
                 bubble.style.color = from === 'user' ? '#000' : '#fff';
                 bubble.style.wordWrap = 'break-word';
                 bubble.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-
-                // Efek animasi muncul
                 bubble.style.opacity = 0;
                 bubble.style.transform = 'translateY(20px)';
                 bubble.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -115,7 +114,6 @@
                 chatMessages.appendChild(div);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                // Trigger animasi setelah div ditambahkan ke DOM
                 requestAnimationFrame(() => {
                     bubble.style.opacity = 1;
                     bubble.style.transform = 'translateY(0)';
@@ -124,7 +122,6 @@
 
             function showTypingIndicator() {
                 const div = document.createElement('div');
-                div.classList.add('typing-indicator');
                 div.style.display = 'flex';
                 div.style.justifyContent = 'flex-start';
                 div.style.marginBottom = '8px';
@@ -140,69 +137,79 @@
 
                 chatMessages.appendChild(div);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                return div; // kita simpan untuk dihapus nanti
+                return div;
             }
+            async function siletBotReply(category = '', keyword = '') {
+                const currentDomain = window.location.origin; // ambil domain sekarang
+                const allowedDomains = ['https://siletsumba.com', 'http://127.0.0.1:8000'];
 
-
-            async function getAIIntro() {
-                try {
-                    const res = await fetch('{{ route('chat.send') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            message: message + (articleTitle ?
-                                `\n\nKonteks artikel: ${articleTitle} (${articleURL})` : '')
-                        })
-                    });
-
-                    const data = await res.json();
-                    addMessage("🤖 " + data.reply, "ai");
-                } catch (err) {
-                    console.error(err);
-                    addMessage("⚠️ Gagal menghubungi AI. Cek console.", "ai");
+                if (!allowedDomains.includes(currentDomain)) {
+                    return "🤖 Maaf, aku cuma bisa mencari berita di situs resmi Silet Sumba. 🔒";
                 }
+
+                const isHome = window.location.pathname === '/';
+                let reply = "🤖 Halo! Aku SiletBot, siap bantu kamu menemukan berita terbaru 😎.\n";
+
+                if (isHome) {
+                    // Cari berita di homepage sesuai kategori/keyword
+                    let apiURL = `${currentDomain}/api`;
+                    if (category) apiURL += `/${category.toLowerCase()}`;
+                    if (keyword) apiURL += `?q=${encodeURIComponent(keyword)}`;
+
+                    try {
+                        const response = await fetch(apiURL);
+                        const data = await response.json();
+
+                        if (data.length === 0) {
+                            reply +=
+                                "Maaf, belum ada berita yang sesuai nih. 😅 Coba keyword lain atau kategori lain ya!";
+                        } else {
+                            reply += `Aku temukan beberapa berita terbaru:\n`;
+                            data.forEach((item, i) => {
+                                reply += `${i+1}. "${item.title}" (${item.url})\n`;
+                            });
+                            reply += "\nKlik link artikelnya kalau mau ringkasan lengkapnya. 😉";
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        reply += "Waduh, ada kendala saat ambil berita. 😓 Coba lagi sebentar ya!";
+                    }
+                } else {
+                    // User membuka artikel
+                    const articleTitle = @json($article->title ?? '');
+                    const articleURL = window.location.href;
+
+                    reply +=
+                        `Ngomong-ngomong, kamu lagi lihat artikel: "${articleTitle}" (${articleURL}). Aku bisa ringkas isinya dalam 2-3 kalimat yang jelas dan menarik! 🎯`;
+                }
+
+                return reply;
             }
 
             chatButton.addEventListener('click', () => {
                 chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
                 if (!aiIntroduced) {
                     aiIntroduced = true;
+                    // Buat greeting dinamis
                     let greeting =
-                        "🤖 Hai, hai! Aku SiletBot, asisten berita SiletSumba.com 📰.\n" +
-                        "Aku ramah, santai, dan siap bantu kamu ngerti berita lokal tanpa ribet 😎.\n" +
-                        "FYI: Aku dikembangkan dan terus diajarin sama Nanu biar makin pintar loh 😉.\n";
+                        "🤖 Halo! Aku SiletBot, asisten resmi siletsumba.com 📰. Aku bisa bantu kamu memahami berita lokal dengan cepat dan mudah 😎.";
 
-                    if (articleTitle) {
+                    if (!isHome) {
+                        // User membuka artikel
                         greeting +=
-                            `By the way, ada artikel terbaru nih: "${articleTitle}" (${articleURL}). ` +
-                            "Aku bisa ringkas jadi 2-3 kalimat yang gampang dimengerti, tetap seru, dan kadang sambil becanda 😏🎉";
+                            ` Ngomong-ngomong, ada artikel terbaru: "${articleTitle}" (${articleURL}). Aku bisa merangkum isinya dalam 2-3 kalimat yang jelas dan tetap menarik! 🎯`;
+                    } else {
+                        // User masih di home page
+                        greeting +=
+                            " Kamu bisa tanya tentang berita terbaru, kategori favorit, atau minta ringkasan artikel. Aku siap bantu! 💡";
                     }
-
-                    // Bisa tambahkan variasi greeting acak supaya tidak monoton
-                    const greetingsVariations = [
-                        "Selamat datang! Aku siap jadi teman ngobrolmu tentang berita Sumba 🗞️😄",
-                        "Halo! Aku SiletBot, teman santai buat ngerti berita tanpa pusing 🤓",
-                        "Hai! Siap kasih ringkasan berita lokal biar tetap seru dan mudah dimengerti 🎈"
-                    ];
-
-                    // Pilih salah satu secara acak
-                    greeting += "\n\n" + greetingsVariations[Math.floor(Math.random() * greetingsVariations
-                        .length)];
 
                     addMessage(greeting, 'ai');
                 }
             });
 
-            chatSend.addEventListener('click', async () => {
-                const message = chatInput.value.trim();
-                if (!message) return;
-
-                addMessage("👤 " + message, "user");
+            async function sendMessage(message) {
+                addMessage("👤 " + message, 'user');
                 chatInput.value = '';
                 const typingDiv = showTypingIndicator();
 
@@ -215,22 +222,23 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         body: JSON.stringify({
-                            message: message + (articleTitle ?
-                                `\n\nKonteks artikel: ${articleTitle} (${articleURL}) "Jawab pertanyaan user dengan gaya santai dan akrab, sesekali pakai emoji, jangan kaku. Kalau bisa, tambahkan sedikit humor.
-                                Selalu bilang kalau masih terus diajar oleh Nanu tergangtung bahasa kamu"` :
-                                '')
+                            message: message +
+                                `\n\n${articleTitle ? `Konteks artikel: ${articleTitle} (${articleURL}). ` : ''}Jawab pertanyaan user dengan gaya santai, akrab, penuh emoji, humor kalau perlu.`
                         })
                     });
-
                     const data = await res.json();
                     chatMessages.removeChild(typingDiv);
-                    addMessage("🤖 " + data.reply, "ai");
+                    addMessage("🤖 " + data.reply, 'ai');
                 } catch (err) {
                     console.error(err);
-                    addMessage("⚠️ Gagal menghubungi AI. Cek console.", "ai");
+                    chatMessages.removeChild(typingDiv);
+                    addMessage("⚠️ Gagal menghubungi AI. Cek console.", 'ai');
                 }
+            }
+            chatSend.addEventListener('click', () => {
+                const message = chatInput.value.trim();
+                if (message) sendMessage(message);
             });
-
             chatInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') chatSend.click();
             });
