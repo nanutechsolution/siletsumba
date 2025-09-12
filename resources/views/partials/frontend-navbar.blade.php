@@ -2,8 +2,9 @@
     <div class="flex items-center justify-between py-3 border-b flex-wrap">
         <!-- Logo -->
         <div class="flex items-center gap-4 flex-shrink-0">
-            <div class="w-20 h-20 bg-red-600 rounded flex items-center justify-center flex-shrink-0">
-                <img src="{{ Storage::url($settings['site_logo_url']->value) }}" alt="Site Logo">
+            <div class="w-16 h-16 bg-red-600 rounded flex items-center justify-center flex-shrink-0">
+                <img src="{{ Storage::url($settings['site_logo_url']->value) }}"
+                    alt="{{ $settings['site_name']->value }}">
             </div>
             <div class="min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 truncate">
