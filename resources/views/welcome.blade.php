@@ -173,12 +173,27 @@
                 if (!aiIntroduced) {
                     aiIntroduced = true;
                     let greeting =
-                        "🤖 Hai! Aku SiletBot, asisten berita Sumba 📰. Aku ramah, santai, dan siap bantu kamu ngerti berita lokal tanpa ribet 😎.\n";
-                    greeting += "FYI: Aku masih terus diajarin sama Nanu biar makin pintar loh 😉.\n";
+                        "🤖 Hai, hai! Aku SiletBot, asisten berita SiletSumba.com 📰.\n" +
+                        "Aku ramah, santai, dan siap bantu kamu ngerti berita lokal tanpa ribet 😎.\n" +
+                        "FYI: Aku dikembangkan dan terus diajarin sama Nanu biar makin pintar loh 😉.\n";
+
                     if (articleTitle) {
                         greeting +=
-                            `By the way, ada artikel terbaru nih: "${articleTitle}" (${articleURL}). Aku bisa ringkas dalam 2-3 kalimat yang gampang dimengerti dan tetap seru! 🎉`;
+                            `By the way, ada artikel terbaru nih: "${articleTitle}" (${articleURL}). ` +
+                            "Aku bisa ringkas jadi 2-3 kalimat yang gampang dimengerti, tetap seru, dan kadang sambil becanda 😏🎉";
                     }
+
+                    // Bisa tambahkan variasi greeting acak supaya tidak monoton
+                    const greetingsVariations = [
+                        "Selamat datang! Aku siap jadi teman ngobrolmu tentang berita Sumba 🗞️😄",
+                        "Halo! Aku SiletBot, teman santai buat ngerti berita tanpa pusing 🤓",
+                        "Hai! Siap kasih ringkasan berita lokal biar tetap seru dan mudah dimengerti 🎈"
+                    ];
+
+                    // Pilih salah satu secara acak
+                    greeting += "\n\n" + greetingsVariations[Math.floor(Math.random() * greetingsVariations
+                        .length)];
+
                     addMessage(greeting, 'ai');
                 }
             });
@@ -201,7 +216,8 @@
                         },
                         body: JSON.stringify({
                             message: message + (articleTitle ?
-                                `\n\nKonteks artikel: ${articleTitle} (${articleURL}) "Jawab pertanyaan user dengan gaya santai dan akrab, sesekali pakai emoji, jangan kaku. Kalau bisa, tambahkan sedikit humor."` :
+                                `\n\nKonteks artikel: ${articleTitle} (${articleURL}) "Jawab pertanyaan user dengan gaya santai dan akrab, sesekali pakai emoji, jangan kaku. Kalau bisa, tambahkan sedikit humor.
+                                Selalu bilang kalau masih terus diajar oleh Nanu tergangtung bahasa kamu"` :
                                 '')
                         })
                     });
