@@ -14,6 +14,10 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\UserCreate;
+use App\Livewire\UserEdit;
+use App\Livewire\UserIndex;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -28,6 +32,18 @@ Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('users', function () {
+        return view('admin.users.index');
+    })->name('users.index');
+    Route::get('/users/create', function () {
+        return view('admin.users.create');
+    })->name('users.create');
+
+    Route::get('/users/{user}/edit', function (User $user) {
+        return view('admin.users.edit', compact('user'));
+    })->name('users.edit');
+
+
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('categories', AdminCategoryController::class);
     Route::delete('articles/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
@@ -40,9 +56,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
     Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
     Route::post('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
-    Route::resource('users', UserController::class)->except(['show']);
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
     Route::resource('tags', TagController::class);
 });
 Route::middleware('auth')->group(function () {

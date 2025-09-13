@@ -24,7 +24,7 @@
             document.documentElement.classList.remove('dark')
         }
     </script>
-
+    @livewireStyles
     @include('partials._variables')
 </head>
 
@@ -46,7 +46,7 @@
             {{ $slot }}
         </main>
     </div>
-
+    @livewireScripts
 </body>
 
 </html>

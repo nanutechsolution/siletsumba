@@ -141,9 +141,6 @@
                         target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-600">
                         <i class="fab fa-x text-xl"></i>
                     </a>
-
-
-
                     <!-- Telegram -->
                     <a href="https://t.me/share/url?url={{ $shareUrl }}&text={{ $shareTitle }}" target="_blank"
                         rel="noopener noreferrer" class="text-gray-800 hover:text-black">

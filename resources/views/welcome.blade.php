@@ -7,14 +7,8 @@
     <title>Silet Sumba - Berita, Budaya & Pariwisata Sumba</title>
     {{-- icon --}}
     <link rel="shortcut icon" href="{{ Storage::url($settings['site_logo_url']->value) }}" type="image/x-icon">
-    <meta name="description"
-        content="Situs berita Silet Sumba menyajikan informasi terkini seputar Sumba, termasuk budaya, pariwisata, dan berita lokal.">
+    @include('partials._meta')
     @vite('resources/css/app.css')
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
