@@ -2,7 +2,7 @@
     // Meta defaults
     $metaTitle = $article->title . ' - Silet Sumba';
     $metaDescription = $article->excerpt ?? Str::limit(strip_tags($article->content), 160);
-    $metaImage = $article->images->first()->path ?? Storage::url($settings['site_logo_url']->value);
+    $metaImage = $article->image_url ? url($article->image_url) : Storage::url($settings['site_logo_url']->value);
     $metaUrl = url()->current();
     $publishedTime = $article->created_at ? $article->created_at->toIso8601String() : now()->toIso8601String();
     $modifiedTime = $article->updated_at ? $article->updated_at->toIso8601String() : $publishedTime;
