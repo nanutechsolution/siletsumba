@@ -40,7 +40,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
     Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
     Route::post('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
-    Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+    Route::resource('users', UserController::class)->except(['show']);
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::resource('tags', TagController::class);

@@ -12,7 +12,6 @@
                     <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="space-y-6">
                         @csrf
                         @method('PUT')
-
                         <div class="flex items-center space-x-4 mb-6">
                             <div class="flex-shrink-0 h-16 w-16">
                                 @if ($user->profile_photo_path)

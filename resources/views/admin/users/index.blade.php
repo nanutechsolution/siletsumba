@@ -16,7 +16,14 @@
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-2xl font-bold mb-6">Daftar Pengguna</h3>
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold">Daftar Pengguna</h3>
+                        <a href="{{ route('admin.users.create') }}"
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow transition">
+                            <i class="fas fa-user-plus mr-2"></i> Tambah Pengguna
+                        </a>
+                    </div>
+
 
                     {{-- Tampilan Desktop (Tabel) --}}
                     <div class="hidden md:block overflow-x-auto">
