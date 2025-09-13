@@ -118,32 +118,38 @@
                     </div>
                 @endif
                 @php
-                    $shareUrl = urlencode(request()->fullUrl());
-                    $shareTitle = urlencode($article->title);
+                    // Variabel untuk share
+                    $metaTitle = $article->title . ' - Silet Sumba';
+                    $metaDescription = $article->excerpt ?? Str::limit(strip_tags($article->content), 160);
+                    $metaImage = $article->images->first()?->path ?? Storage::url($settings['site_logo_url']->value);
+                    $shareUrl = url()->current();
                 @endphp
 
                 <!-- Social Share -->
                 <div class="mt-6 flex items-center gap-4">
                     <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
+
                     <!-- WhatsApp -->
-                    <a href="https://api.whatsapp.com/send?text={{ $shareTitle }}%20{{ $shareUrl }}" target="_blank"
-                        rel="noopener noreferrer" class="text-green-600 hover:text-green-800">
+                    <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
+                        target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800">
                         <i class="fab fa-whatsapp text-xl"></i>
                     </a>
+
                     <!-- Facebook -->
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank"
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
                         rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
                         <i class="fab fa-facebook text-xl"></i>
                     </a>
 
                     <!-- Twitter (X) -->
-                    <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareTitle }}"
+                    <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
                         target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-600">
                         <i class="fab fa-x text-xl"></i>
                     </a>
+
                     <!-- Telegram -->
-                    <a href="https://t.me/share/url?url={{ $shareUrl }}&text={{ $shareTitle }}" target="_blank"
-                        rel="noopener noreferrer" class="text-gray-800 hover:text-black">
+                    <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
+                        target="_blank" rel="noopener noreferrer" class="text-gray-800 hover:text-black">
                         <i class="fab fa-telegram text-xl"></i>
                     </a>
                 </div>
