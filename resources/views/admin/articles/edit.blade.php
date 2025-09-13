@@ -207,10 +207,9 @@
             contentInput.value = quill.root.innerHTML;
         });
 
-        // --- Logika Hapus Gambar Lama ---
         let deletedImageIds = [];
-        const deleteImagesInput = document.getElementById('delete-images');
         const oldImagePreviewContainer = document.getElementById('old-image-preview');
+        const deleteImagesContainer = document.getElementById('delete-images');
 
         oldImagePreviewContainer.addEventListener('click', function(e) {
             const deleteButton = e.target.closest('.delete-old-image');
@@ -220,8 +219,22 @@
             const imageId = imageContainer.dataset.id;
 
             if (confirm('Apakah Anda yakin ingin menghapus gambar ini?')) {
+                // Tambahkan ID ke array
                 deletedImageIds.push(imageId);
-                deleteImagesInput.value = deletedImageIds.join(',');
+
+                // Hapus semua hidden input lama
+                deleteImagesContainer.innerHTML = '';
+
+                // Buat hidden input baru per ID
+                deletedImageIds.forEach(id => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'delete_images[]';
+                    input.value = id;
+                    deleteImagesContainer.appendChild(input);
+                });
+
+                // Hapus preview di frontend
                 imageContainer.remove();
             }
         });
@@ -257,7 +270,6 @@
         breakingToggle.addEventListener('change', function() {
             breakingLabel.textContent = this.checked ? 'Breaking News' : 'Normal';
         });
-
         // Set initial text on page load
         const initialPublishedLabel = publishedToggle.closest('label').querySelector('span');
         initialPublishedLabel.textContent = publishedToggle.checked ? 'Terpublikasi' : 'Draft';

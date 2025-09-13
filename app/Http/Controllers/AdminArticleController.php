@@ -48,28 +48,57 @@ class AdminArticleController extends Controller
             'title' => 'required|max:255',
             'content' => ['required', new RequiredHtmlContent()],
             'category_id' => 'required|exists:categories,id',
-            'images' => 'required|array|min:1',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
+            'tags.*' => 'string',
             'is_breaking' => 'nullable|boolean',
             'location_short' => 'required|string|max:255',
-            'is_published' => 'nullable|boolean',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
+            'publish_option' => 'nullable|in:now,schedule',
+            'scheduled_at' => 'nullable|date',
 
         ]);
         $validated['slug'] = Str::slug($validated['title']);
         $validated['user_id'] = auth()->id();
+        $validated['scheduled_at'] = $request->scheduled_at ?? null;
+
+        if ($request->input('publish_option') === 'now') {
+            $validated['is_published'] = true;
+            $validated['scheduled_at'] = now(); // gunakan kolom yang ada
+        } elseif ($request->input('publish_option') === 'schedule') {
+            $validated['is_published'] = false;
+            $validated['scheduled_at'] = $request->input('scheduled_at') ?: null;
+        } else {
+            $validated['is_published'] = false;
+            $validated['scheduled_at'] = null;
+        }
+        // Hapus key 'image' supaya tidak di-insert ke articles
+        $imageFile = $validated['image'];
+        unset($validated['image']);
+
         $article = Article::create($validated);
-        $article->tags()->sync($validated['tags'] ?? []);
-
-
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('articles', 'public');
-                $article->images()->create(['path' => $path]);
+        $tags = collect($validated['tags'] ?? [])->map(function ($tag) {
+            if (is_numeric($tag)) {
+                // Tag lama
+                return (int) $tag;
+            } else {
+                // Tag baru
+                $slug = Str::slug($tag);
+                $newTag = \App\Models\Tag::firstOrCreate(
+                    ['slug' => $slug], // cek kalau sudah ada slug
+                    ['name' => $tag]   // kalau belum ada, buat baru
+                );
+                return $newTag->id;
             }
+        })->toArray();
+
+        $article->tags()->sync($tags);
+
+
+        // Upload gambar
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('articles', 'public');
+            $article->images()->create(['path' => $path]);
         }
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');
     }
@@ -91,7 +120,6 @@ class AdminArticleController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'delete_images' => 'nullable|array',
             'delete_images.*' => 'exists:article_images,id',
             'is_breaking' => 'nullable|boolean',
@@ -100,32 +128,35 @@ class AdminArticleController extends Controller
             'is_published' => 'nullable|boolean',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
+            'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
-
+        // Update artikel
         $article->update([
             'title' => $validated['title'],
-            'is_published' => $validated['is_published'] ?? false,
+            'is_published' => $validated['scheduled_at'] ? false : ($validated['is_published'] ?? false),
             'content' => $validated['content'],
             'lokasi_short' => $validated['lokasi_short'] ?? null,
             'category_id' => $validated['category_id'],
             'slug' => Str::slug($validated['title']),
-            'lokasi_short' => $validated['lokasi_short'] ?? null,
             'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
             'user_id' => auth()->id(),
         ]);
+
+        // Sync tags
         $article->tags()->sync($validated['tags'] ?? []);
+
         // Hapus gambar yang dicentang
         if (!empty($validated['delete_images'])) {
             $imagesToDelete = ArticleImage::whereIn('id', $validated['delete_images'])->get();
             foreach ($imagesToDelete as $img) {
-                Storage::disk('public')->delete($img->path); // hapus file fisik
-                $img->delete(); // hapus record
+                Storage::disk('public')->delete($img->path);
+                $img->delete();
             }
         }
 
-        // Tambahkan gambar baru
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
+        // Upload gambar baru
+        if ($request->hasFile('new_images')) {
+            foreach ($request->file('new_images') as $image) {
                 $path = $image->store('articles', 'public');
                 $article->images()->create(['path' => $path]);
             }
@@ -133,6 +164,7 @@ class AdminArticleController extends Controller
 
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
+
 
     public function destroy(Article $article)
     {

@@ -18,13 +18,13 @@ class Article extends Model
         'title',
         'slug',
         'content',
-        'image',
         'category_id',
         'is_breaking',
         'location_short',
         'user_id',
         'views',
         'is_published',
+        'scheduled_at'
     ];
 
     public function category()

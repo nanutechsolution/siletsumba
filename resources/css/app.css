@@ -114,3 +114,26 @@
         }
 
 
+
+        /* Dark mode Tom Select */
+.dark .ts-control {
+    background-color: #1f2937; /* bg-gray-800 */
+    color: #f9fafb; /* text-gray-100 */
+    border-color: #374151; /* border-gray-700 */
+}
+
+.dark .ts-dropdown {
+    background-color: #1f2937;
+    color: #f9fafb;
+}
+
+.dark .ts-dropdown .ts-option:hover,
+.dark .ts-dropdown .ts-option.ts-selected {
+    background-color: #2563eb; /* bg-blue-600 */
+    color: #fff;
+}
+
+.dark .ts-control input {
+    background-color: transparent;
+    color: #f9fafb;
+}

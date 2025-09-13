@@ -22,7 +22,7 @@ class SettingServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // View Composer untuk layout utama
-        View::composer(['welcome', 'layouts.app', 'layouts.navigation'], function ($view) {
+        View::composer('*', function ($view) {
             $settings = Setting::all()->keyBy('key');
             $view->with('settings', $settings);
         });
