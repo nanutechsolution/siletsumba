@@ -1,12 +1,18 @@
 @php
-    // Meta defaults
-    $metaTitle = $article->title . ' - Silet Sumba';
-    $metaDescription = $article->excerpt ?? Str::limit(strip_tags($article->content), 160);
-    $metaImage = $article->image_url ? url($article->image_url) : Storage::url($settings['site_logo_url']->value);
+    $metaTitle = isset($article) ? $article->title . ' - Silet Sumba' : 'Silet Sumba';
+    $metaDescription = isset($article)
+        ? $article->excerpt ?? Str::limit(strip_tags($article->content), 160)
+        : 'Berita terbaru Silet Sumba';
+    $metaImage =
+        isset($article) && $article->image_url
+            ? url($article->image_url)
+            : Storage::url($settings['site_logo_url']->value);
     $metaUrl = url()->current();
-    $publishedTime = $article->created_at ? $article->created_at->toIso8601String() : now()->toIso8601String();
-    $modifiedTime = $article->updated_at ? $article->updated_at->toIso8601String() : $publishedTime;
+    $publishedTime =
+        isset($article) && $article->created_at ? $article->created_at->toIso8601String() : now()->toIso8601String();
+    $modifiedTime = isset($article) && $article->updated_at ? $article->updated_at->toIso8601String() : $publishedTime;
 @endphp
+
 
 <!-- Primary Meta Tags -->
 <title>{{ $metaTitle }}</title>
@@ -23,9 +29,11 @@
 <meta property="article:published_time" content="{{ $publishedTime }}">
 <meta property="article:modified_time" content="{{ $modifiedTime }}">
 <meta property="article:author" content="{{ $article->user->name ?? 'Redaksi' }}">
-@foreach ($article->tags as $tag)
-    <meta property="article:tag" content="{{ $tag->name }}">
-@endforeach
+@isset($article)
+    @foreach ($article->tags as $tag)
+        <meta property="article:tag" content="{{ $tag->name }}">
+    @endforeach
+@endisset
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
@@ -35,22 +43,20 @@
 <meta name="twitter:site" content="@siletsumba">
 <meta name="twitter:creator" content="@siletsumba">
 @php
-    $articleJson = [
+    $articleJson = isset($article) ? [
         '@context' => 'https://schema.org',
         '@type' => 'Article',
         'mainEntityOfPage' => [
             '@type' => 'WebPage',
             '@id' => url()->current(),
         ],
-        'headline' => $article->title,
+        'headline' => $article->title ?? 'Silet Sumba',
         'image' => [$article->images->first()?->path ?? Storage::url($settings['site_logo_url']->value)],
-        'datePublished' => $article->created_at?->toIso8601String() ?? now()->toIso8601String(),
-        'dateModified' =>
-            $article->updated_at?->toIso8601String() ??
-            ($article->created_at?->toIso8601String() ?? now()->toIso8601String()),
+        'datePublished' => ($article->scheduled_at ?? $article->created_at)?->toIso8601String() ?? now()->toIso8601String(),
+        'dateModified' => ($article->updated_at ?? ($article->scheduled_at ?? $article->created_at))?->toIso8601String() ?? now()->toIso8601String(),
         'author' => [
             '@type' => 'Person',
-            'name' => $article->user->name ?? 'Redaksi',
+            'name' => $article->user?->name ?? 'Redaksi',
         ],
         'publisher' => [
             '@type' => 'Organization',
@@ -60,10 +66,14 @@
                 'url' => Storage::url($settings['site_logo_url']->value),
             ],
         ],
-        'description' => $article->excerpt ?? Str::limit(strip_tags($article->content), 160),
-    ];
+        'description' => $article->excerpt ?? Str::limit(strip_tags($article->content ?? ''), 160),
+        'keywords' => $article->tags?->pluck('name')->toArray() ?? [],
+    ] : null;
 @endphp
 
-<script type="application/ld+json">
-{!! json_encode($articleJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) !!}
-</script>
+@if($articleJson)
+    <script type="application/ld+json">
+        {!! json_encode($articleJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) !!}
+    </script>
+@endif
+

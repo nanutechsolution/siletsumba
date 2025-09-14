@@ -18,18 +18,28 @@
 
         <!-- Search (centered) -->
         @if (!request()->routeIs('articles.search'))
-            <div class="hidden md:flex flex-1 justify-center px-6">
-                <form action="{{ route('articles.search') }}" method="GET" class="relative w-full max-w-md">
+            <!-- Search (selalu muncul) -->
+            <!-- Search (responsive modern) -->
+            <div class="flex flex-1 justify-center px-2 mt-3 md:mt-0">
+                <form action="{{ route('articles.search') }}" method="GET"
+                    class="relative w-full max-w-xs md:max-w-md">
+                    <!-- Input dengan icon di dalam -->
                     <input type="text" name="q" placeholder="Cari berita..."
-                        class="border border-gray-300 rounded-full px-4 py-2 w-full focus:outline-none focus:border-red-600"
+                        class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
                         value="{{ request('q') }}">
-                    <button type="submit" class="absolute right-0 top-0 mt-2 mr-3 text-gray-400">
+
+                    <!-- Icon pencarian -->
+                    <div
+                        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-400 pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                    </button>
+                    </div>
+
+                    <!-- Tombol submit (opsional di mobile, bisa pakai enter) -->
+                    <button type="submit" class="hidden"></button>
                 </form>
             </div>
         @endif

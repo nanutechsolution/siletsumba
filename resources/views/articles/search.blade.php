@@ -1,5 +1,4 @@
 @extends('welcome')
-
 @section('content')
     <!-- Breadcrumb -->
     <div class="bg-tribun-gray dark:bg-gray-800 py-2">
