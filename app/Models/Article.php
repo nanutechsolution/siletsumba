@@ -26,6 +26,10 @@ class Article extends Model
         'is_published',
         'scheduled_at'
     ];
+    protected $casts = [
+        'scheduled_at' => 'datetime',
+    ];
+
 
     public function category()
     {
