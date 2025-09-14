@@ -30,6 +30,155 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Article Content (3/4) -->
         <div class="lg:col-span-3">
+            @php
+                // Variabel untuk share
+                $metaTitle = $article->title . ' - Silet Sumba';
+                $metaDescription = $article->excerpt ?? Str::limit(strip_tags($article->content), 160);
+                $metaImage = $article->images->first()?->path ?? Storage::url($settings['site_logo_url']->value);
+                $shareUrl = url()->current();
+            @endphp
+            <article
+                class="bg-white dark:bg-gray-950 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 transition">
+                <!-- Category -->
+                <div class="px-8 pt-8">
+                    <span
+                        class="inline-block text-white text-xs md:text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm uppercase tracking-wide"
+                        style="background-color: {{ $article->category->color }}">
+                        {{ $article->category->name }}
+                    </span>
+                </div>
+
+                <!-- Title -->
+                <h1 class="px-8 pt-4 text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
+                    {!! $article->title !!}
+                </h1>
+
+                <!-- Meta Info -->
+                <div class="px-8 mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-500 dark:text-gray-400">
+                    <!-- Author -->
+                    <div class="flex items-center gap-3">
+                        @if (!empty($article->user?->profile_photo_path))
+                            <img src="{{ Storage::url($article->user->profile_photo_path) }}"
+                                alt="{{ $article->user->name }}"
+                                class="w-11 h-11 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700 shadow-sm">
+                        @else
+                            <i class="fas fa-user-circle text-3xl"></i>
+                        @endif
+                        <span class="font-medium">{{ $article->user->name ?? 'Redaksi' }}</span>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="flex items-center gap-2">
+                        <i class="far fa-clock"></i>
+                        <span>{{ $article->created_at->format('d F Y - H:i') }} WITA</span>
+                    </div>
+
+                    <!-- Views -->
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-eye"></i>
+                        <span>{{ number_format($article->views) }} kali dibaca</span>
+                    </div>
+
+                    <!-- Likes -->
+                    <div class="flex items-center gap-2">
+                        <i class="far fa-thumbs-up"></i>
+                        <span>{{ number_format($article->likes) }} suka</span>
+                    </div>
+
+                    <!-- Komentar -->
+                    <div class="flex items-center gap-2">
+                        <i class="far fa-comment"></i>
+                        <span>{{ $article->comments_count ?? 0 }} komentar</span>
+                    </div>
+                </div>
+
+                <!-- Featured Image -->
+                <div class="mt-8 relative">
+                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
+                        class="w-full h-[460px] object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
+                </div>
+
+                <!-- Content -->
+                <div class="article-content prose prose-lg dark:prose-invert px-8 mt-10 max-w-none leading-relaxed">
+                    {!! $article->full_content !!}
+                </div>
+
+                <!-- Tags -->
+                @if ($article->tags->count())
+                    <div class="px-8 mt-12 border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Topik Terkait:</h4>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach ($article->tags as $tag)
+                                <a href="{{ route('tags.show', $tag->slug) }}"
+                                    class="px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-xs md:text-sm font-medium hover:bg-tribun-red hover:text-white transition">
+                                    #{{ $tag->name }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Share -->
+                <div class="px-8 mt-12 border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan artikel ini:</span>
+                        <div class="flex gap-5 text-xl">
+                            <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
+                                target="_blank" rel="noopener noreferrer"
+                                class="text-green-500 hover:text-green-700 transition"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}"
+                                target="_blank" rel="noopener noreferrer"
+                                class="text-blue-600 hover:text-blue-800 transition"><i class="fab fa-facebook"></i></a>
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
+                                target="_blank" rel="noopener noreferrer"
+                                class="text-sky-500 hover:text-sky-700 transition"><i class="fab fa-twitter"></i></a>
+                            <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
+                                target="_blank" rel="noopener noreferrer"
+                                class="text-gray-800 dark:text-gray-300 hover:text-black transition"><i
+                                    class="fab fa-telegram"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Author Box -->
+                <div class="px-8 mt-12 border-t border-gray-200 dark:border-gray-700 pt-8 pb-10">
+                    <div class="flex items-center gap-5">
+                        @if (!empty($article->user?->profile_photo_path))
+                            <img src="{{ Storage::url($article->user->profile_photo_path) }}"
+                                alt="{{ $article->user->name }}"
+                                class="w-16 h-16 rounded-full object-cover shadow-lg ring-2 ring-gray-200 dark:ring-gray-700">
+                        @else
+                            <i class="fas fa-user-circle text-6xl text-gray-400"></i>
+                        @endif
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                {{ $article->user->name ?? 'Redaksi' }}
+                            </h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                @if (!empty($article->user?->bio))
+                                    {{ $article->user->bio }}
+                                @else
+                                    <span class="font-medium">Silet Sumba</span> — Portal Berita Lokal Terpercaya
+                                @endif
+                            </p>
+
+                            <!-- Socials -->
+                            <div class="flex gap-4 mt-2 text-lg">
+                                <a href="https://www.facebook.com/bung.kobus.2025"
+                                    class="text-blue-600 hover:text-blue-800 transition"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="text-sky-500 hover:text-sky-700 transition"><i
+                                        class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-pink-500 hover:text-pink-700 transition"><i
+                                        class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            {{-- 
             <!-- Article Header -->
             <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
                 <span class=" text-white px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block"
@@ -122,13 +271,7 @@
                         </div>
                     </div>
                 @endif
-                @php
-                    // Variabel untuk share
-                    $metaTitle = $article->title . ' - Silet Sumba';
-                    $metaDescription = $article->excerpt ?? Str::limit(strip_tags($article->content), 160);
-                    $metaImage = $article->images->first()?->path ?? Storage::url($settings['site_logo_url']->value);
-                    $shareUrl = url()->current();
-                @endphp
+
 
                 <!-- Social Share -->
                 <div class="mt-6 flex items-center gap-4">
@@ -198,7 +341,7 @@
                         </div>
                     </div>
                 </div>
-            </article>
+            </article> --}}
 
             <!-- Related News -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
