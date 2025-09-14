@@ -43,8 +43,15 @@
                 <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400 mb-6">
                     <!-- Author -->
                     <div class="flex items-center mr-6 mb-2">
-                        <i class="fas fa-user-circle mr-2"></i>
-                        <span>{{ $article->user->name ?? 'Redaksi' }}</span>
+                        @if (!empty($article->user?->profile_photo_path))
+                            <img src="{{ Storage::url($hero->user->profile_photo_path) }}" alt="{{ $hero->author->name }}"
+                                class="w-6 h-6 rounded-full mr-2 object-cover">
+                        @else
+                            <i class="fas fa-user-circle mr-2"></i>
+                        @endif
+                        {{ $article->user->name ?? 'Penulis' }}
+
+                        {{-- <span>{{ $article->user->name ?? 'Redaksi' }}</span> --}}
                     </div>
 
                     <!-- Tanggal -->
