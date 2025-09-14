@@ -30,7 +30,7 @@
                                         @else
                                             <i class="fas fa-user mr-2"></i>
                                         @endif
-                                        {{ $hero->author->name ?? 'Redaksi' }}
+                                        {{ $hero->author->name ?? 'Penulis' }}
                                     </span>
                                     <span class="mx-3">•</span>
                                     <span><i class="fas fa-clock mr-1"></i> {{ $hero->created_at->diffForHumans() }}</span>
@@ -49,7 +49,6 @@
                             <img src="{{ $article->image_url ?? 'https://via.placeholder.com/300x200' }}"
                                 alt="{{ $article->title }}"
                                 class="w-full h-full object-cover group-hover:opacity-90 transition duration-300">
-
                             <span class="absolute top-2 left-2   text-white text-xs px-2 py-1 rounded font-semibold"
                                 style="background-color: {{ $article->category->color }}; color: #fff;">
                                 {{ $article->category->name ?? 'Umum' }}
@@ -135,13 +134,13 @@
 
             </div>
 
-            <!-- Advertisement -->
+            {{-- <!-- Advertisement -->
             <div class="bg-gray-100 rounded-lg p-4 text-center">
                 <h4 class="text-sm text-gray-500 mb-2">ADVERTISEMENT</h4>
                 <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b259c087-ef16-40c8-87be-f9f713d14c87.png"
                     alt="Iklan sponsor produk teknologi terbaru" class="w-full h-48 object-cover rounded mb-2">
                 <p class="text-xs text-gray-600">Dukung media independen dengan mendukung advertiser kami</p>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection
