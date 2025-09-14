@@ -18,15 +18,10 @@
 
         <!-- Search (centered) -->
         @if (!request()->routeIs('articles.search'))
-            <!-- Search (selalu muncul) -->
-            <!-- Search (responsive modern) -->
+            <!-- Search Bar Animasi Modern -->
             <div class="flex flex-1 justify-center px-2 mt-3 md:mt-0">
                 <form action="{{ route('articles.search') }}" method="GET"
-                    class="relative w-full max-w-xs md:max-w-md">
-                    <!-- Input dengan icon di dalam -->
-                    <input type="text" name="q" placeholder="Cari berita..."
-                        class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
-                        value="{{ request('q') }}">
+                    class="relative w-full max-w-xs md:max-w-md transition-all duration-300 ease-in-out focus-within:max-w-md">
 
                     <!-- Icon pencarian -->
                     <div
@@ -38,7 +33,12 @@
                         </svg>
                     </div>
 
-                    <!-- Tombol submit (opsional di mobile, bisa pakai enter) -->
+                    <!-- Input -->
+                    <input type="text" name="q" placeholder="Cari berita..."
+                        class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 transition-all duration-300 ease-in-out"
+                        value="{{ request('q') }}">
+
+                    <!-- Tombol submit disembunyikan -->
                     <button type="submit" class="hidden"></button>
                 </form>
             </div>
