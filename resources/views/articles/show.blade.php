@@ -62,7 +62,11 @@
                     <!-- Tanggal -->
                     <div class="flex items-center mr-6 mb-2">
                         <i class="far fa-clock mr-2"></i>
-                        <span>{{ $article->created_at->format('d F Y - H:i') }} WITA</span>
+                        <span>
+                            {{ \Carbon\Carbon::parse($article->scheduled_at ?? $article->created_at)->format('d F Y - H:i') }}
+                            WITA
+                        </span>
+
                     </div>
 
                     <!-- Views -->

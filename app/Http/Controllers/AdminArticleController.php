@@ -64,7 +64,7 @@ class AdminArticleController extends Controller
 
         if ($request->input('publish_option') === 'now') {
             $validated['is_published'] = true;
-            $validated['scheduled_at'] = now(); // gunakan kolom yang ada
+            $validated['scheduled_at'] = now();
         } elseif ($request->input('publish_option') === 'schedule') {
             $validated['is_published'] = false;
             $validated['scheduled_at'] = $request->filled('scheduled_at')

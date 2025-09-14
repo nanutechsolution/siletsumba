@@ -156,10 +156,7 @@
 
                         {{-- Tombol --}}
                         <div class="flex items-center justify-between">
-                            <button type="submit"
-                                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded shadow hover:shadow-lg transition">
-                                Perbarui
-                            </button>
+                            <x-submit-button text="Update" color="green" />
                             <a href="{{ route('admin.articles.index') }}"
                                 class="text-blue-500 hover:text-blue-700 font-semibold">Batal</a>
                         </div>
