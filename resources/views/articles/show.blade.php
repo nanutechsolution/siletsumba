@@ -38,80 +38,84 @@
                 $shareUrl = url()->current();
             @endphp
             <article
-                class="bg-white dark:bg-gray-950 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 transition">
+                class="bg-white dark:bg-gray-950 rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 transition">
                 <!-- Category -->
-                <div class="px-8 pt-8">
+                <div class="px-4 md:px-8 pt-6">
                     <span
-                        class="inline-block text-white text-xs md:text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm uppercase tracking-wide"
+                        class="inline-block text-white text-xs md:text-sm font-semibold px-3 md:px-4 py-1 rounded-full shadow-sm uppercase tracking-wide"
                         style="background-color: {{ $article->category->color }}">
                         {{ $article->category->name }}
                     </span>
                 </div>
 
                 <!-- Title -->
-                <h1 class="px-8 pt-4 text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
+                <h1
+                    class="px-4 md:px-8 pt-3 text-2xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 leading-snug md:leading-tight">
                     {!! $article->title !!}
                 </h1>
 
                 <!-- Meta Info -->
-                <div class="px-8 mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-500 dark:text-gray-400">
+                <div
+                    class="px-4 md:px-8 mt-4 md:mt-5 flex flex-col md:flex-row md:flex-wrap md:items-center gap-x-6 gap-y-3 text-xs md:text-sm text-gray-500 dark:text-gray-400">
                     <!-- Author -->
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
                         @if (!empty($article->user?->profile_photo_path))
                             <img src="{{ Storage::url($article->user->profile_photo_path) }}"
                                 alt="{{ $article->user->name }}"
-                                class="w-11 h-11 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700 shadow-sm">
+                                class="w-9 h-9 md:w-11 md:h-11 rounded-full object-cover ring-1 md:ring-2 ring-gray-200 dark:ring-gray-700 shadow-sm">
                         @else
-                            <i class="fas fa-user-circle text-3xl"></i>
+                            <i class="fas fa-user-circle text-2xl md:text-3xl"></i>
                         @endif
                         <span class="font-medium">{{ $article->user->name ?? 'Redaksi' }}</span>
                     </div>
 
                     <!-- Date -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <i class="far fa-clock"></i>
                         <span>{{ $article->created_at->format('d F Y - H:i') }} WITA</span>
                     </div>
 
                     <!-- Views -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <i class="fas fa-eye"></i>
-                        <span>{{ number_format($article->views) }} kali dibaca</span>
+                        <span>{{ number_format($article->views) }}</span>
                     </div>
 
                     <!-- Likes -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <i class="far fa-thumbs-up"></i>
-                        <span>{{ number_format($article->likes) }} suka</span>
+                        <span>{{ number_format($article->likes) }}</span>
                     </div>
 
                     <!-- Komentar -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <i class="far fa-comment"></i>
-                        <span>{{ $article->comments_count ?? 0 }} komentar</span>
+                        <span>{{ $article->comments_count ?? 0 }}</span>
                     </div>
                 </div>
 
                 <!-- Featured Image -->
-                <div class="mt-8 relative">
+                <div class="mt-5 md:mt-8 relative">
                     <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
-                        class="w-full h-[460px] object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
+                        class="w-full h-56 md:h-[460px] object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent"></div>
                 </div>
 
                 <!-- Content -->
-                <div class="article-content prose prose-lg dark:prose-invert px-8 mt-10 max-w-none leading-relaxed">
+                <div
+                    class="article-content prose prose-base md:prose-lg dark:prose-invert px-4 md:px-8 mt-6 md:mt-10 max-w-none leading-relaxed">
                     {!! $article->full_content !!}
                 </div>
 
                 <!-- Tags -->
                 @if ($article->tags->count())
-                    <div class="px-8 mt-12 border-t border-gray-200 dark:border-gray-700 pt-6">
-                        <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Topik Terkait:</h4>
-                        <div class="flex flex-wrap gap-3">
+                    <div class="px-4 md:px-8 mt-8 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-4 md:pt-6">
+                        <h4 class="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Topik Terkait:
+                        </h4>
+                        <div class="flex flex-wrap gap-2 md:gap-3">
                             @foreach ($article->tags as $tag)
                                 <a href="{{ route('tags.show', $tag->slug) }}"
-                                    class="px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-xs md:text-sm font-medium hover:bg-tribun-red hover:text-white transition">
+                                    class="px-3 md:px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-xs md:text-sm font-medium hover:bg-tribun-red hover:text-white transition">
                                     #{{ $tag->name }}
                                 </a>
                             @endforeach
@@ -120,10 +124,10 @@
                 @endif
 
                 <!-- Share -->
-                <div class="px-8 mt-12 border-t border-gray-200 dark:border-gray-700 pt-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan artikel ini:</span>
-                        <div class="flex gap-5 text-xl">
+                <div class="px-4 md:px-8 mt-8 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-4 md:pt-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
+                        <span class="text-xs md:text-sm text-gray-600 dark:text-gray-400">Bagikan artikel ini:</span>
+                        <div class="flex gap-4 md:gap-5 text-lg md:text-xl">
                             <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
                                 target="_blank" rel="noopener noreferrer"
                                 class="text-green-500 hover:text-green-700 transition"><i class="fab fa-whatsapp"></i></a>
@@ -142,21 +146,21 @@
                 </div>
 
                 <!-- Author Box -->
-                <div class="px-8 mt-12 border-t border-gray-200 dark:border-gray-700 pt-8 pb-10">
-                    <div class="flex items-center gap-5">
+                <div class="px-4 md:px-8 mt-8 md:mt-12 border-t border-gray-200 dark:border-gray-700 pt-6 pb-8">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-5">
                         @if (!empty($article->user?->profile_photo_path))
                             <img src="{{ Storage::url($article->user->profile_photo_path) }}"
                                 alt="{{ $article->user->name }}"
-                                class="w-16 h-16 rounded-full object-cover shadow-lg ring-2 ring-gray-200 dark:ring-gray-700">
+                                class="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover shadow-md ring-1 md:ring-2 ring-gray-200 dark:ring-gray-700">
                         @else
-                            <i class="fas fa-user-circle text-6xl text-gray-400"></i>
+                            <i class="fas fa-user-circle text-5xl md:text-6xl text-gray-400"></i>
                         @endif
 
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        <div class="text-center md:text-left">
+                            <h3 class="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
                                 {{ $article->user->name ?? 'Redaksi' }}
                             </h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <p class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1">
                                 @if (!empty($article->user?->bio))
                                     {{ $article->user->bio }}
                                 @else
@@ -165,7 +169,7 @@
                             </p>
 
                             <!-- Socials -->
-                            <div class="flex gap-4 mt-2 text-lg">
+                            <div class="flex justify-center md:justify-start gap-4 mt-2 text-base md:text-lg">
                                 <a href="https://www.facebook.com/bung.kobus.2025"
                                     class="text-blue-600 hover:text-blue-800 transition"><i class="fab fa-facebook"></i></a>
                                 <a href="#" class="text-sky-500 hover:text-sky-700 transition"><i
@@ -177,6 +181,7 @@
                     </div>
                 </div>
             </article>
+
 
             {{-- 
             <!-- Article Header -->
