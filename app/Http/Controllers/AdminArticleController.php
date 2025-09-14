@@ -130,7 +130,6 @@ class AdminArticleController extends Controller
             'tags.*' => 'exists:tags,id',
             'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
-        // Update artikel
         $article->update([
             'title' => $validated['title'],
             'is_published' => true,
@@ -142,7 +141,6 @@ class AdminArticleController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        // Sync tags
         $article->tags()->sync($validated['tags'] ?? []);
 
         // Hapus gambar yang dicentang

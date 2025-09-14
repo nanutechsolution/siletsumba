@@ -73,7 +73,8 @@
                                 <i class="far fa-thumbs-up mr-2"></i>
                             </button>
                             <p class="text-sm text-gray-500">
-                                <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> untuk menyukai
+                                <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a> untuk
+                                menyukai
                                 artikel ini.
                             </p>
                         @endguest
@@ -102,7 +103,6 @@
                         {!! $article->title !!}
                     </p>
                 </div>
-
                 <!-- Article Content -->
                 <div class="article-content prose dark:prose-invert max-w-none">
                     {!! $article->full_content !!}
@@ -159,6 +159,45 @@
                     </a>
                 </div>
 
+
+                <!-- Author Box -->
+                <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                        <!-- Foto Penulis -->
+                        @if (!empty($article->user?->profile_photo_path))
+                            <img src="{{ Storage::url($article->user->profile_photo_path) }}"
+                                alt="{{ $article->user->name }}" class="w-32 h-32 rounded-full object-cover shadow-md">
+                        @else
+                            <i class="fas fa-user-circle text-gray-400 text-7xl"></i>
+                        @endif
+
+                        <!-- Info Penulis -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
+                                {{ $article->user->name ?? 'Redaksi' }}
+                            </h3>
+                            <p class="text-gray-600 dark:text-gray-400 mt-2">
+                                @if (!empty($article->user?->bio))
+                                    {{ $article->user->bio }}
+                                @else
+                                    Penulis di <span class="font-medium">Silet Sumba</span>.
+                                @endif
+                            </p>
+                            <div class="flex gap-4 mt-4">
+                                <!-- Contoh: link ke profil / sosmed penulis -->
+                                <a href="#" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fab fa-facebook text-lg"></i>
+                                </a>
+                                <a href="#" class="text-blue-400 hover:text-blue-600">
+                                    <i class="fab fa-twitter text-lg"></i>
+                                </a>
+                                <a href="#" class="text-pink-500 hover:text-pink-700">
+                                    <i class="fab fa-instagram text-lg"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </article>
 
             <!-- Related News -->
@@ -202,7 +241,8 @@
                         @csrf
                         <input type="hidden" name="article_id" value="{{ $article->id }}">
                         <div class="mb-4">
-                            <label for="name" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Nama</label>
+                            <label for="name"
+                                class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Nama</label>
                             <input type="text" name="name" id="name"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
                                 required>
