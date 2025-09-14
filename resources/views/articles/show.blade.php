@@ -45,13 +45,11 @@
                     <div class="flex items-center mr-6 mb-2">
                         @if (!empty($article->user?->profile_photo_path))
                             <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                alt="{{ $article->user->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
+                                alt="{{ $article->user->name }}" class="w-8 h-8 rounded-full mr-2 object-cover">
                         @else
                             <i class="fas fa-user-circle mr-2"></i>
                         @endif
                         {{ $article->user->name ?? 'Penulis' }}
-
-                        {{-- <span>{{ $article->user->name ?? 'Redaksi' }}</span> --}}
                     </div>
 
                     <!-- Tanggal -->
