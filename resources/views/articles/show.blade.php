@@ -45,7 +45,7 @@
                     <div class="flex items-center mr-6 mb-2">
                         @if (!empty($article->user?->profile_photo_path))
                             <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                alt="{{ $article->user->name }}" class="w-8 h-8 rounded-full mr-2 object-cover">
+                                alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full mr-2 object-cover">
                         @else
                             <i class="fas fa-user-circle mr-2"></i>
                         @endif
@@ -158,41 +158,40 @@
                         <i class="fab fa-telegram text-xl"></i>
                     </a>
                 </div>
-
-
                 <!-- Author Box -->
                 <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
-                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                    <div class="flex items-center gap-4">
                         <!-- Foto Penulis -->
                         @if (!empty($article->user?->profile_photo_path))
                             <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                alt="{{ $article->user->name }}" class="w-32 h-32 rounded-full object-cover shadow-md">
+                                alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md">
                         @else
-                            <i class="fas fa-user-circle text-gray-400 text-7xl"></i>
+                            <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
                         @endif
 
                         <!-- Info Penulis -->
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
                                 {{ $article->user->name ?? 'Redaksi' }}
                             </h3>
-                            <p class="text-gray-600 dark:text-gray-400 mt-2">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
                                 @if (!empty($article->user?->bio))
                                     {{ $article->user->bio }}
                                 @else
-                                    Penulis di <span class="font-medium">Silet Sumba</span>.
+                                    <span class="font-medium">Silet Sumba</span>.
                                 @endif
                             </p>
-                            <div class="flex gap-4 mt-4">
-                                <!-- Contoh: link ke profil / sosmed penulis -->
+
+                            <!-- Sosmed -->
+                            <div class="flex gap-3 mt-2">
                                 <a href="#" class="text-blue-600 hover:text-blue-800">
-                                    <i class="fab fa-facebook text-lg"></i>
+                                    <i class="fab fa-facebook text-sm"></i>
                                 </a>
                                 <a href="#" class="text-blue-400 hover:text-blue-600">
-                                    <i class="fab fa-twitter text-lg"></i>
+                                    <i class="fab fa-twitter text-sm"></i>
                                 </a>
                                 <a href="#" class="text-pink-500 hover:text-pink-700">
-                                    <i class="fab fa-instagram text-lg"></i>
+                                    <i class="fab fa-instagram text-sm"></i>
                                 </a>
                             </div>
                         </div>
