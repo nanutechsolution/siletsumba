@@ -184,7 +184,8 @@
 
                             <!-- Sosmed -->
                             <div class="flex gap-3 mt-2">
-                                <a href="#" class="text-blue-600 hover:text-blue-800">
+                                <a href="https://www.facebook.com/bung.kobus.2025"
+                                    class="text-blue-600 hover:text-blue-800">
                                     <i class="fab fa-facebook text-sm"></i>
                                 </a>
                                 <a href="#" class="text-blue-400 hover:text-blue-600">
