@@ -133,7 +133,7 @@ class AdminArticleController extends Controller
         // Update artikel
         $article->update([
             'title' => $validated['title'],
-            'is_published' => $validated['scheduled_at'] ? false : ($validated['is_published'] ?? false),
+            'is_published' => true,
             'content' => $validated['content'],
             'lokasi_short' => $validated['lokasi_short'] ?? null,
             'category_id' => $validated['category_id'],

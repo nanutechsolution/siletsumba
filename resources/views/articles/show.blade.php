@@ -49,7 +49,7 @@
                         @else
                             <i class="fas fa-user-circle mr-2"></i>
                         @endif
-                        {{ $article->user->name ?? 'Penulis' }}
+                        {{ $article->user->name ?? 'Redaksi' }}
                     </div>
 
                     <!-- Tanggal -->
