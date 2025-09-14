@@ -418,28 +418,40 @@
                     const location = document.getElementById('location').value.trim();
                     const facts = document.getElementById('facts').value.trim();
                     const quotes = document.getElementById('quotes').value.trim();
-                    if (!title) {
-                        alert('Masukkan judul terlebih dahulu!');
-                        document.getElementById('title').focus();
-                        return;
+                    const conten = document.getElementById('content').value.trim();
+
+                    if (conten) {
+                        console.log(conten)
+                        const finalPrompts = promptTemplate
+                            .replace(/{konten}/g, conten);
+                        console.log(finalPrompts);
+
+                        callAI(finalPrompts, this);
+                    } else {
+                        if (!title) {
+                            alert('Masukkan judul terlebih dahulu!');
+                            document.getElementById('title').focus();
+                            return;
+                        }
+                        if (!location) {
+                            alert('Masukkan Detail Lokasi terlebih dahulu!');
+                            document.getElementById('location').focus();
+                            return;
+                        }
+                        if (!facts) {
+                            alert('Masukkan Fakta / Kronologi terlebih dahulu!');
+                            document.getElementById('facts').focus();
+                            return;
+                        }
+                        const finalPrompt = promptTemplate
+                            .replace(/{title}/g, title)
+                            .replace(/{category}/g, category)
+                            .replace(/{location}/g, location || "Tidak disebutkan")
+                            .replace(/{facts}/g, facts || "Tidak ada fakta tambahan")
+                            .replace(/{quotes}/g, quotes || "Tidak ada kutipan");
+                        callAI(finalPrompt, this);
                     }
-                    if (!location) {
-                        alert('Masukkan Detail Lokasi terlebih dahulu!');
-                        document.getElementById('location').focus();
-                        return;
-                    }
-                    if (!facts) {
-                        alert('Masukkan Fakta / Kronologi terlebih dahulu!');
-                        document.getElementById('facts').focus();
-                        return;
-                    }
-                    const finalPrompt = promptTemplate
-                        .replace(/{title}/g, title)
-                        .replace(/{category}/g, category)
-                        .replace(/{location}/g, location || "Tidak disebutkan")
-                        .replace(/{facts}/g, facts || "Tidak ada fakta tambahan")
-                        .replace(/{quotes}/g, quotes || "Tidak ada kutipan");
-                    callAI(finalPrompt, this);
+
                 });
             });
         });
