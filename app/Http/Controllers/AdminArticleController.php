@@ -44,6 +44,7 @@ class AdminArticleController extends Controller
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'title' => 'required|max:255',
             'content' => ['required', new RequiredHtmlContent()],
@@ -66,7 +67,9 @@ class AdminArticleController extends Controller
             $validated['scheduled_at'] = now(); // gunakan kolom yang ada
         } elseif ($request->input('publish_option') === 'schedule') {
             $validated['is_published'] = false;
-            $validated['scheduled_at'] = $request->input('scheduled_at') ?: null;
+            $validated['scheduled_at'] = $request->filled('scheduled_at')
+                ? \Carbon\Carbon::parse($request->input('scheduled_at'))
+                : null;
         } else {
             $validated['is_published'] = false;
             $validated['scheduled_at'] = null;
