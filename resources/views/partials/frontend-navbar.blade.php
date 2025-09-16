@@ -101,14 +101,15 @@
                 </button>
 
                 @guest
-                    <a href="{{ route('login') }}"
-                        class="bg-red-600 text-white px-3 md:px-4 py-2 rounded hover:bg-red-700 transition text-sm md:text-base flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                    <a id="loginBtn" x-data @click.prevent="console.log('login clicked')">Login</a>
+                    <a href="{{ route('login') }}" id="loginBtn"
+                        class="bg-red-600 text-white px-4 py-2 rounded flex items-center justify-center space-x-2 hover:bg-red-700 transition text-sm md:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                         </svg>
-                        Login
+                        <span>Login</span>
                     </a>
                 @endguest
 
@@ -125,7 +126,8 @@
                                     @else
                                         <div
                                             class="h-full w-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="h-5 w-5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
@@ -178,3 +180,16 @@
         </nav>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginBtn = document.getElementById('loginBtn');
+        console.log('Login button found:', loginBtn);
+
+        if (loginBtn) {
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Tombol login diklik!');
+            });
+        }
+    });
+</script>
