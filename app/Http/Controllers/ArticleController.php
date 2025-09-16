@@ -102,9 +102,20 @@ class ArticleController extends Controller
             });
         }
         // Ambil semua kategori untuk filter dropdown
-        $categories = Category::all();
-        if ($categorySlug) {
-            $category = Category::where('slug', $categorySlug)->first();
+        // $categories = Category::all();
+        // if ($categorySlug) {
+        //     $category = Category::where('slug', $categorySlug)->first();
+        //     if ($category) {
+        //         $queryBuilder->where('category_id', $category->id);
+        //     }
+        // }
+        $categories = Category::whereHas('articles')->get();
+
+        if ($categories) {
+            $category = Category::where('slug', $categorySlug)
+                ->whereHas('articles') // pastikan punya artikel
+                ->first();
+
             if ($category) {
                 $queryBuilder->where('category_id', $category->id);
             }
