@@ -2,7 +2,7 @@
 
      <div class="flex items-center justify-between py-3 border-b flex-wrap">
          <!-- Logo & Nama -->
-         <div class="flex items-center gap-4 flex-shrink-0">
+         <a href="{{ url('/') }}" class="flex items-center gap-4 flex-shrink-0">
              <div class="w-16 h-16 bg-red-600 rounded items-center justify-center flex-shrink-0 hidden md:flex">
                  <img src="{{ Storage::url($settings['site_logo_url']->value) }}"
                      alt="{{ $settings['site_name']->value }}">
@@ -15,7 +15,7 @@
                      {{ $settings['site_description']->value ?? 'Berita & Inspirasi dari Sumba' }}
                  </p>
              </div>
-         </div>
+         </a>
 
          <!-- Search -->
          <div class="relative flex-1 justify-center px-2 mt-3 md:mt-0 items-center">
