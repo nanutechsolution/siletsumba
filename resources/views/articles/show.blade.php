@@ -313,26 +313,28 @@
             <!-- Sidebar (1/4) -->
             <div class="lg:col-span-1 space-y-6">
 
-                <!-- Popular News -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                     <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">BERITA POPULER</h2>
                     <div class="divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach ($popular as $index => $pop)
                             <a href="{{ route('articles.show', $pop->slug) }}"
-                                class="flex items-start space-x-3 py-3 hover:text-tribun-red transition">
+                                class="flex items-start space-x-3 py-3 px-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700 
+                      transform hover:scale-105 hover:shadow-lg transition-all duration-200 ease-in-out">
+
                                 <span
                                     class="bg-tribun-red text-white w-6 h-6 rounded-full flex items-center 
-                                 justify-center text-xs font-bold mt-1">
+                             justify-center text-xs font-bold mt-1">
                                     {{ $index + 1 }}
                                 </span>
+
                                 <p class="text-sm font-medium text-gray-800 dark:text-white truncate w-48">
                                     {{ $pop->title }}
                                 </p>
-
                             </a>
                         @endforeach
                     </div>
                 </div>
+
 
                 <!-- Banner Advertisement -->
                 <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center mb-6">
