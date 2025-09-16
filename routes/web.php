@@ -5,19 +5,14 @@ use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\PromptController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TagController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminThemeController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use App\Livewire\UserCreate;
-use App\Livewire\UserEdit;
-use App\Livewire\UserIndex;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -29,9 +24,6 @@ Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategory'])
     ->name('articles.category');
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/tags/{slug}', [HomeController::class, 'getByTag'])->name('tags.show');
-Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
-
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('users', function () {
         return view('admin.users.index');
@@ -39,12 +31,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users/create', function () {
         return view('admin.users.create');
     })->name('users.create');
-
     Route::get('/users/{user}/edit', function (User $user) {
         return view('admin.users.edit', compact('user'));
     })->name('users.edit');
-
-
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('categories', AdminCategoryController::class);
     Route::delete('articles/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
@@ -53,7 +42,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/theme-settings', [AdminThemeController::class, 'update'])->name('theme.update');
     Route::post('articles/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content'); // Tambahkan baris ini
     Route::resource('prompts', PromptController::class);
-
     Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
     Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
     Route::post('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');

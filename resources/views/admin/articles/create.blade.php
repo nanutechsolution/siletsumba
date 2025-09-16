@@ -342,6 +342,7 @@
             editorQuill.on('text-change', function() {
                 contentTextarea.value = editorQuill.root.innerHTML;
             });
+            editorQuill.root.classList.add('dark:text-gray-100');
             // ====== AI Generation Functions ======
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const aiButtons = document.querySelectorAll('[data-prompt-name]');

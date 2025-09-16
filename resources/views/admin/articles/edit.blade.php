@@ -197,7 +197,7 @@
         // Set konten Quill dari input hidden
         const contentInput = document.getElementById('content-input');
         quill.root.innerHTML = contentInput.value;
-
+        quill.root.classList.add('dark:text-gray-100');
         // Sinkronisasi konten Quill ke input hidden saat form disubmit
         const form = document.getElementById('article-form');
         form.addEventListener('submit', function() {
