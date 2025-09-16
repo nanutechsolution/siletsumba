@@ -8,7 +8,7 @@
 
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ Storage::url($settings['site_logo_url']->value) }}" type="image/x-icon">
-
+    @include('partials._meta')
     {{-- Dark mode script sebelum CSS --}}
     <script>
         (function() {
