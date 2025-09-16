@@ -26,7 +26,7 @@
 </head>
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div x-data="scrollHeader()" x-init="init()">
+    <div x-data="appHandler()" x-init="init()">
         <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }"
             class="fixed top-0 left-0 w-full z-50 transition-transform duration-200">
             {{-- Header + Breaking News --}}
@@ -57,16 +57,16 @@
         <main x-ref="mainContent" class="container mx-auto px-4 py-6">
             @yield('content')
         </main>
+        {{-- Footer --}}
+        @include('partials.frontend-footer')
+        {{-- Dark Mode Toggle --}}
+        <button @click="toggleDarkMode()"
+            class="fixed bottom-5 left-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-full shadow-lg z-50">
+            <span x-show="!darkMode">🌞</span>
+            <span x-show="darkMode">🌙</span>
+        </button>
     </div>
-    {{-- Footer --}}
-    @include('partials.frontend-footer')
-    {{-- Dark Mode Toggle --}}
-    <button @click="toggle()"
-        class="fixed bottom-5 left-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-full shadow-lg z-50">
-        <span x-show="!darkMode">🌞</span>
-        <span x-show="darkMode">🌙</span>
-    </button>
-    </div>
+
     <!-- Chat AI Floating Button -->
     <div id="chatButton"
         class="fixed bottom-5 right-5 w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg z-50 text-2xl">
@@ -86,10 +86,15 @@
     </div>
 
     <script>
-        function scrollHeader() {
+        function appHandler() {
             return {
+                // --- Scroll Header ---
                 lastScroll: 0,
                 offset: 0,
+
+                // --- Dark Mode ---
+                darkMode: localStorage.getItem('theme') === 'dark',
+
                 init() {
                     this.updateMainMargin();
                     window.addEventListener('scroll', () => {
@@ -101,9 +106,19 @@
                         this.updateMainMargin();
                     });
                     window.addEventListener('resize', () => this.updateMainMargin());
+
+                    if (this.darkMode) document.documentElement.classList.add('dark');
                 },
+
                 updateMainMargin() {
                     this.$refs.mainContent.style.marginTop = this.$refs.headerWrapper.offsetHeight + 'px';
+                },
+
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+                    if (this.darkMode) document.documentElement.classList.add('dark');
+                    else document.documentElement.classList.remove('dark');
                 }
             }
         }
@@ -182,19 +197,7 @@
             });
         });
     </script>
-    <script>
-        function darkModeHandler() {
-            return {
-                darkMode: localStorage.getItem('theme') === 'dark',
-                toggle() {
-                    this.darkMode = !this.darkMode;
-                    localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
-                    if (this.darkMode) document.documentElement.classList.add('dark');
-                    else document.documentElement.classList.remove('dark');
-                }
-            }
-        }
-    </script>
+
 
 
 </body>
