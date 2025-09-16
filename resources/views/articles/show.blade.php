@@ -118,7 +118,7 @@
                     </div>
 
                     <!-- Article Content -->
-                    <div class="article-content prose dark:prose-invert max-w-none">
+                    <div class="prose dark:prose-invert max-w-none">
                         {!! $article->full_content !!}
                     </div>
 
