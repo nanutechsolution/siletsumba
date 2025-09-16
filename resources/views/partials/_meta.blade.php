@@ -52,7 +52,11 @@
                 '@id' => url()->current(),
             ],
             'headline' => $article->title ?? 'Silet Sumba',
-            'image' => [optional($article->images->first())->path ?? Storage::url($settings['site_logo_url']->value)],
+            'image' => [
+                isset($article) && $article->images->first()
+                    ? url(Storage::url($article->images->first()->path))
+                    : url(Storage::url($settings['site_logo_url']->value)),
+            ],
             'datePublished' =>
                 $article->scheduled_at ?? $article->created_at
                     ? ($article->scheduled_at ?? $article->created_at)->toIso8601String()
@@ -70,11 +74,11 @@
                 'name' => 'Silet Sumba',
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => Storage::url($settings['site_logo_url']->value),
+                    'url' => url(Storage::url($settings['site_logo_url']->value)),
                 ],
             ],
             'description' => $article->excerpt ?? Str::limit(strip_tags($article->content ?? ''), 160),
-            'keywords' => $article->tags?->pluck('name')->toArray() ?? [],
+            'keywords' => $article->tags?->pluck('name')->implode(', ') ?? '',
         ]
         : null;
 @endphp
