@@ -411,20 +411,22 @@
             aiButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const promptTemplate = this.dataset.promptTemplate;
+                    const promptName = this.dataset.promptName;
                     const title = document.getElementById('title').value.trim();
                     const categorySelect = document.querySelector('select[name="category_id"]');
                     const category = categorySelect.options[categorySelect.selectedIndex].text;
                     const location = document.getElementById('location').value.trim();
                     const facts = document.getElementById('facts').value.trim();
                     const quotes = document.getElementById('quotes').value.trim();
-                    const conten = document.getElementById('content').value.trim();
+                    const content = document.getElementById('content').value.trim();
 
-                    if (conten) {
-                        console.log(conten)
-                        const finalPrompts = promptTemplate
-                            .replace(/{konten}/g, conten);
-                        console.log(finalPrompts);
-
+                    if (promptName === "rapikan_tambah_konten") {
+                        if (!content) {
+                            alert('Masukkan konten terlebih dahulu untuk dirapikan & ditambahkan!');
+                            editorQuill.focus();
+                            return;
+                        }
+                        const finalPrompts = promptTemplate.replace(/{konten}/g, content);
                         callAI(finalPrompts, this);
                     } else {
                         if (!title) {

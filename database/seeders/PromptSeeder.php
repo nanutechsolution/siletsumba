@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Prompt;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class PromptSeeder extends Seeder
@@ -109,6 +110,34 @@ class PromptSeeder extends Seeder
             'description' => 'Menghasilkan draf wawancara dengan pertanyaan dan jawaban yang dirangkai secara logis dari fakta dan kutipan yang diberikan.',
             'prompt_template' => "Bertindaklah sebagai jurnalis Sumba yang sedang mewawancarai narasumber. Berdasarkan Kutipan: {quotes} dan Fakta: {facts}, buatlah skrip wawancara dengan format Tanya Jawab. Rangkai pertanyaan yang relevan dan jawabannya diambil dari kutipan. Fokus pada detail penting. Output HANYA dalam format HTML dengan tag <strong> untuk pertanyaan dan tag <p> untuk jawaban. JANGAN sertakan judul, kategori, atau informasi lain di luar tag HTML.",
             'color' => '#008B8B'
+        ]);
+
+        DB::table('prompts')->insert([
+            [
+                'name' => 'rapikan_tambah_konten',
+                'description' => 'Merapikan konten berita sesuai EYD, menambahkan detail, serta menghasilkan 3 alternatif judul.',
+                'button_text' => 'Rapikan & Tambahkan',
+                'color' => 'bg-purple-600 text-white',
+                'prompt_template' => "Kamu adalah seorang editor berita profesional. 
+Tugasmu:
+1. Rapikan {konten} agar tata bahasa sesuai EYD dan enak dibaca.  
+2. Tambahkan detail/konteks seperlunya (misalnya: lokasi, waktu, latar belakang singkat) untuk memperkaya konten.  
+3. Gunakan gaya penulisan jurnalistik: ringkas, jelas, dan objektif.  
+4. Bagi paragraf agar lebih rapi dan mudah dipahami.  
+5. Jangan mengubah fakta yang sudah ada, hanya boleh melengkapi dengan informasi umum yang relevan.  
+6. Buatkan 3 alternatif judul berita yang menarik dan memancing rasa ingin tahu pembaca, namun tetap informatif.  
+
+Format keluaran wajib:
+- Mulai dengan daftar judul alternatif dalam elemen <ul><li>Judul 1</li><li>Judul 2</li><li>Judul 3</li></ul>.  
+- Setelah itu, tampilkan artikel berita dalam HTML murni.  
+- Artikel harus dimulai dengan <p class='headline'><strong>Judul Terpilih</strong></p>.  
+- Isi berita dibuat dengan paragraf <p> terpisah.  
+- Jika ada kutipan narasumber, gunakan tanda kutip.  
+- Tutup dengan kredit penulis jika tersedia.  
+- Jangan gunakan pemisah markdown seperti ```html, ``` atau ***. Output harus berupa HTML murni saja.",
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ]);
     }
 }
