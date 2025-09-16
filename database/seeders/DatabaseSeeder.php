@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             PromptSeeder::class,
             TagSeeder::class,
             ArticleTagSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

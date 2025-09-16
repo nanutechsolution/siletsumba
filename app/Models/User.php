@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,8 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-
+    use  HasFactory, Notifiable;
     /**
      * The attributes that are mass assignable.
      *
@@ -20,9 +18,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'profile_photo_path',
-        'role',
         'password',
+        'role',
+        'bio',
+        'slug',
+        'profile_photo_path',
+        'is_active',
+        'social_links',
     ];
 
     /**
@@ -40,14 +42,29 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'social_links' => 'array',
+        'is_active' => 'boolean',
+    ];
+
+    /**
+     * Check roles
+     */
+    public function isAdmin(): bool
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->role === 'admin';
     }
 
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
+    }
+
+    public function isWriter(): bool
+    {
+        return $this->role === 'writer';
+    }
 
     public function articles()
     {

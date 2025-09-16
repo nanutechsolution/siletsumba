@@ -74,10 +74,11 @@
 
             <div>
                 <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Peran</label>
-                <select wire:model="role" id="role"
+                <select wire:model.live="role" id="role"
                     class="mt-1 w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring focus:ring-blue-500 px-3 py-2 text-sm shadow-sm">
                     <option value="writer">Writer</option>
                     <option value="admin">Admin</option>
+                    <option value="admin">Editor</option>
                 </select>
                 @error('role')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -87,12 +88,11 @@
             <div>
                 <label for="profile_photo_path" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Foto
                     Profil</label>
-                <input wire:model="profile_photo_path" id="profile_photo_path" type="file"
+                <input wire:model.live="profile_photo_path" id="profile_photo_path" type="file"
                     class="mt-1 w-full text-sm text-gray-700 dark:text-gray-200">
                 @error('profile_photo_path')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
-
                 @if ($profile_photo_path)
                     <div class="mt-3">
                         <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Preview:</p>
@@ -118,7 +118,28 @@
                     </div>
                 @endif
             </div>
-
+            <!-- Bio -->
+            <div>
+                <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bio</label>
+                <textarea wire:model.live="bio" id="bio" rows="3"
+                    class="mt-1 w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 px-3 py-2 text-sm shadow-sm focus:ring focus:ring-blue-500"
+                    placeholder="Tulis deskripsi singkat pengguna..."></textarea>
+                @error('bio')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <!-- Social Media -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Social Media</label>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-1">
+                    <input wire:model.live="social_links.fb" type="url" placeholder="Facebook URL"
+                        class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 px-3 py-2 text-sm shadow-sm focus:ring focus:ring-blue-500">
+                    <input wire:model.live="social_links.ig" type="url" placeholder="Instagram URL"
+                        class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 px-3 py-2 text-sm shadow-sm focus:ring focus:ring-blue-500">
+                    <input wire:model.live="social_links.twitter" type="url" placeholder="Twitter URL"
+                        class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 px-3 py-2 text-sm shadow-sm focus:ring focus:ring-blue-500">
+                </div>
+            </div>
             <div class="flex items-center justify-between">
                 <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -131,7 +152,6 @@
                     Batal
                 </a>
             </div>
-
             <div x-data="{ isUploading: false, progress: 0 }" x-on:livewire-upload-start="isUploading = true"
                 x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
                 x-on:livewire-upload-progress="progress = $event.detail.progress">

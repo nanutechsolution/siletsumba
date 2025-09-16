@@ -29,7 +29,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key' => 'site_logo_url',
-                'value' => 'images/logo-siletsumba.png', // Contoh path logo
+                'value' => 'images/logo-siletsumba.png',
             ],
             [
                 'key' => 'social_facebook_url',

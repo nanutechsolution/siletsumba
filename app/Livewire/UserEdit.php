@@ -15,7 +15,9 @@ class UserEdit extends Component
     public User $user;
     public $name, $email, $password, $password_confirmation, $role;
     public $profile_photo_path;
-
+    public $bio;
+    public $social_links = [];
+    public string $type = 'password';
     protected function rules()
     {
         return [
@@ -28,8 +30,10 @@ class UserEdit extends Component
                 Rule::unique('users')->ignore($this->user->id),
             ],
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,writer',
+            'role' => 'required|in:admin,writer,editor',
             'profile_photo_path' => 'nullable|image|max:2048',
+            'bio' => 'nullable|string|max:1000',
+            'social_links.*' => 'nullable|url',
         ];
     }
 
@@ -39,6 +43,17 @@ class UserEdit extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->role = $user->role;
+        $this->bio = $user->bio;
+        $this->social_links = $user->social_links;
+    }
+
+    public function togglePassword()
+    {
+        if ($this->type == 'password') {
+            $this->type = 'text';
+        } else {
+            $this->type = 'password';
+        }
     }
 
     public function submit()
@@ -49,6 +64,8 @@ class UserEdit extends Component
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->role,
+            'bio' => $this->bio,
+            'social_links' => $this->social_links,
         ];
 
         if ($this->password) {

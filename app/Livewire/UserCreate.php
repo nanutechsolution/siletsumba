@@ -13,6 +13,8 @@ class UserCreate extends Component
 
     public $name, $email, $password, $password_confirmation, $role = 'writer';
     public $profile_photo_path;
+    public $bio;
+    public $social_links = [];
     public $type = 'password';
 
     protected function rules()
@@ -21,8 +23,10 @@ class UserCreate extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,writer',
+            'role' => 'required|in:admin,writer,editor',
             'profile_photo_path' => 'nullable|image|max:2048',
+            'bio' => 'nullable|string|max:1000',
+            'social_links.*' => 'nullable|url',
         ];
     }
 
@@ -50,6 +54,8 @@ class UserCreate extends Component
             'password' => Hash::make($this->password),
             'role' => $this->role,
             'profile_photo_path' => $path,
+            'bio' => $this->bio,
+            'social_links' => $this->social_links,
         ]);
         session()->flash('success', 'Pengguna berhasil ditambahkan. ✅');
         return redirect()->route('admin.users.index');

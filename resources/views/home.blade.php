@@ -19,17 +19,17 @@
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
                             <h2 class="text-3xl font-bold text-white mt-2">{!! $hero->title !!}</h2>
-                            <p class="text-white mt-2">{{ Str::limit(strip_tags($hero->content), 150) }}</p>
+                            <p class="text-white mt-2">{{ Str::limit(strip_tags($hero->content), 50) }}</p>
 
                             <div class="flex items-center text-gray-300 text-sm mt-3">
                                 <span class="flex items-center">
-                                    @if (!empty($hero->author?->profile_photo_path))
-                                        <img src="{{ Storage::url($hero->author->profile_photo_path) }}"
-                                            alt="{{ $hero->author->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
+                                    @if (!empty($hero->user?->profile_photo_path))
+                                        <img src="{{ Storage::url($hero->user->profile_photo_path) }}"
+                                            alt="{{ $hero->user->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
                                     @else
                                         <i class="fas fa-user mr-2"></i>
                                     @endif
-                                    {{ $hero->author->name ?? 'Penulis' }}
+                                    {{ $hero->user->name ?? 'Penulis' }}
                                 </span>
                                 <span class="mx-3">•</span>
                                 <span><i class="fas fa-clock mr-1"></i> {{ $hero->created_at->diffForHumans() }}</span>
