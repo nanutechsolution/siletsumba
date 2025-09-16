@@ -20,6 +20,7 @@
 
     {{-- Tailwind CSS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -65,23 +66,6 @@
         </button>
     </div>
 
-    <!-- Chat AI Floating Button -->
-    <div id="chatButton"
-        class="fixed bottom-5 right-5 w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg z-50 text-2xl">
-        💬
-    </div>
-
-    <!-- Chat AI Box -->
-    <div id="chatBox"
-        class="hidden fixed bottom-24 right-5 w-80 max-h-[450px] bg-white dark:bg-gray-800 rounded-xl shadow-lg z-50 overflow-hidden transition-all">
-        <div class="bg-red-600 text-white p-3 font-bold">Chat Asisten Silet Sumba</div>
-        <div id="chatMessages" class="p-3 h-72 overflow-y-auto flex flex-col gap-2 text-sm"></div>
-        <div class="flex border-t border-gray-300 dark:border-gray-700">
-            <input id="chatInput" type="text" placeholder="Tanya sesuatu..."
-                class="flex-1 p-2 outline-none text-sm dark:bg-gray-700 dark:text-white">
-            <button id="chatSend" class="bg-red-600 text-white px-4">Kirim</button>
-        </div>
-    </div>
 
     <script>
         function appHandler() {
@@ -120,80 +104,6 @@
                 }
             }
         }
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const chatButton = document.getElementById('chatButton');
-            const chatBox = document.getElementById('chatBox');
-            const chatInput = document.getElementById('chatInput');
-            const chatSend = document.getElementById('chatSend');
-            const chatMessages = document.getElementById('chatMessages');
-
-            let aiIntroduced = false;
-            const articleTitle = @json($article->title ?? '');
-            const articleURL = window.location.href;
-
-            function addMessage(text, from) {
-                const div = document.createElement('div');
-                div.classList.add('flex');
-                div.style.justifyContent = from === 'ai' ? 'flex-start' : 'flex-end';
-
-                const bubble = document.createElement('div');
-                bubble.textContent = text;
-                bubble.className = 'p-2 rounded-lg max-w-[70%] break-words';
-                bubble.style.backgroundColor = from === 'user' ? '#DCF8C6' : '#e53e3e';
-                bubble.style.color = from === 'user' ? '#000' : '#fff';
-
-                div.appendChild(bubble);
-                chatMessages.appendChild(div);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            chatButton.addEventListener('click', () => {
-                chatBox.classList.toggle('hidden');
-                if (!aiIntroduced) {
-                    aiIntroduced = true;
-                    let greeting = "🤖 Halo! Aku SiletBot, siap bantu kamu menemukan berita terbaru 😎.";
-                    if (articleTitle) {
-                        greeting +=
-                            ` Kamu sedang baca artikel: "${articleTitle}". Aku bisa merangkum isinya. 🎯`;
-                    }
-                    addMessage(greeting, 'ai');
-                }
-            });
-
-            async function sendMessage(message) {
-                addMessage("👤 " + message, 'user');
-                chatInput.value = '';
-                try {
-                    const res = await fetch('{{ route('chat.send') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            message
-                        })
-                    });
-                    const data = await res.json();
-                    addMessage("🤖 " + data.reply, 'ai');
-                } catch (err) {
-                    console.error(err);
-                    addMessage("⚠️ Gagal menghubungi AI.", 'ai');
-                }
-            }
-
-            chatSend.addEventListener('click', () => {
-                const message = chatInput.value.trim();
-                if (message) sendMessage(message);
-            });
-
-            chatInput.addEventListener('keypress', e => {
-                if (e.key === 'Enter') chatSend.click();
-            });
-        });
     </script>
 
 
