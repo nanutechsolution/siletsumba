@@ -74,6 +74,8 @@ class AdminArticleController extends Controller
             $validated['is_published'] = false;
             $validated['scheduled_at'] = null;
         }
+        // Auto-generate excerpt
+        $validated['excerpt'] = Str::limit(strip_tags($validated['content']), 150);
         // Hapus key 'image' supaya tidak di-insert ke articles
         $imageFile = $validated['image'];
         unset($validated['image']);
@@ -95,14 +97,17 @@ class AdminArticleController extends Controller
         })->toArray();
 
         $article->tags()->sync($tags);
-
-
-        // Upload gambar
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $path = $file->store('articles', 'public');
+
+            // simpan ke kolom `image_url`
+            $article->update(['image_url' => $path]);
+
+            // simpan juga ke relasi images
             $article->images()->create(['path' => $path]);
         }
+
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');
     }
 
@@ -133,10 +138,12 @@ class AdminArticleController extends Controller
             'tags.*' => 'exists:tags,id',
             'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
+
         $article->update([
             'title' => $validated['title'],
             'is_published' => true,
             'content' => $validated['content'],
+            'excerpt' => Str::limit(strip_tags($validated['content']), 150),
             'lokasi_short' => $validated['lokasi_short'] ?? null,
             'category_id' => $validated['category_id'],
             'slug' => Str::slug($validated['title']),
@@ -162,7 +169,10 @@ class AdminArticleController extends Controller
                 $article->images()->create(['path' => $path]);
             }
         }
-
+        $coverImage = $article->images()->first();
+        $article->update([
+            'image_url' => $coverImage ? $coverImage->path : null,
+        ]);
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
 

@@ -43,37 +43,44 @@
 <meta name="twitter:site" content="@siletsumba">
 <meta name="twitter:creator" content="@siletsumba">
 @php
-    $articleJson = isset($article) ? [
-        '@context' => 'https://schema.org',
-        '@type' => 'Article',
-        'mainEntityOfPage' => [
-            '@type' => 'WebPage',
-            '@id' => url()->current(),
-        ],
-        'headline' => $article->title ?? 'Silet Sumba',
-        'image' => [$article->images->first()?->path ?? Storage::url($settings['site_logo_url']->value)],
-        'datePublished' => ($article->scheduled_at ?? $article->created_at)?->toIso8601String() ?? now()->toIso8601String(),
-        'dateModified' => ($article->updated_at ?? ($article->scheduled_at ?? $article->created_at))?->toIso8601String() ?? now()->toIso8601String(),
-        'author' => [
-            '@type' => 'Person',
-            'name' => $article->user?->name ?? 'Redaksi',
-        ],
-        'publisher' => [
-            '@type' => 'Organization',
-            'name' => 'Silet Sumba',
-            'logo' => [
-                '@type' => 'ImageObject',
-                'url' => Storage::url($settings['site_logo_url']->value),
+    $articleJson = isset($article)
+        ? [
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => url()->current(),
             ],
-        ],
-        'description' => $article->excerpt ?? Str::limit(strip_tags($article->content ?? ''), 160),
-        'keywords' => $article->tags?->pluck('name')->toArray() ?? [],
-    ] : null;
+            'headline' => $article->title ?? 'Silet Sumba',
+            'image' => [optional($article->images->first())->path ?? Storage::url($settings['site_logo_url']->value)],
+            'datePublished' =>
+                $article->scheduled_at ?? $article->created_at
+                    ? ($article->scheduled_at ?? $article->created_at)->toIso8601String()
+                    : now()->toIso8601String(),
+            'dateModified' =>
+                $article->updated_at ?? ($article->scheduled_at ?? $article->created_at)
+                    ? ($article->updated_at ?? ($article->scheduled_at ?? $article->created_at))->toIso8601String()
+                    : now()->toIso8601String(),
+            'author' => [
+                '@type' => 'Person',
+                'name' => $article->user?->name ?? 'Redaksi',
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Silet Sumba',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => Storage::url($settings['site_logo_url']->value),
+                ],
+            ],
+            'description' => $article->excerpt ?? Str::limit(strip_tags($article->content ?? ''), 160),
+            'keywords' => $article->tags?->pluck('name')->toArray() ?? [],
+        ]
+        : null;
 @endphp
 
-@if($articleJson)
+@if ($articleJson)
     <script type="application/ld+json">
         {!! json_encode($articleJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT) !!}
     </script>
 @endif
-
