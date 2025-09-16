@@ -27,7 +27,15 @@ class HomeController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
-
+        // 2.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
+        $latestFive = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->when($hero, function ($query) use ($hero) {
+                return $query->where('id', '!=', $hero->id);
+            })
+            ->latest()
+            ->take(5)
+            ->get();
         // 3. Mengambil artikel terpopuler berdasarkan views
         $trending = Article::with(['category', 'images'])
             ->where('is_published', true)
@@ -52,7 +60,8 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews'));
+
+        return view('home', compact('hero', 'latestArticles', 'latestFive', 'trending', 'categories', 'breakingNews'));
     }
     public function getArticlesByCategory(string $slug): View
     {
@@ -82,7 +91,15 @@ class HomeController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
-
+        // 3.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
+        $latestFive = Article::with(['category', 'images'])
+            ->where('is_published', true)
+            ->when($hero, function ($query) use ($hero) {
+                return $query->where('id', '!=', $hero->id);
+            })
+            ->latest()
+            ->take(5)
+            ->get();
         // 4. Mengambil 5 berita terpopuler
         $trending = Article::with(['category', 'images'])
             ->where('is_published', true)
@@ -103,7 +120,7 @@ class HomeController extends Controller
             $query->where('is_published', true);
         })->get();
 
-        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews'));
+        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews', 'latestFive'));
     }
 
     public function getByTag($slug)
@@ -126,7 +143,16 @@ class HomeController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
-
+        // 2.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
+        $latestFive = $tag->articles()
+            ->with(['category', 'user', 'images', 'tags'])
+            ->where('is_published', true)
+            ->when($hero, function ($query) use ($hero) {
+                return $query->where('articles.id', '!=', $hero->id);
+            })
+            ->latest()
+            ->take(5)
+            ->get();
         // 3. Artikel terpopuler (trending)
         $trending = $tag->articles()
             ->with(['category', 'user', 'images', 'tags'])
@@ -153,6 +179,6 @@ class HomeController extends Controller
             ->take(5)
             ->get();
 
-        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews', 'tag'));
+        return view('home', compact('hero', 'latestArticles', 'latestFive', 'trending', 'categories', 'breakingNews', 'tag'));
     }
 }
