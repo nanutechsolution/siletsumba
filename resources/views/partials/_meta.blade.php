@@ -68,6 +68,8 @@
             'author' => [
                 '@type' => 'Person',
                 'name' => $article->user?->name ?? 'Redaksi',
+                'url' => $article->user ? url('/penulis/' . $article->user->id) : url('/redaksi'),
+                'image' => $article->user?->profile_photo_path ?? url(Storage::url($settings['site_logo_url']->value)),
             ],
             'publisher' => [
                 '@type' => 'Organization',
