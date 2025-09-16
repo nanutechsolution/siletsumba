@@ -4,8 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Silet Sumba - Berita, Budaya & Pariwisata Sumba</title>
-
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ Storage::url($settings['site_logo_url']->value) }}" type="image/x-icon">
     @include('partials._meta')
