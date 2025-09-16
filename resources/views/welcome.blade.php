@@ -26,49 +26,46 @@
 </head>
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-
-    {{-- Alpine.js Dark Mode --}}
-    <div x-data="darkModeHandler()" :class="{ 'dark': darkMode }">
-        {{-- Header --}}
-        <header class="bg-white dark:bg-gray-900 shadow-md">
-            @include('partials.frontend-navbar-darkmode')
-        </header>
-
-        {{-- Breaking News --}}
-        @if (request()->routeIs('home'))
-            <div class="bg-red-600 text-white py-2 overflow-hidden">
-                <div class="container mx-auto px-4 flex items-center">
-                    <span class="bg-white text-red-600 px-3 py-1 rounded font-bold mr-4 whitespace-nowrap">
-                        <i class="fas fa-bolt mr-1"></i>BREAKING NEWS
-                    </span>
-                    <div class="flex-1 overflow-hidden">
-                        <div class="breaking-news whitespace-nowrap">
-                            @foreach ($breakingNews as $news)
-                                <span class="mx-6">
-                                    <a href="{{ route('articles.show', $news->slug) }}" class="hover:underline">
-                                        {{ $news->title }}
-                                    </a>
-                                </span>
-                            @endforeach
+    <div x-data="scrollHeader()" x-init="init()">
+        <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }"
+            class="fixed top-0 left-0 w-full z-50 transition-transform duration-200">
+            {{-- Header + Breaking News --}}
+            <header class="bg-white dark:bg-gray-900 shadow-md">
+                @include('partials.frontend-navbar-darkmode')
+            </header>
+            @if (request()->routeIs('home'))
+                <div class="bg-red-600 text-white py-2 overflow-hidden">
+                    <div class="container mx-auto px-4 flex items-center">
+                        <span class="bg-white text-red-600 px-3 py-1 rounded font-bold mr-4 whitespace-nowrap">
+                            <i class="fas fa-bolt mr-1"></i>BREAKING NEWS
+                        </span>
+                        <div class="flex-1 overflow-hidden">
+                            <div class="breaking-news whitespace-nowrap">
+                                @foreach ($breakingNews as $news)
+                                    <span class="mx-6">
+                                        <a href="{{ route('articles.show', $news->slug) }}" class="hover:underline">
+                                            {{ $news->title }}
+                                        </a>
+                                    </span>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif
-
-        {{-- Main Content --}}
-        <main class="container mx-auto px-4 py-6">
+            @endif
+        </div>
+        <main x-ref="mainContent" class="container mx-auto px-4 py-6">
             @yield('content')
         </main>
-
-        {{-- Footer --}}
-        @include('partials.frontend-footer')
-        {{-- Dark Mode Toggle --}}
-        <button @click="toggle()"
-            class="fixed bottom-5 left-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-full shadow-lg z-50">
-            <span x-show="!darkMode">🌞</span>
-            <span x-show="darkMode">🌙</span>
-        </button>
+    </div>
+    {{-- Footer --}}
+    @include('partials.frontend-footer')
+    {{-- Dark Mode Toggle --}}
+    <button @click="toggle()"
+        class="fixed bottom-5 left-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-full shadow-lg z-50">
+        <span x-show="!darkMode">🌞</span>
+        <span x-show="darkMode">🌙</span>
+    </button>
     </div>
     <!-- Chat AI Floating Button -->
     <div id="chatButton"
@@ -87,6 +84,30 @@
             <button id="chatSend" class="bg-red-600 text-white px-4">Kirim</button>
         </div>
     </div>
+
+    <script>
+        function scrollHeader() {
+            return {
+                lastScroll: 0,
+                offset: 0,
+                init() {
+                    this.updateMainMargin();
+                    window.addEventListener('scroll', () => {
+                        let currentScroll = window.pageYOffset;
+                        let delta = currentScroll - this.lastScroll;
+                        this.offset = Math.min(Math.max(this.offset + delta, 0), this.$refs.headerWrapper
+                            .offsetHeight);
+                        this.lastScroll = currentScroll;
+                        this.updateMainMargin();
+                    });
+                    window.addEventListener('resize', () => this.updateMainMargin());
+                },
+                updateMainMargin() {
+                    this.$refs.mainContent.style.marginTop = this.$refs.headerWrapper.offsetHeight + 'px';
+                }
+            }
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

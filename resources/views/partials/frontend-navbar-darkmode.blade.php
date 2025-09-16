@@ -3,9 +3,9 @@
      <div class="flex items-center justify-between py-3 border-b flex-wrap">
          <!-- Logo & Nama -->
          <a href="{{ url('/') }}" class="flex items-center gap-4 flex-shrink-0">
-             <div class="w-16 h-16 bg-red-600 rounded items-center justify-center flex-shrink-0 hidden md:flex">
+             <div class="w-16 h-16  rounded items-center justify-center flex-shrink-0 hidden md:flex">
                  <img src="{{ Storage::url($settings['site_logo_url']->value) }}"
-                     alt="{{ $settings['site_name']->value }}">
+                     alt="{{ $settings['site_name']->value }}" class="w-full h-full object-cover">
              </div>
              <div class="min-w-0">
                  <h1 class="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 truncate">
@@ -142,7 +142,7 @@
 
      <!-- Navbar kategori -->
      @php $currentSlug = request()->route('slug'); @endphp
-     <nav class="py-3 border-b bg-white dark:bg-gray-900">
+     <nav class="py-3  bg-white dark:bg-gray-900">
          <div class="flex overflow-x-auto scrollbar-hide space-x-4 px-2 whitespace-nowrap w-full">
              <a href="{{ url('/') }}"
                  class="px-2 py-2 flex-shrink-0 {{ request()->is('/') ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-700 dark:text-gray-300 hover:text-red-600' }}">Beranda</a>
