@@ -1,8 +1,8 @@
 <footer class="bg-silet-dark text-white py-12 dark:bg-gray-900">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mx-auto">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
             {{-- Kolom 1: Info Situs --}}
-            <div>
+            <div class="text-left">
                 <h4 class="font-bold text-lg mb-4 text-silet-red">
                     {{ $settings['site_name']->value ?? 'SILET SUMBA' }}
                 </h4>
@@ -31,7 +31,7 @@
             </div>
 
             {{-- Kolom 2: Kategori --}}
-            <div>
+            <div class="text-center">
                 {{-- Mobile: Accordion --}}
                 <div x-data="{ open: false }" class="md:hidden">
                     <h4 class="font-bold text-lg mb-4 flex justify-between items-center cursor-pointer"
@@ -72,7 +72,7 @@
             </div>
 
             {{-- Kolom 3: Link Terkait --}}
-            <div>
+            <div class="text-right">
                 <h4 class="font-bold text-lg mb-4">{{ __('LINK TERKAIT') }}</h4>
                 <ul class="space-y-2">
                     @foreach ($footerPages as $page)

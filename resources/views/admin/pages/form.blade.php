@@ -74,7 +74,7 @@
                         }],
                         ["link", "blockquote", "code-block", "image"],
                         ["clean"]
-                    ]
+                    ],
                 }
             });
 
