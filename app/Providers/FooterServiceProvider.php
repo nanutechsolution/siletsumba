@@ -28,8 +28,11 @@ class FooterServiceProvider extends ServiceProvider
         View::composer(['*'], function ($view) {
             // Cache untuk performa (1 jam). Sesuaikan TTL kalau mau.
             $footerCategories = Cache::remember('footer_categories', 3600, function () {
-                return Category::take(12)->get();
+                return Category::whereHas('articles')
+                    ->take(12)
+                    ->get();
             });
+
 
             $footerPages = Cache::remember('footer_pages', 3600, function () {
                 if (method_exists(Page::class, 'scopeFooter')) {
