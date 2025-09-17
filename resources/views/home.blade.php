@@ -7,15 +7,13 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative h-[40vh] md:h-[60vh] rounded-lg overflow-hidden shadow-md">
+                <div class="relative rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-
                         {{-- Hero Image --}}
                         <img src="{{ $hero->image_url ?? 'https://via.placeholder.com/800x400' }}" alt="{{ $hero->title }}"
                             loading="eager"
                             class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
-
                         {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 flex flex-col justify-end">
