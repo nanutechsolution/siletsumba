@@ -21,7 +21,6 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Gunakan View Composer untuk mengirim data ke semua view yang menggunakan layout `navigation`
         View::composer('layouts.navigation', function ($view) {
             $pendingComments = Comment::where('status', 'pending')->count();
             $view->with('pendingComments', $pendingComments);

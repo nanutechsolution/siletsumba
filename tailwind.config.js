@@ -14,7 +14,7 @@ export default {
                 'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
             },
             colors: {
-                tribun: {
+                silet: {
                     red: '#E41E2D',
                     dark: '#1a1a1a',
                     gray: '#f5f5f5'

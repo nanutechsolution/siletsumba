@@ -3,8 +3,15 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                    <a href="{{ url('/') }}" class="flex items-center gap-4 flex-shrink-0">
+                        <div class="min-w-0">
+                            <h1 class="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 truncate">
+                                {{ $settings['site_name']->value ?? 'SILET SUMBA' }}
+                            </h1>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                                {{ $settings['site_description']->value ?? 'Berita & Inspirasi dari Sumba' }}
+                            </p>
+                        </div>
                     </a>
                 </div>
 
@@ -40,6 +47,9 @@
                     </x-nav-link>
                     <x-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
                         {{ __('Tag') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
+                        {{ __('Halaman Statis') }}
                     </x-nav-link>
                     <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
                         {{ __('Pengaturan') }}
@@ -134,6 +144,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
                 {{ __('Tag') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
+                {{ __('Halaman Statis') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
                 {{ __('Pengatuan') }}
