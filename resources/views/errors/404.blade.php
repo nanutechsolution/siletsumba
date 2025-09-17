@@ -28,7 +28,7 @@
         {{-- Trending / Popular Articles --}}
         @if (!empty($trending) && $trending->count())
             <div class="w-full max-w-5xl">
-                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Artikel Berita</h2>
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Berita Populer</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     @foreach ($trending as $article)
                         <a href="{{ route('articles.show', $article->slug) }}"
