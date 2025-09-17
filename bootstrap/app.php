@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Models\Article;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,5 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // 404 Not Found
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            try {
+                $trending = Article::orderBy('views', 'desc')->take(6)->get();
+            } catch (\Throwable $err) {
+                $trending = collect();
+            }
+
+            return response()->view('errors.404', compact('trending'), 404);
+        });
     })->create();
