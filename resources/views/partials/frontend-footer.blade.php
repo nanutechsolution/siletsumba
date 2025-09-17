@@ -29,7 +29,7 @@
                     @foreach ($footerCategories as $category)
                         <li>
                             <a href="{{ route('articles.category', $category->slug) }}"
-                                class="text-gray-300 dark:text-gray-400 hover:text-silet-red transition text-sm">
+                                class="text-gray-300 dark:text-gray-400 hover:text-silet-red transition text-sm dark:hover:text-silet-red">
                                 {{ $category->name }}
                             </a>
                         </li>
@@ -44,7 +44,7 @@
                     @foreach ($footerPages as $page)
                         <li>
                             <a href="{{ route('page.show', $page->slug) }}"
-                                class="text-gray-300 dark:text-gray-400 hover:text-silet-red transition">
+                                class="text-gray-300 dark:text-gray-400 hover:text-silet-red transition dark:hover:text-silet-red">
                                 {{ $page->title }}
                             </a>
                         </li>

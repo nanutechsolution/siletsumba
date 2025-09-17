@@ -19,7 +19,7 @@
                         {{-- Jangan tampilkan halaman yg sedang dibuka --}}
                         <li>
                             <a href="{{ route('page.show', $related->slug) }}"
-                                class="block text-sm text-gray-600 dark:text-gray-400 hover:text-silet-red transition">
+                                class="block text-sm text-gray-600 dark:text-gray-400 hover:text-silet-red transition dark:hover:text-silet-red">
                                 {{ $related->title }}
                             </a>
                         </li>
