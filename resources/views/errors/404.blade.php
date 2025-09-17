@@ -21,14 +21,14 @@
             </a>
             <a href="{{ route('home') }}"
                 class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold px-6 py-3 rounded shadow transition">
-                Lihat Semua Artikel
+                Lihat Semua Berita
             </a>
         </div>
 
         {{-- Trending / Popular Articles --}}
         @if (!empty($trending) && $trending->count())
             <div class="w-full max-w-5xl">
-                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Artikel Populer</h2>
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Artikel Berita</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     @foreach ($trending as $article)
                         <a href="{{ route('articles.show', $article->slug) }}"
