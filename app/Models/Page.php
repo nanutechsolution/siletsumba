@@ -17,7 +17,7 @@ class Page extends Model
 
     public function scopeFooter($query)
     {
-        return $query->where('show_in_footer', true)
+        return $query->where('show_in_footer', 1)
             ->where('status', 'published');
     }
 }

@@ -32,7 +32,6 @@ class FooterServiceProvider extends ServiceProvider
             });
 
             $footerPages = Cache::remember('footer_pages', 3600, function () {
-                // pakai scope Page::footer() kalau sudah ada, atau fallback:
                 if (method_exists(Page::class, 'scopeFooter')) {
                     return Page::footer()->get();
                 }
