@@ -2,24 +2,24 @@
 
 @section('content')
     <!-- Breadcrumb -->
-    <div class="bg-tribun-gray dark:bg-gray-800 py-2 mb-2 rounded-lg">
+    <div class="bg-silet-gray dark:bg-gray-800 py-2 mb-2 rounded-lg">
         <div class="container mx-auto px-4">
             <nav class="text-sm text-gray-600 dark:text-gray-400" aria-label="Breadcrumb">
-                <a href="{{ url('/') }}" class="hover:text-tribun-red">Home</a>
+                <a href="{{ url('/') }}" class="hover:text-silet-red">Home</a>
                 <span class="mx-1">></span>
                 @if ($article->category?->parent)
-                    <a href="{{ route('home', $article->category->parent->slug) }}" class="hover:text-tribun-red">
+                    <a href="{{ route('home', $article->category->parent->slug) }}" class="hover:text-silet-red">
                         {{ $article->category->parent->name }}
                     </a>
                     <span class="mx-1">></span>
                 @endif
 
-                <a href="{{ route('home', $article->category->slug) }}" class="hover:text-tribun-red">
+                <a href="{{ route('home', $article->category->slug) }}" class="hover:text-silet-red">
                     {{ $article->category->name }}
                 </a>
                 <span class="mx-1">></span>
 
-                <span class="text-tribun-red truncate inline-block max-w-[150px] align-bottom">
+                <span class="text-silet-red truncate inline-block max-w-[150px] align-bottom">
                     {{ Str::limit(strip_tags($article->title), 30) }}
                 </span>
             </nav>
@@ -129,7 +129,7 @@
                                 <span class="text-sm text-gray-600 dark:text-gray-400">Tags:</span>
                                 @foreach ($article->tags as $tag)
                                     <a href="{{ route('tags.show', $tag->slug) }}"
-                                        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-tribun-red hover:text-white">
+                                        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
                                         #{{ $tag->name }}
                                     </a>
                                 @endforeach
@@ -218,7 +218,7 @@
                                     alt="{{ $rel->title }}" class="w-20 h-16 object-cover rounded">
                                 <div>
                                     <h3
-                                        class="font-semibold text-gray-800 dark:text-white group-hover:text-tribun-red cursor-pointer">
+                                        class="font-semibold text-gray-800 dark:text-white group-hover:text-silet-red cursor-pointer">
                                         {{ $rel->title }}
                                     </h3>
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -280,7 +280,7 @@
                             </div>
                             <div class="flex justify-end mt-4">
                                 <button type="submit"
-                                    class="bg-tribun-red text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                    class="bg-silet-red text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
                                     Kirim
                                 </button>
                             </div>
@@ -322,7 +322,7 @@
                       transform hover:scale-105 hover:shadow-lg transition-all duration-200 ease-in-out">
 
                                 <span
-                                    class="bg-tribun-red text-white w-6 h-6 rounded-full flex items-center 
+                                    class="bg-silet-red text-white w-6 h-6 rounded-full flex items-center 
                              justify-center text-xs font-bold mt-1">
                                     {{ $index + 1 }}
                                 </span>
@@ -353,7 +353,7 @@
                         @foreach ($latest as $news)
                             <a href="{{ route('articles.show', $news->slug) }}"
                                 class="block py-2 text-sm font-medium text-gray-800 dark:text-white 
-                          hover:text-tribun-red truncate">
+                          hover:text-silet-red truncate">
                                 {{ $news->title }}
                             </a>
                         @endforeach
