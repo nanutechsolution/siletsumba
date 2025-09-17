@@ -1,6 +1,6 @@
 @props([
-    'text' => 'Simpan', // teks tombol default
-    'color' => 'blue', // warna tombol: blue, green, red
+    'text' => 'Simpan',
+    'color' => 'blue',
 ])
 
 @php

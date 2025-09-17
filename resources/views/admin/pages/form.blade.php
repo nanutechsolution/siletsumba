@@ -47,10 +47,7 @@
             </div>
 
             {{-- Submit --}}
-            <button type="submit"
-                class="px-5 py-2 rounded-lg bg-tribun-red text-white font-semibold hover:bg-red-700 transition">
-                {{ isset($page) ? 'Update' : 'Simpan' }}
-            </button>
+            <x-submit-button text="{{ isset($page) ? 'Update' : 'Simpan' }}" color="blue" />
         </form>
     </div>
 
