@@ -26,8 +26,10 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{ $metaTitle }}">
     <meta property="og:description" content="{{ $metaDescription }}">
-    <meta property="og:image" content="{{ $metaImage }}">
+    <meta property="og:image" content="{{ $metaImage }}?v={{ now()->timestamp }}">
     <meta property="og:url" content="{{ $metaUrl }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="Silet Sumba">
     <meta property="article:published_time" content="{{ $publishedTime }}">
     <meta property="article:modified_time" content="{{ $modifiedTime }}">
