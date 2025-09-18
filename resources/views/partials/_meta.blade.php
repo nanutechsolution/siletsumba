@@ -34,6 +34,8 @@
     <meta property="article:published_time" content="{{ $publishedTime }}">
     <meta property="article:modified_time" content="{{ $modifiedTime }}">
     <meta property="article:author" content="{{ $article->user->name ?? 'Redaksi' }}">
+    <meta property="fb:app_id" content="848147202689080">
+
 
     @isset($article)
         @foreach ($article->tags as $tag)
