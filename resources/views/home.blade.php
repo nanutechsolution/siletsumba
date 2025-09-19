@@ -5,34 +5,26 @@
         {{-- Main Content (2/3) --}}
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
-            @if ($hero)
+            @if ($hero && $hero->hasMedia('images'))
                 <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                    {{-- Preload hero image --}}
-                    @if ($hero->hasMedia('images'))
-                        <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
-                    @endif
+                    {{-- Preload hero image terbesar --}}
+                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', 'webp') }}">
 
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-                        @if ($hero->hasMedia('images'))
-                            <picture>
-                                {{-- WebP responsive --}}
-                                <source
-                                    srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
-                                    type="image/webp">
-                                {{-- Fallback JPG/PNG responsive --}}
-                                <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
-                                    src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}"
-                                    class="w-full h-full object-cover transition duration-300" loading="eager"
-                                    fetchpriority="high">
-                            </picture>
-                        @else
-                            <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
+                        <picture>
+                            {{-- WebP responsive --}}
+                            <source
+                                srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
+                                type="image/webp">
+                            {{-- JPG fallback responsive --}}
+                            <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
+                                src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}"
                                 class="w-full h-full object-cover transition duration-300" loading="eager"
-                                fetchpriority="high">
-                        @endif
+                                fetchpriority="high" width="800" height="450">
+                        </picture>
 
-                        {{-- Overlay sederhana --}}
+                        {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
                             <span class="text-xs font-medium px-2 py-1 rounded text-white"
@@ -61,6 +53,7 @@
                     </a>
                 </div>
             @endif
+
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @php
