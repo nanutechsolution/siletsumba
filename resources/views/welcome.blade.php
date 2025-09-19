@@ -5,7 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- Favicon --}}
-    <link rel="shortcut icon" href="{{ Storage::url($settings['site_logo_url']->value) }}" type="image/x-icon">
+    @php
+        $faviconUrl =
+            $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ?? asset('default-favicon.png');
+    @endphp
+
+    <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/x-icon">
+
     @include('partials._meta')
     {{-- Dark mode script sebelum CSS --}}
     <script>
