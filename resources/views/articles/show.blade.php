@@ -138,38 +138,42 @@
                     @endif
 
 
-                    <!-- Social Share -->
                     <div class="mt-6 flex items-center gap-4">
                         <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
 
                         <!-- WhatsApp -->
                         <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
-                            target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800">
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded">
                             <i class="fab fa-whatsapp text-xl"></i>
                             <span class="sr-only">Whatsapp</span>
                         </a>
 
                         <!-- Facebook -->
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
-                            rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
                             <i class="fab fa-facebook text-xl"></i>
                             <span class="sr-only">Facebook</span>
                         </a>
 
                         <!-- Twitter (X) -->
                         <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-600">
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
                             <i class="fab fa-x text-xl"></i>
                             <span class="sr-only">Twitter</span>
                         </a>
 
                         <!-- Telegram -->
                         <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer" class="text-gray-800 hover:text-black">
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded">
                             <i class="fab fa-telegram text-xl"></i>
                             <span class="sr-only">Telegram</span>
                         </a>
                     </div>
+
                     <!-- Author Box -->
                     <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <div class="flex items-center gap-4">
