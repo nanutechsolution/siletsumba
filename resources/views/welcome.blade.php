@@ -65,35 +65,35 @@
             <span x-show="darkMode">🌙</span>
         </button>
     </div>
-
-
     <script>
         function appHandler() {
             return {
-                // --- Scroll Header ---
                 lastScroll: 0,
                 offset: 0,
-
-                // --- Dark Mode ---
                 darkMode: localStorage.getItem('theme') === 'dark',
 
                 init() {
-                    this.updateMainMargin();
+                    this.headerHeight = this.$refs.headerWrapper.offsetHeight;
+                    this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
+
                     window.addEventListener('scroll', () => {
-                        let currentScroll = window.pageYOffset;
-                        let delta = currentScroll - this.lastScroll;
-                        this.offset = Math.min(Math.max(this.offset + delta, 0), this.$refs.headerWrapper
-                            .offsetHeight);
-                        this.lastScroll = currentScroll;
-                        this.updateMainMargin();
+                        window.requestAnimationFrame(() => {
+                            let currentScroll = window.pageYOffset;
+                            let delta = currentScroll - this.lastScroll;
+                            this.offset = Math.min(Math.max(this.offset + delta, 0), this.headerHeight);
+                            this.lastScroll = currentScroll;
+
+                            // pakai transform, bukan marginTop
+                            this.$refs.headerWrapper.style.transform = `translateY(${-this.offset}px)`;
+                        });
                     });
-                    window.addEventListener('resize', () => this.updateMainMargin());
+
+                    window.addEventListener('resize', () => {
+                        this.headerHeight = this.$refs.headerWrapper.offsetHeight;
+                        this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
+                    });
 
                     if (this.darkMode) document.documentElement.classList.add('dark');
-                },
-
-                updateMainMargin() {
-                    this.$refs.mainContent.style.marginTop = this.$refs.headerWrapper.offsetHeight + 'px';
                 },
 
                 toggleDarkMode() {
