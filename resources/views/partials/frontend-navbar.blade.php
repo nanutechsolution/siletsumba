@@ -121,7 +121,7 @@
 
                                 <div class="h-12 w-12 rounded-full overflow-hidden flex-shrink-0 mr-2">
                                     @if (Auth::user()->hasMedia('profile_photos'))
-                                        <img class="h-full w-full object-cover"
+                                        <img class="h-full w-full object-cover" loading="lazy"
                                             src="{{ Auth::user()->getFirstMediaUrl('profile_photos', 'small') }}"
                                             alt="{{ Auth::user()->name }}">
                                     @else
