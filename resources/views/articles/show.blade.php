@@ -47,14 +47,16 @@
                     <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400 mb-6">
                         <!-- Author -->
                         <div class="flex items-center mr-6 mb-2">
-                            @if (!empty($article->user?->profile_photo_path))
-                                <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full mr-2 object-cover">
+                            @if ($article->user?->hasMedia('profile_photos'))
+                                <img src="{{ $article->user->getFirstMediaUrl('profile_photos', 'small') }}"
+                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full mr-2 object-cover"
+                                    loading="lazy">
                             @else
-                                <i class="fas fa-user-circle mr-2"></i>
+                                <i class="fas fa-user-circle mr-2 text-gray-400 text-4xl"></i>
                             @endif
                             {{ $article->user->name ?? 'Redaksi' }}
                         </div>
+
 
                         <!-- Tanggal -->
                         <div class="flex items-center mr-6 mb-2">
@@ -188,9 +190,10 @@
                     <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
                         <div class="flex items-center gap-4">
                             <!-- Foto Penulis -->
-                            @if (!empty($article->user?->profile_photo_path))
-                                <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md">
+                            @if ($article->user?->hasMedia('profile_photos'))
+                                <img src="{{ $article->user->getFirstMediaUrl('profile_photos', 'small') }}"
+                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md"
+                                    loading="lazy">
                             @else
                                 <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
                             @endif

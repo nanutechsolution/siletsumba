@@ -27,22 +27,14 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        // Gabungkan validasi default dengan validasi file
         $validatedData = $request->validated();
-
-        // Ambil instance user
         $user = $request->user();
-
-        // Validasi dan kelola file foto profil
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
-            }
-
-            // Simpan foto baru dan dapatkan path-nya
-            $path = $request->file('photo')->store('profile-photos', 'public');
-            $validatedData['profile_photo_path'] = $path;
+            // Hapus foto lama
+            $user->clearMediaCollection('profile_photos');
+            // Upload foto baru ke collection 'profile_photos'
+            $user->addMediaFromRequest('photo')
+                ->toMediaCollection('profile_photos');
         }
 
         $user->fill($validatedData);
@@ -55,6 +47,7 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
 
     /**
      * Delete the user's account.
