@@ -7,23 +7,28 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full aspect-[16/9] md:aspect-[16/7] rounded-lg overflow-hidden shadow-md">
+                <div class="relative w-full md:h-[60vh] h-[50vh] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))
                             <picture>
-                                <source srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp') }}" type="image/webp">
-                                <img srcset="{{ $hero->getFirstMedia('images')->getSrcset() }}"
+                                {{-- WebP untuk browser yang support --}}
+                                <source
+                                    srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
+                                    type="image/webp">
+                                {{-- Fallback JPG/PNG --}}
+                                <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
                                     src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}" loading="eager"
-                                    fetchpriority="high"
+                                    fetchpriority="high" width="800" height="450"
                                     class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             </picture>
                         @else
-                            <img src="https://via.placeholder.com/800x400" alt="{{ $hero->title }}" loading="eager"
-                                fetchpriority="high"
+                            <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}" loading="eager"
+                                fetchpriority="high" width="800" height="450"
                                 class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                         @endif
 
+                        {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-xs font-medium px-2 py-1 rounded self-start text-white"
@@ -57,6 +62,7 @@
                     </a>
                 </div>
             @endif
+
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @php
@@ -90,9 +96,9 @@
                                     <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
                                         type="image/webp">
                                     {{-- Fallback JPG/PNG --}}
-                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
+                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
                                         src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                        loading="eager" width="400" height="225"
+                                        loading="lazy" width="400" height="225"
                                         class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                                 </picture>
                             @else
