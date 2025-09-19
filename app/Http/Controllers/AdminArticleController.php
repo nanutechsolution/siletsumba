@@ -149,13 +149,11 @@ class AdminArticleController extends Controller
 
         // Hapus gambar yang dicentang
         if (!empty($validated['delete_images'])) {
-            $imagesToDelete = ArticleImage::whereIn('id', $validated['delete_images'])->get();
-            foreach ($imagesToDelete as $img) {
-                Storage::disk('public')->delete($img->path);
-                $img->delete();
+            $imagesToDelete = $article->getMedia('images')->whereIn('id', $validated['delete_images']);
+            foreach ($imagesToDelete as $media) {
+                $media->delete();
             }
         }
-
         // Upload gambar baru
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $image) {
@@ -163,10 +161,6 @@ class AdminArticleController extends Controller
                     ->toMediaCollection('images');
             }
         }
-        // $coverImage = $article->images()->first();
-        // $article->update([
-        //     'image_url' => $coverImage ? $coverImage->path : null,
-        // ]);
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
 
