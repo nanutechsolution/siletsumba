@@ -71,7 +71,7 @@
                         <!-- Views -->
                         <div class="flex items-center mr-6 mb-2">
                             <i class="fas fa-eye mr-2"></i>
-                            <span>{{ number_format($article->views) }} Views</span>
+                            <span>{{ number_format($article->views) }} Dibaca</span>
                         </div>
                         <div class="flex items-center mr-6 mb-2  space-x-4">
                             <p class="text-sm text-gray-600">
