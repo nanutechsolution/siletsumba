@@ -24,8 +24,6 @@
                 </span>
             </nav>
         </div>
-
-
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <!-- Article Content (3/4) -->
@@ -124,7 +122,7 @@
 
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
-                            {!! $article->title !!}
+                            {!! $article->getFirstMedia('images')->getSrcset('webp') !!}
                         </p>
                     </div>
 
