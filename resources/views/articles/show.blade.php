@@ -140,12 +140,17 @@
 
                     <div class="mt-6 flex items-center gap-4">
                         <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
+
                         <!-- WhatsApp -->
                         <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
-                            aria-label="Bagikan ke WhatsApp" target="_blank" rel="noopener noreferrer"
-                            class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded">
-                            <i class="fab fa-whatsapp text-xl"></i>
-                            <span class="sr-only">Whatsapp</span>
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+                            aria-label="Bagikan ke WhatsApp">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M20.52 3.48a11.92 11.92 0 00-16.92 0 11.92 11.92 0 00-3.48 8.52c0 2.05.55 4.06 1.6 5.8L2 22l4.34-1.14a11.92 11.92 0 005.8 1.6 11.92 11.92 0 008.52-3.48 11.92 11.92 0 000-16.92zM12 21a9.93 9.93 0 01-5.02-1.38l-.36-.22-3.23.85.86-3.15-.23-.37A9.93 9.93 0 012.01 12 9.93 9.93 0 0112 2a9.93 9.93 0 017.88 16.88A9.93 9.93 0 0112 21z" />
+                            </svg>
+                            <span class="sr-only">WhatsApp</span>
                         </a>
 
                         <!-- Facebook -->
@@ -153,27 +158,38 @@
                             rel="noopener noreferrer"
                             class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                             aria-label="Bagikan ke Facebook">
-                            <i class="fab fa-facebook text-xl"></i>
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 5.002 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.845c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.63.772-1.63 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 17.002 22 12z" />
+                            </svg>
                             <span class="sr-only">Facebook</span>
                         </a>
 
                         <!-- Twitter (X) -->
                         <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Twitter"
-                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
-                            <i class="fab fa-x text-xl"></i>
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+                            aria-label="Bagikan ke Twitter">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0022.4 1a9.05 9.05 0 01-2.88 1.1 4.52 4.52 0 00-7.86 4.13A12.85 12.85 0 013 2.89a4.52 4.52 0 001.4 6.03 4.48 4.48 0 01-2-.55v.06a4.52 4.52 0 003.63 4.43 4.52 4.52 0 01-2 .08 4.52 4.52 0 004.22 3.13 9.05 9.05 0 01-5.6 1.93A9.32 9.32 0 012 19.54 12.77 12.77 0 008.29 21c7.547 0 11.675-6.155 11.675-11.49 0-.175-.004-.349-.012-.522A8.18 8.18 0 0023 3z" />
+                            </svg>
                             <span class="sr-only">Twitter</span>
                         </a>
 
                         <!-- Telegram -->
                         <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Telegram"
-                            class="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded">
-                            <i class="fab fa-telegram text-xl"></i>
+                            target="_blank" rel="noopener noreferrer"
+                            class="text-blue-400 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
+                            aria-label="Bagikan ke Telegram">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M12 0C5.372 0 0 5.373 0 12c0 6.627 5.372 12 12 12s12-5.373 12-12c0-6.627-5.372-12-12-12zm5.704 8.52l-1.43 6.765c-.108.493-.39.614-.79.383l-2.182-1.606-1.05 1.012c-.115.115-.21.21-.43.21l.152-2.18 3.964-3.584c.172-.152-.037-.238-.264-.086l-4.895 3.079-2.107-.657c-.457-.143-.466-.457.096-.675l8.234-3.174c.384-.144.718.086.595.671z" />
+                            </svg>
                             <span class="sr-only">Telegram</span>
-
                         </a>
                     </div>
+
 
                     <!-- Author Box -->
                     <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
@@ -181,7 +197,8 @@
                             <!-- Foto Penulis -->
                             @if (!empty($article->user?->profile_photo_path))
                                 <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md">
+                                    alt="{{ $article->user->name }}"
+                                    class="w-12 h-12 rounded-full object-cover shadow-md">
                             @else
                                 <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
                             @endif
