@@ -111,18 +111,26 @@
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
                         </div>
-                        {{-- Content --}}
-                        <div class="p-4">
-                            <h3
-                                class="font-bold text-lg mb-2 text-gray-800 dark:text-white line-clamp-2 group-hover:text-red-600 transition">
+                        {{-- Konten --}}
+                        <div class="p-4 flex flex-col justify-between min-h-[150px]">
+                            {{-- Judul --}}
+                            <h3 class="font-bold text-lg text-gray-800 dark:text-white line-clamp-2 mb-2">
                                 {{ $article->title }}
                             </h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-3">
+
+                            {{-- Ringkasan --}}
+                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-3">
                                 {{ strip_tags($article->content) }}
                             </p>
+
+                            {{-- Meta --}}
                             <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                                <span><i class="far fa-clock mr-1"></i>{{ $article->created_at->diffForHumans() }}</span>
-                                <span><i class="fas fa-eye mr-1"></i>{{ number_format($article->views) }} dibaca</span>
+                                <span class="flex items-center">
+                                    <i class="far fa-clock mr-1"></i>{{ $article->created_at->diffForHumans() }}
+                                </span>
+                                <span class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>{{ number_format($article->views) }} dibaca
+                                </span>
                             </div>
                         </div>
                     </a>
