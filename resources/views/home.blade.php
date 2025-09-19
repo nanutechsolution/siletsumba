@@ -101,7 +101,6 @@
                                 <img src="https://via.placeholder.com/300x200" alt="{{ $article->title }}" loading="lazy"
                                     class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             @endif
-
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
                                 style="background-color: {{ $bgColor }}; color: {{ $textColor }};"
                                 aria-label="Kategori: {{ $article->category->name ?? 'Umum' }}">
@@ -166,10 +165,19 @@
                         <a href="{{ route('articles.show', $article->slug) }}"
                             aria-label="Baca artikel terbaru: {{ $article->title }}"
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
-                            @if ($article->image_url)
-                                <img src="{{ $article->image_url }}" alt="{{ $article->title }}" loading="lazy"
+                            @if ($article->hasMedia('images'))
+                                <picture>
+                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                        type="image/webp">
+                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
+                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                        loading="lazy" class="w-20 h-15 object-cover rounded">
+                                </picture>
+                            @else
+                                <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}" loading="lazy"
                                     class="w-20 h-15 object-cover rounded">
                             @endif
+
                             <div>
                                 <h3 class="font-medium text-sm hover:text-red-600 cursor-pointer line-clamp-2">
                                     {{ $article->title }}
