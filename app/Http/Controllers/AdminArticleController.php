@@ -169,16 +169,14 @@ class AdminArticleController extends Controller
         // Upload gambar baru
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $image) {
-                // $path = $image->store('articles', 'public');
-                // $article->images()->create(['path' => $path]);
-                $article->addMediaFromRequest('image')
+                $article->addMedia($image)
                     ->toMediaCollection('images');
             }
         }
-        $coverImage = $article->images()->first();
-        $article->update([
-            'image_url' => $coverImage ? $coverImage->path : null,
-        ]);
+        // $coverImage = $article->images()->first();
+        // $article->update([
+        //     'image_url' => $coverImage ? $coverImage->path : null,
+        // ]);
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
 

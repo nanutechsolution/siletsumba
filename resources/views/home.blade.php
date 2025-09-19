@@ -90,7 +90,6 @@
                                     {{-- WebP --}}
                                     <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
                                         type="image/webp">
-
                                     {{-- Fallback JPG/PNG --}}
                                     <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
                                         src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
