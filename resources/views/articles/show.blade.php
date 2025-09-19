@@ -122,7 +122,7 @@
 
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
-                            {!! {{ $article->getFirstMediaUrl('images') }} !!}
+                            {!! $article->title !!}
                         </p>
                     </div>
 
