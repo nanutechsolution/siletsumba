@@ -47,11 +47,11 @@
 
                             <div class="flex items-center text-gray-300 text-xs md:text-sm mt-3">
                                 <span class="flex items-center">
-                                    @if (!empty($hero->user?->profile_photo_path))
-                                        <img src="{{ Storage::url($hero->user->profile_photo_path) }}"
+                                    @if ($hero->user?->hasMedia('profile_photos'))
+                                        <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
                                             alt="{{ $hero->user->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
                                     @else
-                                        <i class="fas fa-user mr-2"></i>
+                                        <i class="fas fa-user mr-2 text-gray-400"></i>
                                     @endif
                                     {{ $hero->user->name ?? 'Penulis' }}
                                 </span>
