@@ -152,14 +152,15 @@
                         <!-- Facebook -->
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
                             rel="noopener noreferrer"
-                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            aria-label="Bagikan ke Facebook">
                             <i class="fab fa-facebook text-xl"></i>
                             <span class="sr-only">Facebook</span>
                         </a>
 
                         <!-- Twitter (X) -->
                         <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer"
+                            target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Twitter"
                             class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
                             <i class="fab fa-x text-xl"></i>
                             <span class="sr-only">Twitter</span>
@@ -167,10 +168,11 @@
 
                         <!-- Telegram -->
                         <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer"
+                            target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Telegram"
                             class="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded">
                             <i class="fab fa-telegram text-xl"></i>
                             <span class="sr-only">Telegram</span>
+
                         </a>
                     </div>
 
