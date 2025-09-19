@@ -7,60 +7,57 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full md:h-[60vh] h-[50vh] rounded-lg overflow-hidden shadow-md">
+                <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
+                    @if ($hero->hasMedia('images'))
+                        <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
+                    @endif
+
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-                        @if ($hero && $hero->hasMedia('images'))
-                            <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
+                        @if ($hero->hasMedia('images'))
                             <picture>
-                                {{-- WebP untuk browser yang support --}}
-                                <source srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp') }}" type="image/webp">
-                                {{-- Fallback JPG/PNG --}}
+                                <source
+                                    srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
+                                    type="image/webp">
                                 <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
                                     src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}" loading="eager"
-                                    fetchpriority="high" width="800" height="450"
-                                    class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                                    fetchpriority="high" class="w-full h-full object-cover">
                             </picture>
                         @else
                             <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}" loading="eager"
-                                fetchpriority="high" width="800" height="450"
-                                class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                                fetchpriority="high" class="w-full h-full object-cover">
                         @endif
 
-                        {{-- Overlay --}}
+                        {{-- Overlay sederhana --}}
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 flex flex-col justify-end">
-                            <span class="text-xs font-medium px-2 py-1 rounded self-start text-white"
-                                style="background-color: {{ $hero->category->color ?? '#FF0000' }};"
-                                aria-label="Kategori: {{ $hero->category->name ?? 'Umum' }}">
+                            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
+                            <span class="text-xs font-medium px-2 py-1 rounded text-white"
+                                style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
 
-                            <h2 class="text-2xl md:text-3xl font-bold text-white mt-2 line-clamp-2">
+                            <h2 class="text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
                                 {{ $hero->title }}
                             </h2>
 
-                            <p class="text-white mt-2 line-clamp-3 text-sm md:text-base">
-                                {{ Str::limit(strip_tags($hero->content), 100) }}
-                            </p>
-
-                            <div class="flex items-center text-gray-300 text-xs md:text-sm mt-3">
+                            <div class="flex items-center text-gray-300 text-xs mt-2">
                                 <span class="flex items-center">
                                     @if ($hero->user?->hasMedia('profile_photos'))
                                         <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                            alt="{{ $hero->user->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
+                                            alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-1 object-cover">
                                     @else
-                                        <i class="fas fa-user mr-2 text-gray-400"></i>
+                                        <i class="fas fa-user mr-1 text-gray-400"></i>
                                     @endif
                                     {{ $hero->user->name ?? 'Penulis' }}
                                 </span>
-                                <span class="mx-3">•</span>
+                                <span class="mx-2">•</span>
                                 <span><i class="fas fa-clock mr-1"></i> {{ $hero->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
                     </a>
                 </div>
             @endif
+
 
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
