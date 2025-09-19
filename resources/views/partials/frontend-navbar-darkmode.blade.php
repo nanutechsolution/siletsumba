@@ -3,10 +3,21 @@
      <div class="flex items-center justify-between py-3 border-b flex-wrap">
          <!-- Logo & Nama -->
          <a href="{{ url('/') }}" class="flex items-center gap-4 flex-shrink-0">
-             <div class="w-16 h-16  rounded items-center justify-center flex-shrink-0 hidden md:flex">
-                 <img src="{{ Storage::url($settings['site_logo_url']->value) }}"
-                     alt="{{ $settings['site_name']->value }}" class="w-full h-full object-cover">
+             <div class="w-16 h-16 rounded items-center justify-center flex-shrink-0 hidden md:flex">
+                 @php
+                     $logoSetting = $settings['site_logo_url'] ?? null;
+                     $logoUrl = $logoSetting?->getFirstMediaUrl('site_logo', 'thumb');
+                 @endphp
+                 @if ($logoUrl)
+                     <img src="{{ $logoUrl }}" alt="{{ $settings['site_name']->value ?? 'Logo' }}"
+                         class="w-full h-full object-cover">
+                 @else
+                     <span class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                         Logo
+                     </span>
+                 @endif
              </div>
+
              <div class="min-w-0">
                  <h1 class="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 truncate">
                      {{ $settings['site_name']->value ?? 'SILET SUMBA' }}

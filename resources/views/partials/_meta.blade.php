@@ -4,9 +4,10 @@
             ? $article->excerpt ?? Str::limit(strip_tags($article->content), 160)
             : 'Berita terbaru Silet Sumba';
         $metaImage =
-            isset($article) && $article->image_url
-                ? url($article->image_url)
-                : Storage::url($settings['site_logo_url']->value);
+            isset($article) && $article->hasMedia('images') && $article->getFirstMedia('images')
+                ? $article->getFirstMediaUrl('images', 'thumb') // conversion 'thumb'
+                : $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ?? asset('default-logo.png');
+
         $metaUrl = url()->current();
         $publishedTime =
             isset($article) && $article->created_at
@@ -60,9 +61,10 @@
                 ],
                 'headline' => $article->title ?? 'Silet Sumba',
                 'image' => [
-                    isset($article) && $article->images->first()
-                        ? url(Storage::url($article->images->first()->path))
-                        : url(Storage::url($settings['site_logo_url']->value)),
+                    isset($article) && $article->hasMedia('images') && $article->getFirstMedia('images')
+                        ? $article->getFirstMediaUrl('images', 'thumb')
+                        : $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ??
+                            asset('default-logo.png'),
                 ],
                 'datePublished' =>
                     $article->scheduled_at ?? $article->created_at
@@ -76,8 +78,10 @@
                     '@type' => 'Person',
                     'name' => $article->user?->name ?? 'Redaksi',
                     'url' => $article->user ? url('/penulis/' . $article->user->id) : url('/redaksi'),
-                    'image' =>
-                        $article->user?->profile_photo_path ?? url(Storage::url($settings['site_logo_url']->value)),
+                    'image' => $article->user?->hasMedia('profile_photos')
+                        ? $article->user->getFirstMediaUrl('profile_photos', 'small')
+                        : $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ??
+                            asset('default-logo.png'),
                 ],
                 'publisher' => [
                     '@type' => 'Organization',

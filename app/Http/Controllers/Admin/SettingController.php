@@ -23,27 +23,26 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request)
     {
         $data = $request->except(['_token', '_method']);
 
         foreach ($data as $key => $value) {
-            // Jika ada file yang diunggah
+            $setting = Setting::firstOrCreate(['key' => $key]);
+
             if ($request->hasFile($key)) {
-                $file = $request->file($key);
-                $path = $file->store('settings', 'public');
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $path]
-                );
+                // Hapus file lama
+                $setting->clearMediaCollection($key);
+
+                // Upload file baru
+                $setting->addMediaFromRequest($key)
+                    ->toMediaCollection($key);
             } else {
-                Setting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value]
-                );
+                $setting->update(['value' => $value]);
             }
         }
 
-        return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil diperbarui.');
+        return redirect()->route('admin.settings.index')
+            ->with('success', 'Pengaturan berhasil diperbarui.');
     }
 }
