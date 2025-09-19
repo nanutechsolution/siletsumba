@@ -140,10 +140,9 @@
 
                     <div class="mt-6 flex items-center gap-4">
                         <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
-
                         <!-- WhatsApp -->
                         <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
-                            target="_blank" rel="noopener noreferrer"
+                            aria-label="Bagikan ke WhatsApp" target="_blank" rel="noopener noreferrer"
                             class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded">
                             <i class="fab fa-whatsapp text-xl"></i>
                             <span class="sr-only">Whatsapp</span>
