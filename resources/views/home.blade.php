@@ -5,26 +5,34 @@
         {{-- Main Content (2/3) --}}
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
-            @if ($hero && $hero->hasMedia('images'))
+            @if ($hero)
                 <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                    {{-- Preload hero image terbesar --}}
-                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', 'webp') }}">
+                    {{-- Preload hero image --}}
+                    @if ($hero->hasMedia('images'))
+                        <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
+                    @endif
 
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-                        <picture>
-                            {{-- WebP responsive --}}
-                            <source
-                                srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
-                                type="image/webp">
-                            {{-- JPG fallback responsive --}}
-                            <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
-                                src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}"
+                        @if ($hero->hasMedia('images'))
+                            <picture>
+                                {{-- WebP responsive --}}
+                                <source
+                                    srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
+                                    type="image/webp">
+                                {{-- Fallback JPG/PNG responsive --}}
+                                <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
+                                    src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}"
+                                    class="w-full h-full object-cover transition duration-300" loading="eager"
+                                    fetchpriority="high">
+                            </picture>
+                        @else
+                            <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
                                 class="w-full h-full object-cover transition duration-300" loading="eager"
-                                fetchpriority="high" width="800" height="450">
-                        </picture>
+                                fetchpriority="high">
+                        @endif
 
-                        {{-- Overlay --}}
+                        {{-- Overlay sederhana --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
                             <span class="text-xs font-medium px-2 py-1 rounded text-white"
@@ -55,7 +63,7 @@
             @endif
 
             {{-- Latest Articles Grid --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                 @php
                     if (!function_exists('getContrastColor')) {
                         function getContrastColor($hex)
@@ -72,50 +80,45 @@
 
                 @foreach ($latestArticles as $article)
                     @php
-                        // Pastikan bgColor dihitung per artikel
                         $bgColor = $article->category->color ?? '#FF0000';
                         $textColor = getContrastColor($bgColor);
                     @endphp
+
                     <a href="{{ route('articles.show', $article->slug) }}"
                         aria-label="Baca artikel: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
+
                         {{-- Image --}}
-                        <div class="relative aspect-[16/9]">
+                        <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                             @if ($article->hasMedia('images'))
                                 <picture>
-                                    {{-- WebP --}}
                                     <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
                                         type="image/webp">
-                                    {{-- Fallback JPG/PNG --}}
                                     <img srcset="{{ $article->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
                                         src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
                                         loading="lazy" width="400" height="225"
                                         class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                                 </picture>
                             @else
-                                <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="eager"
+                                <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
                                     width="400" height="225"
                                     class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             @endif
+
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
-                                style="background-color: {{ $bgColor }}; color: {{ $textColor }};"
-                                aria-label="Kategori: {{ $article->category->name ?? 'Umum' }}">
+                                style="background-color: {{ $bgColor }}; color: {{ $textColor }};">
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
                         </div>
-                        {{-- Konten --}}
-                        <div class="p-4 flex flex-col justify-between min-h-[150px]">
-                            {{-- Judul --}}
-                            <h3 class="font-bold text-lg text-gray-800 dark:text-white line-clamp-2 mb-2">
+
+                        {{-- Content --}}
+                        <div class="p-3 md:p-4 flex flex-col justify-between min-h-[140px]">
+                            <h3 class="font-bold text-base md:text-lg text-gray-800 dark:text-white line-clamp-2 mb-1">
                                 {{ $article->title }}
                             </h3>
-
-                            {{-- Ringkasan --}}
-                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-3">
+                            <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-2">
                                 {{ strip_tags($article->content) }}
                             </p>
-
-                            {{-- Meta --}}
                             <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                                 <span class="flex items-center">
                                     <i class="far fa-clock mr-1"></i>{{ $article->created_at->diffForHumans() }}
