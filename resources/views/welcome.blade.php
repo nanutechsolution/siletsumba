@@ -17,7 +17,6 @@
             }
         })();
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     {{-- Tailwind CSS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -71,32 +70,30 @@
     <script>
         function appHandler() {
             return {
+                // --- Scroll Header ---
                 lastScroll: 0,
                 offset: 0,
+
+                // --- Dark Mode ---
                 darkMode: localStorage.getItem('theme') === 'dark',
 
                 init() {
-                    this.headerHeight = this.$refs.headerWrapper.offsetHeight;
-                    this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
-
+                    this.updateMainMargin();
                     window.addEventListener('scroll', () => {
-                        window.requestAnimationFrame(() => {
-                            let currentScroll = window.pageYOffset;
-                            let delta = currentScroll - this.lastScroll;
-                            this.offset = Math.min(Math.max(this.offset + delta, 0), this.headerHeight);
-                            this.lastScroll = currentScroll;
-
-                            // pakai transform, bukan marginTop
-                            this.$refs.headerWrapper.style.transform = `translateY(${-this.offset}px)`;
-                        });
+                        let currentScroll = window.pageYOffset;
+                        let delta = currentScroll - this.lastScroll;
+                        this.offset = Math.min(Math.max(this.offset + delta, 0), this.$refs.headerWrapper
+                            .offsetHeight);
+                        this.lastScroll = currentScroll;
+                        this.updateMainMargin();
                     });
-
-                    window.addEventListener('resize', () => {
-                        this.headerHeight = this.$refs.headerWrapper.offsetHeight;
-                        this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
-                    });
+                    window.addEventListener('resize', () => this.updateMainMargin());
 
                     if (this.darkMode) document.documentElement.classList.add('dark');
+                },
+
+                updateMainMargin() {
+                    this.$refs.mainContent.style.marginTop = this.$refs.headerWrapper.offsetHeight + 'px';
                 },
 
                 toggleDarkMode() {
@@ -108,7 +105,6 @@
             }
         }
     </script>
-
 
 
 
