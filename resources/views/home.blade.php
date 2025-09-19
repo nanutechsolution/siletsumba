@@ -49,24 +49,28 @@
                     </a>
                 </div>
             @endif
-            @php
-                $bgColor = $article->category->color ?? '#FF0000';
-
-                // Fungsi sederhana cek luminance untuk teks: putih atau hitam
-                function getContrastColor($hex)
-                {
-                    $hex = str_replace('#', '', $hex);
-                    $r = hexdec(substr($hex, 0, 2));
-                    $g = hexdec(substr($hex, 2, 2));
-                    $b = hexdec(substr($hex, 4, 2));
-                    $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
-                    return $luminance > 0.5 ? '#000000' : '#FFFFFF';
-                }
-                $textColor = getContrastColor($bgColor);
-            @endphp
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @php
+                    if (!function_exists('getContrastColor')) {
+                        function getContrastColor($hex)
+                        {
+                            $hex = str_replace('#', '', $hex);
+                            $r = hexdec(substr($hex, 0, 2));
+                            $g = hexdec(substr($hex, 2, 2));
+                            $b = hexdec(substr($hex, 4, 2));
+                            $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+                            return $luminance > 0.5 ? '#000000' : '#FFFFFF';
+                        }
+                    }
+                @endphp
+
                 @foreach ($latestArticles as $article)
+                    @php
+                        // Pastikan bgColor dihitung per artikel
+                        $bgColor = $article->category->color ?? '#FF0000';
+                        $textColor = getContrastColor($bgColor);
+                    @endphp
                     <a href="{{ route('articles.show', $article->slug) }}"
                         aria-label="Baca artikel: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
@@ -81,7 +85,6 @@
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
                         </div>
-
                         {{-- Content --}}
                         <div class="p-4">
                             <h3
