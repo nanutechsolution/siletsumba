@@ -277,13 +277,6 @@
                     </div>
                 </div>
 
-                <!-- Advertisement -->
-                <div class="bg-gray-100 rounded-lg p-4 text-center">
-                    <h4 class="text-sm text-gray-500 mb-2">ADVERTISEMENT</h4>
-                    <img src="https://placehold.co/300x250" alt="Iklan sponsor"
-                        class="w-full h-48 object-cover rounded mb-2">
-                    <p class="text-xs text-gray-600">Dukung media independen dengan mendukung advertiser kami</p>
-                </div>
 
                 <!-- Newsletter Subscription -->
                 <div class="bg-tribun-red text-white rounded-lg p-6">

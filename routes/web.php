@@ -18,6 +18,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Article;
 use App\Models\Page;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;

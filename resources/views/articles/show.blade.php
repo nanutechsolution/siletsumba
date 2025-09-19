@@ -338,18 +338,6 @@
                         @endforeach
                     </div>
                 </div>
-
-
-                {{-- <!-- Banner Advertisement -->
-                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center mb-6">
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">ADVERTISEMENT</p>
-                    <a href="https://contoh-link-iklan.com" target="_blank" class="block">
-                        <img src="https://via.placeholder.com/728x90?text=Your+Ad+Here" alt="Banner Iklan"
-                            class="mx-auto rounded shadow-md max-w-full h-auto transition-transform duration-300 hover:scale-105">
-                    </a>
-                    <p class="text-xs mt-2 text-gray-600 dark:text-gray-300">Sponsored Content</p>
-                </div> --}}
-
                 <!-- Latest News -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                     <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">TERBARU</h2>
