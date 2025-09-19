@@ -85,9 +85,23 @@
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
                         {{-- Image --}}
                         <div class="relative aspect-[16/9]">
-                            <img src="{{ $article->image_url ?? 'https://via.placeholder.com/300x200' }}"
-                                alt="{{ $article->title }}" loading="lazy"
-                                class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                            @if ($article->hasMedia('images'))
+                                <picture>
+                                    {{-- WebP --}}
+                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                        type="image/webp">
+
+                                    {{-- Fallback JPG/PNG --}}
+                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
+                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                        loading="lazy"
+                                        class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                                </picture>
+                            @else
+                                <img src="https://via.placeholder.com/300x200" alt="{{ $article->title }}" loading="lazy"
+                                    class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                            @endif
+
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
                                 style="background-color: {{ $bgColor }}; color: {{ $textColor }};"
                                 aria-label="Kategori: {{ $article->category->name ?? 'Umum' }}">
