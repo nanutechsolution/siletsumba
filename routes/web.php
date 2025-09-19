@@ -15,8 +15,12 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Article;
+use App\Models\Page;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
@@ -27,6 +31,37 @@ Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategory'])
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/tags/{slug}', [HomeController::class, 'getByTag'])->name('tags.show');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
+
+Route::get('/sitemap.xml', function () {
+    return Cache::remember('sitemap', now()->addHours(6), function () {
+        $sitemap = Sitemap::create();
+        // Homepage
+        $sitemap->add(Url::create('/')
+            ->setPriority(1.0)
+            ->setChangeFrequency('daily'));
+
+        // Artikel (ambil dari database)
+        Article::where('is_published', true)->get()->each(function ($article) use ($sitemap) {
+            $sitemap->add(
+                Url::create("/articles/{$article->slug}")
+                    ->setLastModificationDate($article->updated_at)
+                    ->setPriority(0.8)
+                    ->setChangeFrequency('daily')
+            );
+        });
+        // Halaman statis (opsional)
+        Page::all()->each(function ($page) use ($sitemap) {
+            $sitemap->add(
+                Url::create("/page/{$page->slug}")
+                    ->setLastModificationDate($page->updated_at)
+                    ->setPriority(0.6)
+                    ->setChangeFrequency('monthly')
+            );
+        });
+
+        return $sitemap->toResponse(request());
+    });
+});
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('users', function () {
         return view('admin.users.index');
