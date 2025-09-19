@@ -28,7 +28,7 @@
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
     <div x-data="appHandler()" x-init="init()">
         <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }"
-            class="fixed top-0 left-0 w-full z-50 transition-transform duration-200">
+            class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
             {{-- Header + Breaking News --}}
             <header class="bg-white dark:bg-gray-900 shadow-md">
                 @include('partials.frontend-navbar-darkmode')
@@ -54,7 +54,7 @@
                 </div>
             @endif
         </div>
-        <main x-ref="mainContent" class="container mx-auto px-4 py-6">
+        <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;">
             @yield('content')
         </main>
         {{-- Footer --}}
