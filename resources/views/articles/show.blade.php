@@ -138,13 +138,13 @@
                     @endif
 
 
-                    <div class="mt-6 flex items-center gap-4">
+                    {{-- <div class="mt-6 flex flex-wrap items-center gap-4">
                         <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
 
                         <!-- WhatsApp -->
                         <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
                             target="_blank" rel="noopener noreferrer"
-                            class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+                            class="flex items-center justify-center w-10 h-10 text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded transition-colors"
                             aria-label="Bagikan ke WhatsApp">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
@@ -156,7 +156,7 @@
                         <!-- Facebook -->
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
                             rel="noopener noreferrer"
-                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                            class="flex items-center justify-center w-10 h-10 text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded transition-colors"
                             aria-label="Bagikan ke Facebook">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
@@ -168,7 +168,7 @@
                         <!-- Twitter (X) -->
                         <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
                             target="_blank" rel="noopener noreferrer"
-                            class="text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
+                            class="flex items-center justify-center w-10 h-10 text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded transition-colors"
                             aria-label="Bagikan ke Twitter">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
@@ -180,7 +180,7 @@
                         <!-- Telegram -->
                         <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
                             target="_blank" rel="noopener noreferrer"
-                            class="text-blue-400 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
+                            class="flex items-center justify-center w-10 h-10 text-blue-400 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded transition-colors"
                             aria-label="Bagikan ke Telegram">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
@@ -188,7 +188,9 @@
                             </svg>
                             <span class="sr-only">Telegram</span>
                         </a>
-                    </div>
+                    </div> --}}
+
+
 
 
                     <!-- Author Box -->
@@ -197,8 +199,7 @@
                             <!-- Foto Penulis -->
                             @if (!empty($article->user?->profile_photo_path))
                                 <img src="{{ Storage::url($article->user->profile_photo_path) }}"
-                                    alt="{{ $article->user->name }}"
-                                    class="w-12 h-12 rounded-full object-cover shadow-md">
+                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md">
                             @else
                                 <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
                             @endif
