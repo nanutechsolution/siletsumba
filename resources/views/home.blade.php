@@ -7,7 +7,7 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative h-[50vh] md:h-[60vh] rounded-lg overflow-hidden shadow-md">
+                <div class="relative w-full aspect-[16/9] md:aspect-[16/7] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))
@@ -23,7 +23,7 @@
                                 fetchpriority="high"
                                 class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                         @endif
-                        {{-- Overlay --}}
+
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 flex flex-col justify-end">
                             <span class="text-xs font-medium px-2 py-1 rounded self-start text-white"
@@ -31,7 +31,6 @@
                                 aria-label="Kategori: {{ $hero->category->name ?? 'Umum' }}">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
-
 
                             <h2 class="text-2xl md:text-3xl font-bold text-white mt-2 line-clamp-2">
                                 {{ $hero->title }}
