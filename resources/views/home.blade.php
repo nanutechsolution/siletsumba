@@ -10,10 +10,19 @@
                 <div class="relative h-[50vh] md:h-[60vh] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-                        {{-- Hero Image --}}
-                        <img src="{{ $hero->image_url ?? 'https://via.placeholder.com/800x400' }}" alt="{{ $hero->title }}"
-                            loading="eager" fetchpriority="high"
-                            class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                        @if ($hero->hasMedia('images'))
+                            <picture>
+                                <source srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp') }}" type="image/webp">
+                                <img srcset="{{ $hero->getFirstMedia('images')->getSrcset() }}"
+                                    src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}" loading="eager"
+                                    fetchpriority="high"
+                                    class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                            </picture>
+                        @else
+                            <img src="https://via.placeholder.com/800x400" alt="{{ $hero->title }}" loading="eager"
+                                fetchpriority="high"
+                                class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                        @endif
                         {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 flex flex-col justify-end">
