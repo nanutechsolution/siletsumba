@@ -111,9 +111,7 @@
                             @if ($article->hasMedia('images'))
                                 <picture>
                                     {{-- Sumber untuk gambar WebP responsif --}}
-                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
-                                        type="image/webp">
-
+                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}">
                                     {{-- Gambar fallback (asli) dengan srcset --}}
                                     <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
                                         src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
