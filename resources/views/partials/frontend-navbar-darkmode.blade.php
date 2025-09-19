@@ -153,20 +153,18 @@
 
      <!-- Navbar kategori -->
      @php $currentSlug = request()->route('slug'); @endphp
-     <nav class="py-3 bg-white dark:bg-gray-900">
-         <div class="flex overflow-x-auto scrollbar-hide space-x-4 px-2 whitespace-nowrap min-w-full">
-             <a href="{{ url('/') }}"
-                 class="px-2 py-2 flex-shrink-0 border-b-2 {{ request()->is('/') ? 'border-red-600 text-red-600' : 'border-transparent text-gray-700 dark:text-gray-300 hover:text-red-600' }}">
-                 Beranda
+     <div class="flex overflow-x-auto scrollbar-hide space-x-4 px-2 whitespace-nowrap">
+         <a href="{{ url('/') }}"
+             class="px-2 py-2 flex-shrink-0 {{ request()->is('/') ? 'text-red-600' : 'border-transparent text-gray-700 dark:text-gray-300 hover:text-red-600' }}">
+             Beranda
+         </a>
+         @foreach ($footerCategories as $category)
+             <a href="{{ route('articles.category', $category->slug) }}"
+                 class="px-2 py-2 flex-shrink-0 {{ $currentSlug === $category->slug ? 'text-red-600' : 'border-transparent text-gray-700 dark:text-gray-300 hover:text-red-600' }}">
+                 {{ $category->name }}
              </a>
-             @foreach ($footerCategories as $category)
-                 <a href="{{ route('articles.category', $category->slug) }}"
-                     class="px-2 py-2 flex-shrink-0 border-b-2 {{ $currentSlug === $category->slug ? 'border-red-600 text-red-600' : 'border-transparent text-gray-700 dark:text-gray-300 hover:text-red-600' }}">
-                     {{ $category->name }}
-                 </a>
-             @endforeach
-         </div>
-     </nav>
+         @endforeach
+     </div>
  </div>
 
  <script>
