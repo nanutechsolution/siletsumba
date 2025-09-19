@@ -20,7 +20,7 @@
          <!-- Search -->
          <div class="relative flex-1 justify-center px-2 mt-3 md:mt-0 items-center">
              <!-- Mobile icon -->
-             <button @click="searchOpen = true"
+             <button @click="searchOpen = true" aria-label="Buka pencarian"
                  class="md:hidden p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">

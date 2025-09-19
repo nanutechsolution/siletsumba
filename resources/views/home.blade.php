@@ -12,15 +12,17 @@
                         aria-label="Baca artikel: {{ $hero->title }}">
                         {{-- Hero Image --}}
                         <img src="{{ $hero->image_url ?? 'https://via.placeholder.com/800x400' }}" alt="{{ $hero->title }}"
-                            loading="eager"
+                            loading="eager" fetchpriority="high"
                             class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                         {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 flex flex-col justify-end">
-                            <span class="text-xs font-medium px-2 py-1 rounded self-start"
-                                style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
+                            <span class="text-xs font-medium px-2 py-1 rounded self-start text-white"
+                                style="background-color: {{ $hero->category->color ?? '#FF0000' }};"
+                                aria-label="Kategori: {{ $hero->category->name ?? 'Umum' }}">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
+
 
                             <h2 class="text-2xl md:text-3xl font-bold text-white mt-2 line-clamp-2">
                                 {{ $hero->title }}
@@ -60,9 +62,11 @@
                                 alt="{{ $article->title }}" loading="lazy"
                                 class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             <span class="absolute top-2 left-2 text-white text-xs px-2 py-1 rounded font-semibold"
-                                style="background-color: {{ $article->category->color ?? '#FF0000' }};">
+                                style="background-color: {{ $article->category->color ?? '#FF0000' }};"
+                                aria-label="Kategori: {{ $article->category->name ?? 'Umum' }}">
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
+
                         </div>
 
                         {{-- Content --}}

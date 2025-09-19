@@ -146,24 +146,28 @@
                         <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
                             target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800">
                             <i class="fab fa-whatsapp text-xl"></i>
+                            <span class="sr-only">Whatsapp</span>
                         </a>
 
                         <!-- Facebook -->
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
                             rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">
                             <i class="fab fa-facebook text-xl"></i>
+                            <span class="sr-only">Facebook</span>
                         </a>
 
                         <!-- Twitter (X) -->
                         <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
                             target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-600">
                             <i class="fab fa-x text-xl"></i>
+                            <span class="sr-only">Twitter</span>
                         </a>
 
                         <!-- Telegram -->
                         <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
                             target="_blank" rel="noopener noreferrer" class="text-gray-800 hover:text-black">
                             <i class="fab fa-telegram text-xl"></i>
+                            <span class="sr-only">Telegram</span>
                         </a>
                     </div>
                     <!-- Author Box -->
@@ -195,12 +199,15 @@
                                     <a href="https://www.facebook.com/bung.kobus.2025"
                                         class="text-blue-600 hover:text-blue-800">
                                         <i class="fab fa-facebook text-sm"></i>
+                                        <span class="sr-only">Facebook</span>
                                     </a>
                                     <a href="#" class="text-blue-400 hover:text-blue-600">
                                         <i class="fab fa-twitter text-sm"></i>
+                                        <span class="sr-only">Twitter</span>
                                     </a>
                                     <a href="#" class="text-pink-500 hover:text-pink-700">
                                         <i class="fab fa-instagram text-sm"></i>
+                                        <span class="sr-only">Instagram</span>
                                     </a>
                                 </div>
                             </div>
