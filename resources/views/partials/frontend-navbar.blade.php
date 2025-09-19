@@ -118,10 +118,11 @@
                         <x-slot name="trigger">
                             <button
                                 class="flex items-center text-sm font-medium text-gray-900 dark:text-gray-100 transition duration-150 ease-in-out hover:text-gray-700 dark:hover:text-gray-300">
+
                                 <div class="h-12 w-12 rounded-full overflow-hidden flex-shrink-0 mr-2">
-                                    @if (Auth::user()->profile_photo_path)
+                                    @if (Auth::user()->hasMedia('profile_photos'))
                                         <img class="h-full w-full object-cover"
-                                            src="{{ Storage::url(Auth::user()->profile_photo_path) }}"
+                                            src="{{ Auth::user()->getFirstMediaUrl('profile_photos', 'small') }}"
                                             alt="{{ Auth::user()->name }}">
                                     @else
                                         <div
@@ -134,6 +135,7 @@
                                         </div>
                                     @endif
                                 </div>
+
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
