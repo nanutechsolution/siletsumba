@@ -11,10 +11,14 @@
                 </p>
                 <div class="flex space-x-3">
                     @foreach (['facebook' => 'fab fa-facebook', 'twitter' => 'fab fa-twitter', 'instagram' => 'fab fa-instagram', 'youtube' => 'fab fa-youtube'] as $platform => $icon)
-                        @php $urlKey = "social_{$platform}_url"; @endphp
+                        @php
+                            $urlKey = "social_{$platform}_url";
+                            $label = ucfirst($platform);
+                        @endphp
                         @if (!empty($settings[$urlKey]->value))
                             <a href="{{ $settings[$urlKey]->value }}" target="_blank" rel="noopener noreferrer"
-                                class="text-gray-400 hover:text-white transition">
+                                class="text-gray-400 hover:text-white transition"
+                                aria-label="Ikuti kami di {{ $label }}">
                                 <i class="{{ $icon }} text-lg"></i>
                             </a>
                         @endif
