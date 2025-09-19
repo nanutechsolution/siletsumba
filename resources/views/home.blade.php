@@ -92,11 +92,12 @@
                                     {{-- Fallback JPG/PNG --}}
                                     <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
                                         src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                        loading="lazy"
+                                        loading="eager" width="400" height="225"
                                         class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                                 </picture>
                             @else
-                                <img src="https://via.placeholder.com/300x200" alt="{{ $article->title }}" loading="lazy"
+                                <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="eager"
+                                    width="400" height="225"
                                     class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             @endif
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
