@@ -108,8 +108,20 @@
 
                     <div class="mb-6">
                         <div class="w-full aspect-[16/9] overflow-hidden rounded-lg">
-                            <img src="{{ $article->image_url }}" alt="{{ $article->title }}" loading="lazy"
-                                class="w-full h-full object-cover">
+                            @if ($article->hasMedia('images'))
+                                <picture>
+                                    {{-- Sumber untuk gambar WebP responsif --}}
+                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                        type="image/webp">
+
+                                    {{-- Gambar fallback (asli) dengan srcset --}}
+                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
+                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                        loading="lazy" class="w-full h-full object-cover">
+                                </picture>
+                            @endif
+                            {{-- <img src="{{ $article->image_url }}" alt="{{ $article->title }}" loading="lazy"
+                                class="w-full h-full object-cover"> --}}
 
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">

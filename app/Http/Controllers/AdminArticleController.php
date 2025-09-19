@@ -97,15 +97,19 @@ class AdminArticleController extends Controller
         })->toArray();
 
         $article->tags()->sync($tags);
+        // if ($request->hasFile('image')) {
+        //     $file = $request->file('image');
+        //     $path = $file->store('articles', 'public');
+
+        //     // simpan ke kolom `image_url`
+        //     $article->update(['image_url' => $path]);
+
+        //     // simpan juga ke relasi images
+        //     $article->images()->create(['path' => $path]);
+        // }
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $path = $file->store('articles', 'public');
-
-            // simpan ke kolom `image_url`
-            $article->update(['image_url' => $path]);
-
-            // simpan juga ke relasi images
-            $article->images()->create(['path' => $path]);
+            $article->addMediaFromRequest('image')
+                ->toMediaCollection('images');
         }
 
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');

@@ -157,26 +157,6 @@
                     @endforeach
                 </div>
             </div>
-
-            {{-- MGID / Native Ads --}}
-            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center">
-                <p class="sr-only">Advertisement</p>
-                <!-- MGID Widget -->
-                <div id="mgid-widget-sidebar">
-                    <script type="text/javascript">
-                        (function() {
-                            var mgid_widget = document.createElement('script');
-                            mgid_widget.async = true;
-                            mgid_widget.src = "https://widgets.mgid.com/your-widget.js";
-                            var s = document.getElementsByTagName('script')[0];
-                            s.parentNode.insertBefore(mgid_widget, s);
-                        })();
-                    </script>
-                    <noscript>
-                        <a href="https://www.mgid.com/" target="_blank">Sponsored Content</a>
-                    </noscript>
-                </div>
-            </div>
         </aside>
 
     </div>
