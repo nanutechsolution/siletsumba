@@ -10,7 +10,8 @@
                 <div class="relative w-full md:h-[60vh] h-[50vh] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-                        @if ($hero->hasMedia('images'))
+                        @if ($hero && $hero->hasMedia('images'))
+                            <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
                             <picture>
                                 {{-- WebP untuk browser yang support --}}
                                 <source
