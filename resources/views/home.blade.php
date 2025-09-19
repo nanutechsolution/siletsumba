@@ -14,9 +14,7 @@
                             <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
                             <picture>
                                 {{-- WebP untuk browser yang support --}}
-                                <source
-                                    srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
-                                    type="image/webp">
+                                <source srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp') }}" type="image/webp">
                                 {{-- Fallback JPG/PNG --}}
                                 <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
                                     src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}" loading="eager"
