@@ -163,20 +163,23 @@
                         <a href="{{ route('articles.show', $article->slug) }}"
                             aria-label="Baca artikel terbaru: {{ $article->title }}"
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
-                            @if ($article->hasMedia('images'))
-                                <picture>
-                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
-                                        type="image/webp">
-                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
-                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                        loading="lazy" class="w-20 h-15 object-cover rounded">
-                                </picture>
-                            @else
-                                <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}" loading="lazy"
-                                    class="w-20 h-15 object-cover rounded">
-                            @endif
 
-                            <div>
+                            <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
+                                @if ($article->hasMedia('images'))
+                                    <picture>
+                                        <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                            type="image/webp">
+                                        <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
+                                            src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                            loading="lazy" class="w-full h-full object-cover">
+                                    </picture>
+                                @else
+                                    <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}"
+                                        loading="lazy" class="w-full h-full object-cover">
+                                @endif
+                            </div>
+
+                            <div class="flex-1">
                                 <h3 class="font-medium text-sm hover:text-red-600 cursor-pointer line-clamp-2">
                                     {{ $article->title }}
                                 </h3>
