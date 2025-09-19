@@ -16,13 +16,15 @@
         @csrf
         @method('patch')
 
-        <div class="col-span-6 sm:col-span-4" x-data="{ photoPreview: '{{ $user->profile_photo_path ? Storage::url($user->profile_photo_path) : '' }}' }">
+        <div class="col-span-6 sm:col-span-4" x-data="{
+            photoPreview: '{{ $user->hasMedia('profile_photos') ? $user->getFirstMediaUrl('profile_photos', 'small') : '' }}'
+        }">
 
             <x-input-label for="photo" :value="__('Foto Profil')" />
 
             <div class="mt-2" x-show="!photoPreview">
-                @if ($user->profile_photo_path)
-                    <img src="{{ Storage::url($user->profile_photo_path) }}" alt="{{ $user->name }}"
+                @if ($user->hasMedia('profile_photos'))
+                    <img src="{{ $user->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ $user->name }}"
                         class="rounded-full h-20 w-20 object-cover">
                 @else
                     <div
