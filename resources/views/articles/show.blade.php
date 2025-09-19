@@ -210,7 +210,6 @@
                                         <span class="font-medium">Silet Sumba</span>.
                                     @endif
                                 </p>
-                                {{-- 
                                 <!-- Sosmed -->
                                 <div class="flex gap-3 mt-2">
                                     <a href="https://www.facebook.com/bung.kobus.2025"
@@ -218,20 +217,31 @@
                                         <i class="fab fa-facebook text-sm"></i>
                                         <span class="sr-only">Facebook</span>
                                     </a>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </article>
-
                 <!-- Related News -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">BERITA TERKAIT</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @forelse ($related as $rel)
                             <a href="{{ route('articles.show', $rel->slug) }}" class="flex items-start space-x-4 group">
-                                <img src="{{ $rel->image_url ?? 'https://via.placeholder.com/100x80' }}"
-                                    alt="{{ $rel->title }}" class="w-20 h-16 object-cover rounded">
+                                @if ($rel->hasMedia('images'))
+                                    <picture>
+                                        {{-- WebP --}}
+                                        <source srcset="{{ $rel->getFirstMedia('images')->getSrcset('webp') }}"
+                                            type="image/webp">
+                                        {{-- Fallback JPG/PNG --}}
+                                        <img srcset="{{ $rel->getFirstMedia('images')->getSrcset() }}"
+                                            src="{{ $rel->getFirstMediaUrl('images') }}" alt="{{ $rel->title }}"
+                                            loading="lazy" class="w-20 h-16 object-cover rounded">
+                                    </picture>
+                                @else
+                                    <img src="https://via.placeholder.com/100x80" alt="{{ $rel->title }}"
+                                        class="w-20 h-16 object-cover rounded">
+                                @endif
                                 <div>
                                     <h3
                                         class="font-semibold text-gray-800 dark:text-white group-hover:text-silet-red cursor-pointer">
