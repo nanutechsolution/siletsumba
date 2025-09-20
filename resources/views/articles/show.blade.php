@@ -41,9 +41,11 @@
                         style="background-color: {{ $article->category->color }}">
                         {{ $article->category->name }}
                     </span>
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                    <h1
+                        class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-4 leading-snug">
                         {!! $article->title !!}
                     </h1>
+
                     <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400 mb-6">
                         <!-- Author -->
                         <div class="flex items-center mr-6 mb-2">
