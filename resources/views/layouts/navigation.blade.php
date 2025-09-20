@@ -157,6 +157,9 @@
                 <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
                     {{ __('Pengatuan') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
+                    {{ __('Role') }}
+                </x-responsive-nav-link>
             @endrole
         </div>
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
