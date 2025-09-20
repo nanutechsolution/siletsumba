@@ -45,7 +45,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-4 text-gray-600 dark:text-gray-400 text-sm">
+                        {{-- <div class="flex items-center space-x-4 text-gray-600 dark:text-gray-400 text-sm">
                             <div class="flex items-center space-x-1"><i class="fas fa-eye"></i>
                                 <span>{{ number_format($article->views) }}</span>
                             </div>
@@ -56,7 +56,7 @@
                                 onclick="document.getElementById('comments-section').scrollIntoView({ behavior: 'smooth' })">
                                 <i class="far fa-comment"></i> <span>{{ $article->comments_count ?? 0 }}</span>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Featured Image -->
