@@ -99,7 +99,7 @@
                                     width="400" height="225"
                                     class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             @endif
-                            <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
+                            <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white"
                                 style="background-color: {{ $article->category->color }};">
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
