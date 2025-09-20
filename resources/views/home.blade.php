@@ -28,31 +28,32 @@
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent 
             p-2 sm:p-4 flex flex-col justify-end">
-                        </div>
 
-                        {{-- Konten --}}
-                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                            <span class="inline-block text-xs font-semibold px-2 py-1 rounded mb-3"
-                                style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
-                                {{ $hero->category->name ?? 'Umum' }}
-                            </span>
-                            <h2 class="text-base sm:text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
-                                {{ $hero->title }}
-                            </h2>
-                            <div
-                                class="flex flex-col sm:flex-row sm:items-center text-gray-300 text-xs mt-2 gap-1 sm:gap-2">
-                                <span class="flex items-center">
-                                    @if ($hero->user?->hasMedia('profile_photos'))
-                                        <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                            alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-2 object-cover">
-                                    @else
-                                        <i class="fas fa-user mr-2 text-gray-300"></i>
-                                    @endif
-                                    {{ $hero->user->name ?? 'Penulis' }}
+                            {{-- Konten --}}
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <span class="inline-block text-xs font-semibold px-2 py-1 rounded mb-3"
+                                    style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
+                                    {{ $hero->category->name ?? 'Umum' }}
                                 </span>
-                                <span class="flex items-center">
-                                    <i class="fas fa-clock mr-2"></i>{{ $hero->created_at->diffForHumans() }}
-                                </span>
+                                <h2 class="text-base sm:text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
+                                    {{ $hero->title }}
+                                </h2>
+                                <div
+                                    class="flex flex-col sm:flex-row sm:items-center text-gray-300 text-xs mt-2 gap-1 sm:gap-2">
+                                    <span class="flex items-center">
+                                        @if ($hero->user?->hasMedia('profile_photos'))
+                                            <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
+                                                alt="{{ $hero->user->name }}"
+                                                class="w-5 h-5 rounded-full mr-2 object-cover">
+                                        @else
+                                            <i class="fas fa-user mr-2 text-gray-300"></i>
+                                        @endif
+                                        {{ $hero->user->name ?? 'Penulis' }}
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-clock mr-2"></i>{{ $hero->created_at->diffForHumans() }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </a>
