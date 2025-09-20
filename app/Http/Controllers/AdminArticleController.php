@@ -230,7 +230,6 @@ class AdminArticleController extends Controller
         ]);
     }
 
-
     public function massDestroy(Request $request): RedirectResponse
     {
         $request->validate([
@@ -239,16 +238,19 @@ class AdminArticleController extends Controller
         ]);
 
         $user = auth()->user();
+
+        // Cek role, hanya admin dan editor yang boleh
+        if (!$user->hasAnyRole(['admin', 'editor'])) {
+            abort(403, 'Anda tidak memiliki izin untuk menghapus artikel.');
+        }
+
         $deletedCount = 0;
-        DB::transaction(function () use ($request, &$deletedCount, $user) {
+
+        DB::transaction(function () use ($request, &$deletedCount) {
             foreach ($request->input('selected_articles') as $slug) {
                 $article = Article::where('slug', $slug)->first();
                 if (!$article) continue;
 
-                // Cek permission
-                if ($user->hasRole('writer') && $article->user_id !== $user->id) {
-                    continue; // writer hanya bisa hapus artikel sendiri
-                }
                 // Hapus media terkait
                 $article->clearMediaCollection('images');
 

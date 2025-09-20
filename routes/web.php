@@ -73,7 +73,7 @@ Route::get('/sitemap.xml', function () {
 
 Route::middleware(['auth', 'role:admin|editor|writer'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data'); // AJAX load
+    Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data');
     Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
     Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
