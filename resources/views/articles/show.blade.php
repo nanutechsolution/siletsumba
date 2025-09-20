@@ -105,8 +105,141 @@
                         </div>
                     </div>
                     <div class="mb-6">
-                        <div class="w-full aspect-[16/9] overflow-hidden rounded-lg">
+                        <div class="w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-lg">
                             @if ($article->hasMedia('images'))
+                                <picture>
+                                    <source
+                                        srcset="
+                    {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+                    {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+                    {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+                "
+                                        type="image/webp">
+
+                                    <img srcset="
+                    {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+                    {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+                    {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+                "
+                                        src="{{ $article->getFirstMediaUrl('images', '800') }}"
+                                        alt="{{ $article->title }}"
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" loading="lazy"
+                                        width="1200" height="675"
+                                        class="w-full h-full object-cover object-center rounded-lg">
+                                </picture>
+                            @else
+                                <img src="https://via.placeholder.com/1200x675?text=No+Image" alt="No image available"
+                                    width="1200" height="675" loading="lazy"
+                                    class="w-full h-full object-cover object-center rounded-lg">
+                            @endif
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
+                        {{ $article->title }}
+                    </p>
+            </div>
+
+
+            <!-- Article Content -->
+            <div class="prose dark:prose-invert max-w-none">
+                {!! $article->full_content !!}
+            </div>
+
+            <!-- Article Tags -->
+            @if ($article->tags->count())
+                <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Tags:</span>
+                        @foreach ($article->tags as $tag)
+                            <a href="{{ route('tags.show', $tag->slug) }}"
+                                class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
+                                #{{ $tag->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+
+            <div class="mt-6 flex items-center gap-4">
+                <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
+                <!-- WhatsApp -->
+                <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
+                    aria-label="Bagikan ke WhatsApp" target="_blank" rel="noopener noreferrer"
+                    class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    <span class="sr-only">Whatsapp</span>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                    aria-label="Bagikan ke Facebook">
+                    <i class="fab fa-facebook text-xl"></i>
+                    <span class="sr-only">Facebook</span>
+                </a>
+
+                <!-- Twitter (X) -->
+                <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
+                    target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Twitter"
+                    class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+                    <i class="fab fa-x text-xl"></i>
+                    <span class="sr-only">Twitter</span>
+                </a>
+
+                <!-- Telegram -->
+                <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
+                    target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Telegram"
+                    class="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded">
+                    <i class="fab fa-telegram text-xl"></i>
+                    <span class="sr-only">Telegram</span>
+
+                </a>
+            </div>
+
+            <!-- Author Box -->
+            <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex items-center gap-4">
+                    <!-- Foto Penulis -->
+                    @if ($article->user?->hasMedia('profile_photos'))
+                        <img src="{{ $article->user->getFirstMediaUrl('profile_photos', 'small') }}"
+                            alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md"
+                            loading="lazy">
+                    @else
+                        <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
+                    @endif
+
+                    <!-- Info Penulis -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+                            {{ $article->user->name ?? 'Redaksi' }}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
+                            @if (!empty($article->user?->bio))
+                                {{ $article->user->bio }}
+                            @else
+                                <span class="font-medium">Silet Sumba</span>.
+                            @endif
+                        </p>
+                        <!-- Sosmed -->
+                        <div class="flex gap-3 mt-2">
+                            <a href="https://www.facebook.com/bung.kobus.2025" class="text-blue-600 hover:text-blue-800">
+                                <i class="fab fa-facebook text-sm"></i>
+                                <span class="sr-only">Facebook</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </article>
+            <!-- Related News -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">BERITA TERKAIT</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @forelse ($related as $rel)
+                        <a href="{{ route('articles.show', $rel->slug) }}" class="flex items-start space-x-4 group">
+                            @if ($rel->hasMedia('images'))
                                 <picture>
                                     {{-- Versi WebP --}}
                                     <source
@@ -129,278 +262,141 @@
                                         width="1200" height="675" class="w-full h-full object-cover rounded-lg">
                                 </picture>
                             @else
-                                {{-- Placeholder kalau tidak ada gambar --}}
-                                <img src="https://via.placeholder.com/1200x675?text=No+Image" alt="No image available"
-                                    width="1200" height="675" loading="lazy" class="w-full h-full object-cover">
+                                <img src="https://via.placeholder.com/100x80" alt="{{ $rel->title }}"
+                                    class="w-20 h-16 object-cover rounded">
                             @endif
-                        </div>
-
-                        <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
-                            {{ $article->title }}
-                        </p>
-                    </div>
-
-
-                    <!-- Article Content -->
-                    <div class="prose dark:prose-invert max-w-none">
-                        {!! $article->full_content !!}
-                    </div>
-
-                    <!-- Article Tags -->
-                    @if ($article->tags->count())
-                        <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex flex-wrap gap-2">
-                                <span class="text-sm text-gray-600 dark:text-gray-400">Tags:</span>
-                                @foreach ($article->tags as $tag)
-                                    <a href="{{ route('tags.show', $tag->slug) }}"
-                                        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
-                                        #{{ $tag->name }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-
-
-                    <div class="mt-6 flex items-center gap-4">
-                        <span class="text-sm text-gray-600 dark:text-gray-400">Bagikan:</span>
-                        <!-- WhatsApp -->
-                        <a href="https://api.whatsapp.com/send?text={{ urlencode($metaTitle . ' ' . $shareUrl) }}"
-                            aria-label="Bagikan ke WhatsApp" target="_blank" rel="noopener noreferrer"
-                            class="text-green-600 hover:text-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 rounded">
-                            <i class="fab fa-whatsapp text-xl"></i>
-                            <span class="sr-only">Whatsapp</span>
-                        </a>
-
-                        <!-- Facebook -->
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($shareUrl) }}" target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                            aria-label="Bagikan ke Facebook">
-                            <i class="fab fa-facebook text-xl"></i>
-                            <span class="sr-only">Facebook</span>
-                        </a>
-
-                        <!-- Twitter (X) -->
-                        <a href="https://twitter.com/intent/tweet?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Twitter"
-                            class="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
-                            <i class="fab fa-x text-xl"></i>
-                            <span class="sr-only">Twitter</span>
-                        </a>
-
-                        <!-- Telegram -->
-                        <a href="https://t.me/share/url?url={{ urlencode($shareUrl) }}&text={{ urlencode($metaTitle) }}"
-                            target="_blank" rel="noopener noreferrer" aria-label="Bagikan ke Telegram"
-                            class="text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded">
-                            <i class="fab fa-telegram text-xl"></i>
-                            <span class="sr-only">Telegram</span>
-
-                        </a>
-                    </div>
-
-                    <!-- Author Box -->
-                    <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <div class="flex items-center gap-4">
-                            <!-- Foto Penulis -->
-                            @if ($article->user?->hasMedia('profile_photos'))
-                                <img src="{{ $article->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                    alt="{{ $article->user->name }}"
-                                    class="w-12 h-12 rounded-full object-cover shadow-md" loading="lazy">
-                            @else
-                                <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
-                            @endif
-
-                            <!-- Info Penulis -->
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                                    {{ $article->user->name ?? 'Redaksi' }}
+                                <h3
+                                    class="font-semibold text-gray-800 dark:text-white group-hover:text-silet-red cursor-pointer">
+                                    {{ $rel->title }}
                                 </h3>
-                                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">
-                                    @if (!empty($article->user?->bio))
-                                        {{ $article->user->bio }}
-                                    @else
-                                        <span class="font-medium">Silet Sumba</span>.
-                                    @endif
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    {{ $rel->created_at->diffForHumans() }}
                                 </p>
-                                <!-- Sosmed -->
-                                <div class="flex gap-3 mt-2">
-                                    <a href="https://www.facebook.com/bung.kobus.2025"
-                                        class="text-blue-600 hover:text-blue-800">
-                                        <i class="fab fa-facebook text-sm"></i>
-                                        <span class="sr-only">Facebook</span>
-                                    </a>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-                </article>
-                <!-- Related News -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">BERITA TERKAIT</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        @forelse ($related as $rel)
-                            <a href="{{ route('articles.show', $rel->slug) }}" class="flex items-start space-x-4 group">
-                                @if ($rel->hasMedia('images'))
-                                    <picture>
-                                        {{-- Versi WebP --}}
-                                        <source
-                                            srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                            type="image/webp">
-
-                                        {{-- Fallback JPG/PNG --}}
-                                        <img srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                            src="{{ $article->getFirstMediaUrl('images', '800') }}"
-                                            alt="{{ $article->title }}"
-                                            sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
-                                            loading="lazy" width="1200" height="675"
-                                            class="w-full h-full object-cover rounded-lg">
-                                    </picture>
-                                @else
-                                    <img src="https://via.placeholder.com/100x80" alt="{{ $rel->title }}"
-                                        class="w-20 h-16 object-cover rounded">
-                                @endif
-                                <div>
-                                    <h3
-                                        class="font-semibold text-gray-800 dark:text-white group-hover:text-silet-red cursor-pointer">
-                                        {{ $rel->title }}
-                                    </h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                        {{ $rel->created_at->diffForHumans() }}
-                                    </p>
-                                </div>
-                            </a>
-                        @empty
-                            <p class="text-gray-500 dark:text-gray-400">Tidak ada berita terkait.</p>
-                        @endforelse
-                    </div>
-
-
+                        </a>
+                    @empty
+                        <p class="text-gray-500 dark:text-gray-400">Tidak ada berita terkait.</p>
+                    @endforelse
                 </div>
 
 
-                <!-- Comments Section -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-                        KOMENTAR ({{ $article->comments()->where('status', 'approved')->count() }})
-                    </h2>
-
-                    <!-- Comment Form -->
-                    <div class="mb-8">
-                        <!-- Comment Form -->
-                        <form action="{{ route('comments.store', $article->slug) }}" method="POST">
-                            @csrf
-                            @csrf
-                            <input type="hidden" name="article_id" value="{{ $article->id }}">
-                            <div class="mb-4">
-                                <label for="name"
-                                    class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Nama</label>
-                                <input type="text" name="name" id="name"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                    required>
-                                @error('name')
-                                    <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mb-4">
-                                <label for="email"
-                                    class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Email</label>
-                                <input type="email" name="email" id="email"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                    required>
-                                @error('email')
-                                    <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mb-4">
-                                <label for="body" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Isi
-                                    Komentar</label>
-                                <textarea name="body" id="body" rows="4"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                    required></textarea>
-                                @error('body')
-                                    <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="flex justify-end mt-4">
-                                <button type="submit"
-                                    class="bg-silet-red text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                                    Kirim
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-
-                    <!-- Comments List -->
-                    <div class="space-y-6 mt-8">
-                        @forelse ($article->comments->where('status', 'approved') as $comment)
-                            <div class="flex space-x-4">
-                                <img src="https://via.placeholder.com/50" alt="User" class="w-12 h-12 rounded-full">
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-semibold text-gray-800 dark:text-white">{{ $comment->name }}</h4>
-                                        <span
-                                            class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
-                                    </div>
-                                    <p class="text-gray-600 dark:text-gray-300">{{ $comment->body }}</p>
-                                </div>
-                            </div>
-                        @empty
-                            <p class="text-gray-500 dark:text-gray-400">Belum ada komentar.</p>
-                        @endforelse
-                    </div>
-
-                </div>
             </div>
 
-            <!-- Sidebar (1/4) -->
-            <div class="lg:col-span-1 space-y-6">
 
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">BERITA POPULER</h2>
-                    <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($popular as $index => $pop)
-                            <a href="{{ route('articles.show', $pop->slug) }}"
-                                class="flex items-start space-x-3 py-3 px-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700 
-                      transform hover:scale-105 hover:shadow-lg transition-all duration-200 ease-in-out">
+            <!-- Comments Section -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+                    KOMENTAR ({{ $article->comments()->where('status', 'approved')->count() }})
+                </h2>
 
-                                <span
-                                    class="bg-silet-red text-white w-6 h-6 rounded-full flex items-center 
-                             justify-center text-xs font-bold mt-1">
-                                    {{ $index + 1 }}
-                                </span>
+                <!-- Comment Form -->
+                <div class="mb-8">
+                    <!-- Comment Form -->
+                    <form action="{{ route('comments.store', $article->slug) }}" method="POST">
+                        @csrf
+                        @csrf
+                        <input type="hidden" name="article_id" value="{{ $article->id }}">
+                        <div class="mb-4">
+                            <label for="name"
+                                class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Nama</label>
+                            <input type="text" name="name" id="name"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+                            @error('name')
+                                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-4">
+                            <label for="email"
+                                class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Email</label>
+                            <input type="email" name="email" id="email"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required>
+                            @error('email')
+                                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-4">
+                            <label for="body" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Isi
+                                Komentar</label>
+                            <textarea name="body" id="body" rows="4"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required></textarea>
+                            @error('body')
+                                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <button type="submit"
+                                class="bg-silet-red text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                Kirim
+                            </button>
+                        </div>
+                    </form>
 
-                                <p class="text-sm font-medium text-gray-800 dark:text-white truncate w-48">
-                                    {{ $pop->title }}
-                                </p>
-                            </a>
-                        @endforeach
-                    </div>
                 </div>
-                <!-- Latest News -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">TERBARU</h2>
-                    <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($latest as $news)
-                            <a href="{{ route('articles.show', $news->slug) }}"
-                                class="block py-2 text-sm font-medium text-gray-800 dark:text-white 
-                          hover:text-silet-red truncate">
-                                {{ $news->title }}
-                            </a>
-                        @endforeach
-                    </div>
+
+                <!-- Comments List -->
+                <div class="space-y-6 mt-8">
+                    @forelse ($article->comments->where('status', 'approved') as $comment)
+                        <div class="flex space-x-4">
+                            <img src="https://via.placeholder.com/50" alt="User" class="w-12 h-12 rounded-full">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">{{ $comment->name }}</h4>
+                                    <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                <p class="text-gray-600 dark:text-gray-300">{{ $comment->body }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 dark:text-gray-400">Belum ada komentar.</p>
+                    @endforelse
                 </div>
+
             </div>
         </div>
 
+        <!-- Sidebar (1/4) -->
+        <div class="lg:col-span-1 space-y-6">
 
-    @endsection
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">BERITA POPULER</h2>
+                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach ($popular as $index => $pop)
+                        <a href="{{ route('articles.show', $pop->slug) }}"
+                            class="flex items-start space-x-3 py-3 px-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700 
+                      transform hover:scale-105 hover:shadow-lg transition-all duration-200 ease-in-out">
+
+                            <span
+                                class="bg-silet-red text-white w-6 h-6 rounded-full flex items-center 
+                             justify-center text-xs font-bold mt-1">
+                                {{ $index + 1 }}
+                            </span>
+
+                            <p class="text-sm font-medium text-gray-800 dark:text-white truncate w-48">
+                                {{ $pop->title }}
+                            </p>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+            <!-- Latest News -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">TERBARU</h2>
+                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach ($latest as $news)
+                        <a href="{{ route('articles.show', $news->slug) }}"
+                            class="block py-2 text-sm font-medium text-gray-800 dark:text-white 
+                          hover:text-silet-red truncate">
+                            {{ $news->title }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@endsection
