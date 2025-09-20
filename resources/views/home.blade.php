@@ -8,17 +8,25 @@
                 <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
                         class="block w-full h-full">
-
                         {{-- Gambar Hero --}}
                         @if ($hero->hasMedia('images'))
-                            <img srcset="
-                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                    "
-                                src="{{ $hero->getFirstMediaUrl('images', '800') }}" alt="{{ $hero->title }}"
-                                sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="eager"
-                                fetchpriority="high" width="1200" height="675" class="w-full h-full object-cover" />
+                            <picture>
+                                <source
+                                    srcset="
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" type="image/webp">
+
+                                <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
+                                    srcset="
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+                                    alt="{{ $hero->title }}" loading="eager" fetchpriority="high"
+                                    class="w-full h-full object-cover" />
+                            </picture>
                         @else
                             <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
                                 class="w-full h-full object-cover" width="1200" height="675">
