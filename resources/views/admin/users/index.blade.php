@@ -60,40 +60,49 @@
                 </tbody>
             </table>
         </div>
-
         <!-- Mobile Cards -->
         <div class="md:hidden space-y-3 mt-3">
             <template x-for="user in users" :key="user.id">
-                <div class="border rounded-lg shadow p-4">
+                <div
+                    class="border rounded-lg shadow p-4 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors duration-200">
                     <div class="flex justify-between items-start">
                         <div>
-                            <div class="font-semibold" x-text="user.name"></div>
-                            <div class="text-sm text-gray-500" x-text="user.email"></div>
+                            <div class="font-semibold text-gray-900 dark:text-gray-100" x-text="user.name"></div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400" x-text="user.email"></div>
+
                             <div class="mt-2">
-                                <div class="text-xs font-medium text-gray-600">Roles:</div>
+                                <div class="text-xs font-medium text-gray-600 dark:text-gray-300">Roles:</div>
                                 <div class="flex flex-wrap gap-1 mt-1">
                                     <template x-for="role in user.roles" :key="role.id">
-                                        <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs"
+                                        <span
+                                            class="bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 px-2 py-0.5 rounded-full text-xs transition-colors duration-200"
                                             x-text="role.name"></span>
                                     </template>
                                 </div>
                             </div>
+
                             <div class="mt-2">
-                                <div class="text-xs font-medium text-gray-600">Permissions:</div>
+                                <div class="text-xs font-medium text-gray-600 dark:text-gray-300">Permissions:</div>
                                 <div class="flex flex-wrap gap-1 mt-1">
                                     <template x-for="perm in user.permissions" :key="perm">
-                                        <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs"
+                                        <span
+                                            class="bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full text-xs transition-colors duration-200"
                                             x-text="perm"></span>
                                     </template>
                                 </div>
                             </div>
                         </div>
 
-                        <button @click="editUser(user)"
-                            class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 ml-2">Edit</button>
-                        <button @click="deleteUser(user)"
-                            class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 ml-2">Hapus</button>
-
+                        <div class="flex flex-col space-y-2 ml-2">
+                            <button @click="editUser(user)"
+                                class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors duration-200">
+                                Edit
+                            </button>
+                            <button @click="deleteUser(user)"
+                                class="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white px-3 py-1 rounded transition-colors duration-200">
+                                Hapus
+                            </button>
+                        </div>
                     </div>
                 </div>
             </template>
