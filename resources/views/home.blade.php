@@ -24,10 +24,9 @@
             {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
             {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
-                                alt="{{ $hero->title }}" class="w-full h-full object-cover" loading="eager"
-                                fetchpriority="high" decoding="async">
+                                sizes="(max-width:
+                                640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $hero->title }}"
+                                class="w-full h-auto object-cover" loading="eager" fetchpriority="high" decoding="async">
                         @endif
 
 
