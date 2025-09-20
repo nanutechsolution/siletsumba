@@ -110,23 +110,27 @@
                         <div class="w-full aspect-[16/9] overflow-hidden rounded-lg">
                             @if ($article->hasMedia('images'))
                                 <picture>
-                                    {{-- Sumber untuk gambar WebP responsif --}}
-                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                    {{-- WebP responsif --}}
+                                    <source srcset="{{ $article->getFirstMedia('images')?->getSrcset('webp') }}"
                                         type="image/webp">
-                                    {{-- Gambar fallback (asli) dengan srcset --}}
-                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
-                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                        loading="lazy" class="w-full h-full object-cover">
-                                </picture>
-                            @endif
-                            {{-- <img src="{{ $article->image_url }}" alt="{{ $article->title }}" loading="lazy"
-                                class="w-full h-full object-cover"> --}}
 
+                                    {{-- Fallback JPG/PNG --}}
+                                    <img srcset="{{ $article->getFirstMedia('images')?->getSrcset() }}"
+                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                        width="1200" height="675" loading="lazy" class="w-full h-full object-cover">
+                                </picture>
+                            @else
+                                {{-- Placeholder kalau tidak ada gambar --}}
+                                <img src="https://via.placeholder.com/1200x675?text=No+Image" alt="No image available"
+                                    width="1200" height="675" loading="lazy" class="w-full h-full object-cover">
+                            @endif
                         </div>
+
                         <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
-                            {!! $article->title !!}
+                            {{ $article->title }}
                         </p>
                     </div>
+
 
                     <!-- Article Content -->
                     <div class="prose dark:prose-invert max-w-none">
@@ -192,8 +196,8 @@
                             <!-- Foto Penulis -->
                             @if ($article->user?->hasMedia('profile_photos'))
                                 <img src="{{ $article->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                    alt="{{ $article->user->name }}" class="w-12 h-12 rounded-full object-cover shadow-md"
-                                    loading="lazy">
+                                    alt="{{ $article->user->name }}"
+                                    class="w-12 h-12 rounded-full object-cover shadow-md" loading="lazy">
                             @else
                                 <i class="fas fa-user-circle text-gray-400 text-4xl"></i>
                             @endif
