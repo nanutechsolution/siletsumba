@@ -54,6 +54,19 @@
                                                 {{ $article->title }}</h4>
                                             <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">Kategori:
                                                 {{ $article->category->name }}</p>
+                                            @if (!$article->is_published && $article->scheduled_at)
+                                                @php
+                                                    $hoursLeft = \Carbon\Carbon::now()->diffInHours(
+                                                        $article->scheduled_at,
+                                                        false,
+                                                    ); // negatif kalau sudah lewat
+                                                @endphp
+                                                <span
+                                                    class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                                                    Terbit dalam {{ $hoursLeft }} jam
+                                                </span>
+                                            @endif
+
                                             @if ($article->is_published)
                                                 <span
                                                     class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
@@ -81,16 +94,18 @@
                                                 title="Edit Berita">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('admin.articles.destroy', $article->slug) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus berita ini?') }}');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition"
-                                                    title="Hapus Berita"> Hapus
-                                                </button>
-                                            </form>
+                                            @can('admin|editor')
+                                                <form action="{{ route('admin.articles.destroy', $article->slug) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus berita ini?') }}');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition"
+                                                        title="Hapus Berita"> Hapus
+                                                    </button>
+                                                </form>
+                                            @endcan
                                         </div>
                                     </div>
                                 </div>

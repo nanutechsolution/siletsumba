@@ -258,7 +258,6 @@ class AdminArticleController extends Controller
                 $deletedCount++;
             }
         });
-
         return redirect()->route('admin.articles.index')->with('success', "$deletedCount berita berhasil dihapus.");
     }
 }
