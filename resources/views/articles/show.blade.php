@@ -243,13 +243,26 @@
                             <a href="{{ route('articles.show', $rel->slug) }}" class="flex items-start space-x-4 group">
                                 @if ($rel->hasMedia('images'))
                                     <picture>
-                                        {{-- WebP --}}
-                                        <source srcset="{{ $rel->getFirstMedia('images')->getSrcset('webp') }}"
+                                        {{-- Versi WebP --}}
+                                        <source
+                                            srcset="
+            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+        "
                                             type="image/webp">
+
                                         {{-- Fallback JPG/PNG --}}
-                                        <img srcset="{{ $rel->getFirstMedia('images')->getSrcset() }}"
-                                            src="{{ $rel->getFirstMediaUrl('images') }}" alt="{{ $rel->title }}"
-                                            loading="lazy" class="w-20 h-16 object-cover rounded">
+                                        <img srcset="
+            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                            src="{{ $article->getFirstMediaUrl('images', '800') }}"
+                                            alt="{{ $article->title }}"
+                                            sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
+                                            loading="lazy" width="1200" height="675"
+                                            class="w-full h-full object-cover rounded-lg">
                                     </picture>
                                 @else
                                     <img src="https://via.placeholder.com/100x80" alt="{{ $rel->title }}"
