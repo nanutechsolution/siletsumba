@@ -1,7 +1,7 @@
 @extends('welcome')
 
 @section('content')
-    <div class="container mx-auto px-4 py-2">
+    <div class=" mx-auto py-2">
         <!-- Breadcrumb -->
         <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4" aria-label="Breadcrumb">
             <a href="{{ url('/') }}" class="hover:text-silet-red">Home</a>
@@ -133,8 +133,6 @@
                                 </a>
                             </div>
                         </div>
-
-
                     </div>
 
                     <!-- Login Modal (tailwind) -->
@@ -151,7 +149,7 @@
                         </div>
                     </div>
                     <!-- Content -->
-                    <div class="px-4 py-6 space-y-6">
+                    <div class="px-4  space-y-6">
                         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
                             {!! $article->title !!}
                         </h1>
