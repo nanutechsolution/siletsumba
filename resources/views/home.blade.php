@@ -5,7 +5,7 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full aspect-aspect-[16/9] rounded-lg overflow-hidden shadow-md">
+                <div class="relative w-full aspect-[16/9] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))
