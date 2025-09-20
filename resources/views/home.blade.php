@@ -99,17 +99,14 @@
                         {{-- Image --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                             @if ($article->hasMedia('images'))
-                                <picture>
-                                    {{-- WebP responsive --}}
-                                    <source srcset="{{ $article->getFirstMedia('images')?->getSrcset('webp') }}"
+                                {{-- <picture>
+                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
                                         type="image/webp">
-
-                                    {{-- JPG/PNG fallback responsive --}}
-                                    <img srcset="{{ $article->getFirstMedia('images')?->getSrcset() }}"
+                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
                                         src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
                                         loading="lazy" width="400" height="225"
                                         class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
-                                </picture>
+                                </picture> --}}
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
                                     width="400" height="225"
@@ -186,17 +183,13 @@
 
                             <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
                                 @if ($article->hasMedia('images'))
-                                    <picture>
-                                        {{-- WebP (modern browser) --}}
-                                        <source srcset="{{ $article->getFirstMedia('images')?->getSrcset('webp') }}"
+                                    {{-- <picture>
+                                        <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
                                             type="image/webp">
-
-                                        {{-- Fallback (jpg/png) --}}
-                                        <img srcset="{{ $article->getFirstMedia('images')?->getSrcset() }}"
+                                        <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
                                             src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                            width="800" height="450" loading="lazy"
-                                            class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
-                                    </picture>
+                                            loading="lazy" class="w-full h-full object-cover">
+                                    </picture> --}}
                                 @else
                                     <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}"
                                         loading="lazy" class="w-full h-full object-cover">
