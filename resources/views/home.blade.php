@@ -17,21 +17,22 @@
                                 {{-- WebP responsive --}}
                                 <source
                                     srcset="
-                                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                                    "
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
                                     sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" type="image/webp">
+
                                 {{-- Fallback JPG/PNG --}}
-                                <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
+                                <img src="{{ $hero->getFirstMediaUrl('images', '400') }}"
                                     srcset="
-                                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                                          "
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
                                     sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                                     alt="{{ $hero->title }}" class="w-full h-full object-cover" loading="eager"
-                                    fetchpriority="high">
+                                    fetchpriority="high" width="1200" height="675">
                             </picture>
                         @else
                             <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
