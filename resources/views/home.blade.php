@@ -6,10 +6,17 @@
             {{-- Featured Hero Article --}}
             @if ($hero)
                 <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                    {{-- Preload hero image --}}
+                    {{-- ✅ Preload hero image dengan responsive srcset --}}
                     @if ($hero->hasMedia('images'))
-                        <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
+                        <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
+                            imagesrcset="
+                {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+                {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+                {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+            "
+                            imagesizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px">
                     @endif
+
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))
@@ -17,41 +24,39 @@
                                 {{-- WebP responsive --}}
                                 <source
                                     srcset="
-            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-        "
+                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+                    "
                                     sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" type="image/webp">
 
-                                {{-- Fallback JPG/PNG --}}
-                                <img src="{{ $hero->getFirstMediaUrl('images', '400') }}"
+                                {{-- JPG/PNG fallback --}}
+                                <img src="{{ $hero->getFirstMediaUrl('images', '400') }}" {{-- ✅ default paling kecil --}}
                                     srcset="
-            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-        "
+                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+                    "
                                     sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                                     alt="{{ $hero->title }}" class="w-full h-full object-cover" loading="eager"
                                     fetchpriority="high" width="1200" height="675">
                             </picture>
                         @else
-                            <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
+                            <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
                                 class="w-full h-full object-cover transition duration-300" loading="eager"
-                                fetchpriority="high">
+                                fetchpriority="high" width="1200" height="675">
                         @endif
 
-                        {{-- Overlay sederhana --}}
+                        {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
                             <span class="text-xs font-medium px-2 py-1 rounded text-white"
                                 style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
-
                             <h2 class="text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
                                 {{ $hero->title }}
                             </h2>
-
                             <div class="flex items-center text-gray-300 text-xs mt-2">
                                 <span class="flex items-center">
                                     @if ($hero->user?->hasMedia('profile_photos'))
