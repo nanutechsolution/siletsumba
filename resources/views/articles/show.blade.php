@@ -41,11 +41,10 @@
                         style="background-color: {{ $article->category->color }}">
                         {{ $article->category->name }}
                     </span>
-                    <h1
-                        class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-4 leading-snug">
+                    <h1 style="font-size: clamp(1.5rem, 5vw, 3rem);"
+                        class="font-bold text-gray-800 dark:text-white mb-4 leading-snug">
                         {!! $article->title !!}
                     </h1>
-
                     <div class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400 mb-6">
                         <!-- Author -->
                         <div class="flex items-center mr-6 mb-2">
@@ -139,12 +138,10 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">
                         {{ $article->title }}
                     </p>
-            </div>
-
-
-            <!-- Article Content -->
-            <div class="prose dark:prose-invert max-w-none">
-                {!! $article->full_content !!}
+                    <!-- Article Content -->
+                    <div class="prose dark:prose-invert max-w-none">
+                        {!! $article->full_content !!}
+                    </div>
             </div>
 
             <!-- Article Tags -->
