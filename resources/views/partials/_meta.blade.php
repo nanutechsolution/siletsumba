@@ -6,7 +6,7 @@
         $metaImage =
             isset($article) && $article->hasMedia('images') && $article->getFirstMedia('images')
                 ? $article->getFirstMediaUrl('images', 'thumb') // conversion 'thumb'
-                : $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ?? asset('default-logo.png');
+                : $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-logo.png');
 
         $metaUrl = url()->current();
         $publishedTime =
@@ -63,7 +63,7 @@
                 'image' => [
                     isset($article) && $article->hasMedia('images') && $article->getFirstMedia('images')
                         ? $article->getFirstMediaUrl('images', 'thumb')
-                        : $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ??
+                        : $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ??
                             asset('default-logo.png'),
                 ],
                 'datePublished' =>
@@ -80,7 +80,7 @@
                     'url' => $article->user ? url('/penulis/' . $article->user->id) : url('/redaksi'),
                     'image' => $article->user?->hasMedia('profile_photos')
                         ? $article->user->getFirstMediaUrl('profile_photos', 'small')
-                        : $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ??
+                        : $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ??
                             asset('default-logo.png'),
                 ],
                 'publisher' => [
