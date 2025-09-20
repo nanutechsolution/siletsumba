@@ -93,46 +93,46 @@ class Article extends Model implements HasMedia
         return 'slug';
     }
 
-    // public function registerMediaConversions(Media $media = null): void
-    // {
-    //     $this->addMediaConversion('webp')
-    //         ->nonQueued()
-    //         ->format('webp')
-    //         ->withResponsiveImages();
-
-    //     $this->addMediaConversion('thumb')
-    //         ->fit(Fit::Crop, 300, 300)
-    //         ->format('webp')
-    //         ->quality(80)
-    //         ->nonQueued();
-    // }
-
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversionss(Media $media = null): void
     {
-        // Responsive max fit (biar aman portrait/landscape)
-        $this->addMediaConversion('400')
-            ->fit(Fit::Max, 400, 400) // <= rasio tetap aman
+        $this->addMediaConversion('webp')
+            ->nonQueued()
             ->format('webp')
-            ->quality(80)
-            ->nonQueued();
+            ->withResponsiveImages();
 
-        $this->addMediaConversion('800')
-            ->fit(Fit::Max, 800, 800)
-            ->format('webp')
-            ->quality(80)
-            ->nonQueued();
-
-        $this->addMediaConversion('1200')
-            ->fit(Fit::Max, 1200, 1200)
-            ->format('webp')
-            ->quality(80)
-            ->nonQueued();
-
-        // Thumbnail square (khusus, opsional)
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 300, 300)
             ->format('webp')
-            ->quality(70)
+            ->quality(80)
             ->nonQueued();
     }
+
+    // public function registerMediaConversions(Media $media = null): void
+    // {
+    //     // Responsive max fit (biar aman portrait/landscape)
+    //     $this->addMediaConversion('400')
+    //         ->fit(Fit::Max, 400, 400) // <= rasio tetap aman
+    //         ->format('webp')
+    //         ->quality(80)
+    //         ->nonQueued();
+
+    //     $this->addMediaConversion('800')
+    //         ->fit(Fit::Max, 800, 800)
+    //         ->format('webp')
+    //         ->quality(80)
+    //         ->nonQueued();
+
+    //     $this->addMediaConversion('1200')
+    //         ->fit(Fit::Max, 1200, 1200)
+    //         ->format('webp')
+    //         ->quality(80)
+    //         ->nonQueued();
+
+    //     // Thumbnail square (khusus, opsional)
+    //     $this->addMediaConversion('thumb')
+    //         ->fit(Fit::Crop, 300, 300)
+    //         ->format('webp')
+    //         ->quality(70)
+    //         ->nonQueued();
+    // }
 }
