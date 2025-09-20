@@ -92,12 +92,12 @@
             {{ $article->getFirstMediaUrl('images', '1200') }} 1200w"
                                         sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                                         alt="Foto: {{ $article->title }}" loading="lazy" decoding="async"
-                                        class="w-full h-full object-cover rounded-lg" />
+                                        class="w-full h-auto object-cover rounded-lg" />
                                 </picture>
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
                                     width="400" height="225"
-                                    class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                                    class="w-full h-auto object-cover group-hover:brightness-90 transition duration-300">
                             @endif
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white"
                                 style="background-color: {{ $article->category->color }};">
