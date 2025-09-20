@@ -5,78 +5,67 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full aspect-[16/9] rounded-lg overflow-hidden shadow-md">
-                    <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
-                        aria-label="Baca artikel: {{ $hero->title }}">
+                <div class="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-lg group">
+                    <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
+                        class="block w-full h-full">
+
+                        {{-- Gambar Hero --}}
                         @if ($hero->hasMedia('images'))
                             <img srcset="
-        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-    "
-                                src="{{ $hero->getFirstMediaUrl('images', '800') }}" alt="{{ $hero->title }}"
+                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+                    "
+                                src="{{ $hero->getFirstMediaUrl('images', '800') }}" alt="Foto: {{ $hero->title }}"
                                 sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="eager"
                                 fetchpriority="high" width="1200" height="675"
-                                class="w-full h-full object-cover rounded-lg" />
+                                class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105 group-hover:brightness-90" />
                         @else
                             <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
-                                class="w-full h-full object-cover transition duration-300" loading="eager"
-                                fetchpriority="high" width="1200" height="675">
+                                class="w-full h-full object-cover" loading="eager" fetchpriority="high" width="1200"
+                                height="675">
                         @endif
-                        {{-- Overlay --}}
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
-                            <span class="text-xs font-medium px-2 py-1 rounded text-white"
+
+                        {{-- Overlay gradient --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+                        {{-- Konten teks --}}
+                        <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <span class="inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-md"
                                 style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
-                            <h2 class="text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
+                            <h2
+                                class="text-2xl md:text-3xl font-extrabold leading-tight mb-2 group-hover:text-red-400 transition">
                                 {{ $hero->title }}
                             </h2>
-                            <div class="flex items-center text-gray-300 text-xs mt-2">
+                            <div class="flex items-center text-sm text-gray-200 space-x-3">
                                 <span class="flex items-center">
                                     @if ($hero->user?->hasMedia('profile_photos'))
                                         <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                            alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-1 object-cover">
+                                            alt="{{ $hero->user->name }}"
+                                            class="w-6 h-6 rounded-full mr-2 object-cover border border-white/30">
                                     @else
-                                        <i class="fas fa-user mr-1 text-gray-400"></i>
+                                        <i class="fas fa-user mr-2 text-gray-300"></i>
                                     @endif
                                     {{ $hero->user->name ?? 'Penulis' }}
                                 </span>
-                                <span class="mx-2">•</span>
-                                <span><i class="fas fa-clock mr-1"></i> {{ $hero->created_at->diffForHumans() }}</span>
+                                <span class="flex items-center">
+                                    <i class="fas fa-clock mr-2"></i> {{ $hero->created_at->diffForHumans() }}
+                                </span>
                             </div>
                         </div>
                     </a>
                 </div>
             @endif
 
+
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                @php
-                    if (!function_exists('getContrastColor')) {
-                        function getContrastColor($hex)
-                        {
-                            $hex = str_replace('#', '', $hex);
-                            $r = hexdec(substr($hex, 0, 2));
-                            $g = hexdec(substr($hex, 2, 2));
-                            $b = hexdec(substr($hex, 4, 2));
-                            $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
-                            return $luminance > 0.5 ? '#000000' : '#FFFFFF';
-                        }
-                    }
-                @endphp
-
                 @foreach ($latestArticles as $article)
-                    @php
-                        $bgColor = $article->category->color ?? '#FF0000';
-                        $textColor = getContrastColor($bgColor);
-                    @endphp
-
                     <a href="{{ route('articles.show', $article->slug) }}"
                         aria-label="Baca artikel: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-
                         {{-- Image --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                             @if ($article->hasMedia('images'))
@@ -94,13 +83,11 @@
                                     width="400" height="225"
                                     class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
                             @endif
-
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
-                                style="background-color: {{ $bgColor }}; color: {{ $textColor }};">
+                                style="background-color: {{ $article->category->color }};">
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
                         </div>
-
                         {{-- Content --}}
                         <div class="p-3 md:p-4 flex flex-col justify-between min-h-[140px]">
                             <h3 class="font-bold text-base md:text-lg text-gray-800 dark:text-white line-clamp-2 mb-1">
