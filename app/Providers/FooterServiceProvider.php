@@ -23,25 +23,19 @@ class FooterServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Pastikan nama view sesuai dengan yang kamu include di layout.
-        // Di sini kita menargetkan dua kemungkinan nama partial.
         View::composer(['*'], function ($view) {
-            // Cache untuk performa (1 jam). Sesuaikan TTL kalau mau.
             $footerCategories = Cache::remember('footer_categories', 3600, function () {
                 return Category::whereHas('articles')
                     ->take(12)
                     ->get();
             });
-
-
-            $footerPages = Cache::remember('footer_pages', 3600, function () {
-                if (method_exists(Page::class, 'scopeFooter')) {
-                    return Page::footer()->get();
-                }
-                return Page::where('show_in_footer', true)
+            if (method_exists(Page::class, 'scopeFooter')) {
+                $footerPages = Page::footer()->get();
+            } else {
+                $footerPages = Page::where('show_in_footer', true)
                     ->where('status', 'published')
                     ->get();
-            });
+            }
 
             $view->with(compact('footerCategories', 'footerPages'));
         });

@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminThemeController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
@@ -77,8 +76,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', AdminCategoryController::class);
     Route::delete('articles/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
     Route::post('articles/{slug}/like', [ArticleController::class, 'like'])->name('articles.like');
-    Route::get('/theme-settings', [AdminThemeController::class, 'index'])->name('theme.index');
-    Route::put('/theme-settings', [AdminThemeController::class, 'update'])->name('theme.update');
     Route::post('articles/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content'); // Tambahkan baris ini
     Route::resource('prompts', PromptController::class);
     Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);

@@ -4,13 +4,12 @@
             {{ isset($page) ? 'Edit Halaman' : 'Tambah Halaman' }}
         </h1>
 
-        <form action="{{ isset($page) ? route('admin.pages.update', $page) : route('admin.pages.store') }}"
+        <form id="page-form" action="{{ isset($page) ? route('admin.pages.update', $page) : route('admin.pages.store') }}"
             method="POST">
             @csrf
             @if (isset($page))
                 @method('PUT')
             @endif
-
             {{-- Judul --}}
             <div class="mb-5">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Judul</label>
@@ -55,11 +54,10 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const quill = new Quill("#quill-editor", {
-                theme: "snow", // Bisa ganti 'bubble' kalau mau lebih simple
+                theme: "snow",
                 placeholder: "Tulis konten halaman di sini...",
                 modules: {
                     toolbar: [
@@ -78,13 +76,15 @@
                 }
             });
 
-            // Set initial content kalau edit
-            quill.root.innerHTML = `{!! old('content', $page->content ?? '') !!}`;
-
-            // Sync ke textarea sebelum submit
-            document.querySelector("form").addEventListener("submit", function() {
-                document.querySelector("#content").value = quill.root.innerHTML;
+            // Hanya pakai old kalau ada error (Laravel akan set old jika validasi gagal)
+            const initialContent = @json(session()->getOldInput('content', $page->content ?? ''));
+            quill.root.innerHTML = initialContent;
+            const form = document.getElementById("page-form");
+            form.addEventListener("submit", function(e) {
+                document.getElementById("content").value = quill.root.innerHTML;
             });
         });
     </script>
+
+
 </x-app-layout>

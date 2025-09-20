@@ -23,7 +23,7 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
-        // Text/textarea fields
+
         $data = $request->except(['_token', '_method']);
         foreach ($data as $key => $value) {
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
