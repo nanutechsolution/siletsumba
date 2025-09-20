@@ -93,21 +93,21 @@ class Article extends Model implements HasMedia
         return 'slug';
     }
 
+    // public function registerMediaConversions(Media $media = null): void
+    // {
+    //     $this->addMediaConversion('webp')
+    //         ->nonQueued()
+    //         ->format('webp')
+    //         ->withResponsiveImages();
+
+    //     $this->addMediaConversion('thumb')
+    //         ->fit(Fit::Crop, 300, 300)
+    //         ->format('webp')
+    //         ->quality(80)
+    //         ->nonQueued();
+    // }
+
     public function registerMediaConversions(Media $media = null): void
-    {
-        $this->addMediaConversion('webp')
-            ->nonQueued()
-            ->format('webp')
-            ->withResponsiveImages();
-
-        $this->addMediaConversion('thumb')
-            ->fit(Fit::Crop, 300, 300)
-            ->format('webp')
-            ->quality(80)
-            ->nonQueued();
-    }
-
-    public function registerMediaConversionsssss(Media $media = null): void
     {
         // Responsive max fit (biar aman portrait/landscape)
         $this->addMediaConversion('400')
