@@ -13,6 +13,9 @@ export default {
             fontFamily: {
                 'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
             },
+            fontSize: {
+                'fluid-h1': 'clamp(1.5rem, 5vw, 3rem)',
+            },
             colors: {
                 silet: {
                     red: '#E41E2D',
