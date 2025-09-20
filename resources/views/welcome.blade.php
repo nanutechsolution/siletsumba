@@ -7,7 +7,7 @@
     {{-- Favicon --}}
     @php
         $faviconUrl =
-            $settings['site_logo_url']?->getFirstMediaUrl('site_logo', 'thumb') ?? asset('default-favicon.png');
+            $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
     @endphp
 
     <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/x-icon">
