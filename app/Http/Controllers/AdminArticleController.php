@@ -123,7 +123,7 @@ class AdminArticleController extends Controller
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'delete_images' => 'nullable|array',
-            'delete_images.*' => 'exists:article_images,id',
+            'delete_images.*' => 'exists:media,id',
             'is_breaking' => 'nullable|boolean',
             'lokasi_short' => 'nullable|string|max:255',
             'location_short' => 'nullable|string|max:255',
@@ -144,14 +144,11 @@ class AdminArticleController extends Controller
             'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
             'user_id' => auth()->id(),
         ]);
-
         $article->tags()->sync($validated['tags'] ?? []);
-
-        // Hapus gambar yang dicentang
         if (!empty($validated['delete_images'])) {
-            $imagesToDelete = $article->getMedia('images')->whereIn('id', $validated['delete_images']);
-            foreach ($imagesToDelete as $media) {
-                $media->delete();
+            foreach ($validated['delete_images'] as $id) {
+                $media = $article->media()->find($id);
+                if ($media) $media->delete();
             }
         }
         // Upload gambar baru
@@ -161,6 +158,7 @@ class AdminArticleController extends Controller
                     ->toMediaCollection('images');
             }
         }
+
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
 

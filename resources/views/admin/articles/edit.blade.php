@@ -116,29 +116,31 @@
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar Saat Ini</label>
                             <div id="old-image-preview" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                                 @if ($article->hasMedia('images'))
-                                    @foreach ($article->getMedia('images') as $media)
-                                        <div class="relative group" data-id="{{ $media->id }}">
-                                            <picture>
-                                                <source srcset="{{ $media->getUrl('400') }}"
-                                                    media="(max-width: 640px)">
-                                                <source srcset="{{ $media->getUrl('800') }}"
-                                                    media="(max-width: 1024px)">
-                                                <img src="{{ $media->getUrl('thumb') }}" alt="Preview Gambar"
-                                                    class="w-full h-auto rounded-lg shadow-md object-cover">
-                                            </picture>
-                                            <button type="button"
-                                                class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700 opacity-0 group-hover:opacity-100 transition delete-old-image">
-                                                &times;
-                                            </button>
-                                        </div>
-                                    @endforeach
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach ($article->getMedia('images') as $media)
+                                            <div class="relative group" data-id="{{ $media->id }}">
+                                                <picture>
+                                                    <source srcset="{{ $media->getUrl('400') }}"
+                                                        media="(max-width: 480px)">
+                                                    <source srcset="{{ $media->getUrl('800') }}"
+                                                        media="(max-width: 1024px)">
+                                                    <img src="{{ $media->getUrl('1200') }}"
+                                                        class="w-full h-auto rounded-lg shadow-md object-cover"
+                                                        alt="Gambar artikel">
+                                                </picture>
+                                                <button type="button"
+                                                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700 opacity-0 group-hover:opacity-100 transition delete-old-image">
+                                                    &times;
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 @else
                                     <p class="text-gray-500">Belum ada gambar.</p>
                                 @endif
                             </div>
                             <input type="hidden" name="delete_images" id="delete-images">
                         </div>
-
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Tambah Gambar
                                 Baru</label>
