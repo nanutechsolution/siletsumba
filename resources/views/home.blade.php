@@ -5,48 +5,35 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                    {{-- ✅ Preload hero image dengan responsive srcset --}}
-                    @if ($hero->hasMedia('images'))
-                        <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
-                            imagesrcset="
-                {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-            "
-                            imagesizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px">
-                    @endif
-
+                <div class="relative w-full aspect-aspect-[16/9] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))
                             <picture>
-                                {{-- WebP responsive --}}
+                                {{-- Versi WebP --}}
                                 <source
                                     srcset="
-                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                    "
-                                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" type="image/webp">
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                    type="image/webp">
 
-                                {{-- JPG/PNG fallback --}}
-                                <img src="{{ $hero->getFirstMediaUrl('images', '400') }}" {{-- ✅ default paling kecil --}}
-                                    srcset="
-                        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                    "
-                                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
-                                    alt="{{ $hero->title }}" class="w-full h-full object-cover" loading="eager"
-                                    fetchpriority="high" width="1200" height="675">
+                                {{-- Fallback JPG/PNG --}}
+                                <img srcset="
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+                                        src="{{ $hero->getFirstMediaUrl('images', '800') }}"
+                                    alt="{{ $hero->title }}"
+                                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="lazy"
+                                    width="1200" height="675" class="w-full h-full object-cover rounded-lg">
                             </picture>
                         @else
                             <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
                                 class="w-full h-full object-cover transition duration-300" loading="eager"
                                 fetchpriority="high" width="1200" height="675">
                         @endif
-
                         {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
@@ -119,7 +106,6 @@
             {{ $article->getFirstMediaUrl('images', '400') }} 400w,
             {{ $article->getFirstMediaUrl('images', '800') }} 800w,
             {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
                                         src="{{ $article->getFirstMediaUrl('images', '800') }}"
                                         alt="{{ $article->title }}"
                                         sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="lazy"
