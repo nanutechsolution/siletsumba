@@ -1,5 +1,4 @@
 @extends('welcome')
-
 @section('content')
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {{-- Main Content (2/3) --}}
@@ -11,7 +10,6 @@
                     @if ($hero->hasMedia('images'))
                         <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images') }}">
                     @endif
-
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))

@@ -304,6 +304,8 @@
                                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                                 @enderror
                             </div>
+                            <input type="hidden" name="g-recaptcha-response" id="recaptcha">
+
                             <div class="flex justify-end mt-4">
                                 <button type="submit"
                                     class="bg-silet-red text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
@@ -375,6 +377,14 @@
                 </div>
             </div>
         </div>
-
-
+        <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}"></script>
+        <script>
+            grecaptcha.ready(function() {
+                grecaptcha.execute('{{ env('RECAPTCHA_SITE_KEY') }}', {
+                    action: 'submit'
+                }).then(function(token) {
+                    document.getElementById('recaptcha').value = token;
+                });
+            });
+        </script>
     @endsection

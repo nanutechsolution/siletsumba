@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 
 class CommentController extends Controller
@@ -25,7 +26,26 @@ class CommentController extends Controller
             'name'       => 'required|string|max:255',
             'email'      => 'required|email|max:255',
             'body'       => 'required|string',
+            'g-recaptcha-response' => 'required|string',
         ]);
+
+
+        if (app()->environment('production')) {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret'   => config('services.recaptcha.secret'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            $recaptcha = $response->json();
+
+            if (empty($recaptcha['success']) || $recaptcha['success'] !== true) {
+                return back()->with('error', 'Verifikasi reCAPTCHA gagal, coba lagi.');
+            }
+        } else {
+            // Local dev → bypass supaya gampang testing
+            $recaptcha['success'] = true;
+        }
 
         // Rate limit: max 3 komentar per 1 menit per IP
         $key = 'comment:' . $request->ip();
