@@ -54,7 +54,10 @@ class ArticleController extends Controller
             ->take(5)
             ->get();
         $popular = Article::orderBy('views', 'desc')->take(5)->get();
-        $latest = Article::latest()->take(5)->get();
+        $latest = Article::where('published', true)
+            ->latest()
+            ->take(5)
+            ->get();
         return view('articles.show', compact('article', 'related', 'latest', 'popular', 'categories'));
     }
 

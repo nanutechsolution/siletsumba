@@ -11,9 +11,17 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WriterArticleController;
+use App\Http\Controllers\WriterController;
+use App\Livewire\Roles\RolesList;
+use App\Livewire\UserIndex;
 use App\Models\Article;
 use App\Models\Page;
 use App\Models\User;
@@ -62,16 +70,20 @@ Route::get('/sitemap.xml', function () {
         return $sitemap->toResponse(request());
     });
 });
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('users', function () {
-        return view('admin.users.index');
-    })->name('users.index');
-    Route::get('/users/create', function () {
-        return view('admin.users.create');
-    })->name('users.create');
-    Route::get('/users/{user}/edit', function (User $user) {
-        return view('admin.users.edit', compact('user'));
-    })->name('users.edit');
+
+Route::middleware(['auth', 'role:admin|editor|writer'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data'); // AJAX load
+    Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/roles', [UserController::class, 'assignRoles'])->name('users.roles');
+    Route::post('/users/{user}/permissions', [UserController::class, 'assignPermissions'])->name('users.permissions');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('categories', AdminCategoryController::class);
     Route::delete('articles/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
@@ -88,6 +100,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('pages', AdminPageController::class);
     Route::resource('articles', AdminArticleController::class);
 });
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

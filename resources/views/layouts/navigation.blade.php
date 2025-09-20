@@ -19,44 +19,50 @@
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">
-                        {{ __('Berita') }}
-                    </x-nav-link>
-
-                    {{-- Notifikasi Komentar --}}
-                    <x-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')" class="relative">
-                        <span class="flex items-center">
-                            {{ __('Komentar') }}
-                            @if ($pendingComments > 0)
-                                <span
-                                    class="ms-2 px-2 py-1 text-xs font-bold leading-none text-red-100 dark:text-red-900 bg-red-600 dark:bg-red-300 rounded-full">
-                                    {{ $pendingComments }}
-                                </span>
-                            @endif
-                        </span>
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                        {{ __('Kategori') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">
-                        {{ __('Prompt AI') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                        {{ __('Pengguna') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
-                        {{ __('Tag') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
-                        {{ __('Halaman Statis') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
-                        {{ __('Pengaturan') }}
-                    </x-nav-link>
+                    @can('buat_artikel')
+                        <x-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">
+                            {{ __('Berita') }}
+                        </x-nav-link>
+                    @endcan
+                    @can('kelola_komentar')
+                        {{-- Notifikasi Komentar --}}
+                        <x-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')" class="relative">
+                            <span class="flex items-center">
+                                {{ __('Komentar') }}
+                                @if ($pendingComments > 0)
+                                    <span
+                                        class="ms-2 px-2 py-1 text-xs font-bold leading-none text-red-100 dark:text-red-900 bg-red-600 dark:bg-red-300 rounded-full">
+                                        {{ $pendingComments }}
+                                    </span>
+                                @endif
+                            </span>
+                        </x-nav-link>
+                    @endcan
+                    @role('admin')
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                            {{ __('Kategori') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">
+                            {{ __('Prompt AI') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                            {{ __('Pengguna') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
+                            {{ __('Tag') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
+                            {{ __('Halaman Statis') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
+                            {{ __('Pengaturan') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
+                            {{ __('Manajemen Role') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
-
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <button id="theme-toggle" type="button"
                     class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
@@ -119,47 +125,45 @@
             <x-responsive-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">
                 {{ __('Berita') }}
             </x-responsive-nav-link>
+            @role('admin')
+                {{-- Notifikasi Komentar Responsif --}}
+                <x-responsive-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')">
+                    <span class="flex items-center">
+                        {{ __('Komentar') }}
+                        @if ($pendingComments > 0)
+                            <span
+                                class="ms-2 px-2 py-1 text-xs font-bold leading-none text-red-100 dark:text-red-900 bg-red-600 dark:bg-red-300 rounded-full">
+                                {{ $pendingComments }}
+                            </span>
+                        @endif
+                    </span>
+                </x-responsive-nav-link>
 
-            {{-- Notifikasi Komentar Responsif --}}
-            <x-responsive-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')">
-                <span class="flex items-center">
-                    {{ __('Komentar') }}
-                    @if ($pendingComments > 0)
-                        <span
-                            class="ms-2 px-2 py-1 text-xs font-bold leading-none text-red-100 dark:text-red-900 bg-red-600 dark:bg-red-300 rounded-full">
-                            {{ $pendingComments }}
-                        </span>
-                    @endif
-                </span>
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                {{ __('Kategori') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">
-                {{ __('Prompt AI') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                {{ __('Pengguna') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
-                {{ __('Tag') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
-                {{ __('Halaman Statis') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
-                {{ __('Pengatuan') }}
-            </x-responsive-nav-link>
-
+                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                    {{ __('Kategori') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">
+                    {{ __('Prompt AI') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                    {{ __('Pengguna') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">
+                    {{ __('Tag') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
+                    {{ __('Halaman Statis') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
+                    {{ __('Pengatuan') }}
+                </x-responsive-nav-link>
+            @endrole
         </div>
-
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
-
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">{{ __('Profile') }}</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('home')">{{ __('Kembali Ke Web') }}</x-responsive-nav-link>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\ArticleImage;
 use App\Models\Category;
 use App\Models\Prompt;
 use App\Models\Tag;
@@ -18,11 +17,12 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminArticleController extends Controller
 {
-
     public function index()
     {
+        $user = auth()->user();
+        $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
         // Jika peran pengguna adalah 'admin', tampilkan semua berita
-        if (Auth::user()->role === 'admin') {
+        if ($isAdminOrEditor) {
             $articles = Article::with('category')->latest()->paginate(15);
         } else {
             // Jika peran adalah 'writer', tampilkan hanya berita yang ditulis oleh pengguna tersebut
@@ -50,7 +50,7 @@ class AdminArticleController extends Controller
             'content' => ['required', new RequiredHtmlContent()],
             'category_id' => 'required|exists:categories,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
-            'tags' => 'nullable|array',
+            'tags' => 'required|array',
             'tags.*' => 'string',
             'is_breaking' => 'nullable|boolean',
             'location_short' => 'required|string|max:255',
@@ -61,15 +61,22 @@ class AdminArticleController extends Controller
         $validated['slug'] = Str::slug($validated['title']);
         $validated['user_id'] = auth()->id();
         $validated['scheduled_at'] = $request->scheduled_at ?? null;
-
         if ($request->input('publish_option') === 'now') {
-            $validated['is_published'] = true;
-            $validated['scheduled_at'] = now();
+            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor')) {
+                $validated['is_published'] = true;
+                $validated['scheduled_at'] = now();
+            }
         } elseif ($request->input('publish_option') === 'schedule') {
-            $validated['is_published'] = false;
-            $validated['scheduled_at'] = $request->filled('scheduled_at')
-                ? \Carbon\Carbon::parse($request->input('scheduled_at'))
-                : null;
+            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor')) {
+                $validated['is_published'] = false;
+                $validated['scheduled_at'] = $request->filled('scheduled_at')
+                    ? \Carbon\Carbon::parse($request->input('scheduled_at'))
+                    : null;
+            } else {
+                // Penulis tetap draft
+                $validated['is_published'] = false;
+                $validated['scheduled_at'] = null;
+            }
         } else {
             $validated['is_published'] = false;
             $validated['scheduled_at'] = null;
@@ -107,8 +114,10 @@ class AdminArticleController extends Controller
 
     public function edit(Article $article)
     {
-        // Pastikan penulis hanya bisa mengedit artikelnya sendiri
-        if ($article->user_id !== Auth::id()) {
+
+        $user = auth()->user();
+        $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
+        if (!$isAdminOrEditor) {
             abort(403);
         }
         $categories = Category::all();
@@ -132,10 +141,17 @@ class AdminArticleController extends Controller
             'tags.*' => 'exists:tags,id',
             'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
+        $user = auth()->user();
+        $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
+        if ($isAdminOrEditor) {
+            $isPublished = $validated['is_published'];
+        } else {
+            $isPublished = false;
+        }
 
         $article->update([
             'title' => $validated['title'],
-            'is_published' => true,
+            'is_published' => $isPublished,
             'content' => $validated['content'],
             'excerpt' => Str::limit(strip_tags($validated['content']), 150),
             'lokasi_short' => $validated['lokasi_short'] ?? null,
@@ -165,20 +181,27 @@ class AdminArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        foreach ($article->images as $image) {
-            Storage::disk('public')->delete($image->path);
-            $image->delete();
+        $user = auth()->user();
+
+        // Hanya admin/editor boleh hapus semua artikel
+        // Penulis hanya boleh hapus artikel sendiri
+        if ($user->hasRole('writer') && $article->user_id !== $user->id) {
+            return redirect()->route('admin.articles.index')
+                ->with('error', 'Anda tidak memiliki izin untuk menghapus artikel ini.');
         }
+        $article->clearMediaCollection('images');
+
         $article->delete();
+
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil dihapus!');
     }
+
     public function generateContent(Request $request)
     {
         $request->validate([
             'prompt' => 'required|string|min:5',
         ]);
         $apiKey = env('GEMINI_API_KEY');
-
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'X-goog-api-key' => $apiKey,
@@ -208,9 +231,6 @@ class AdminArticleController extends Controller
     }
 
 
-    /**
-     * Remove multiple resources from storage.
-     */
     public function massDestroy(Request $request): RedirectResponse
     {
         $request->validate([
@@ -218,14 +238,22 @@ class AdminArticleController extends Controller
             'selected_articles.*' => 'string|exists:articles,slug',
         ]);
 
+        $user = auth()->user();
         $deletedCount = 0;
-        DB::transaction(function () use ($request, &$deletedCount) {
+        DB::transaction(function () use ($request, &$deletedCount, $user) {
             foreach ($request->input('selected_articles') as $slug) {
                 $article = Article::where('slug', $slug)->first();
-                if ($article) {
-                    $article->delete();
-                    $deletedCount++;
+                if (!$article) continue;
+
+                // Cek permission
+                if ($user->hasRole('writer') && $article->user_id !== $user->id) {
+                    continue; // writer hanya bisa hapus artikel sendiri
                 }
+                // Hapus media terkait
+                $article->clearMediaCollection('images');
+
+                $article->delete();
+                $deletedCount++;
             }
         });
 

@@ -74,12 +74,12 @@
 
             <div>
                 <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Peran</label>
-                <select wire:model.live="role" id="role"
-                    class="mt-1 w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:ring focus:ring-blue-500 px-3 py-2 text-sm shadow-sm">
-                    <option value="writer">Writer</option>
-                    <option value="admin">Admin</option>
-                    <option value="admin">Editor</option>
+                <select wire:model.defer="role" class="input">
+                    @foreach ($roles as $r)
+                        <option value="{{ $r->name }}">{{ ucfirst($r->name) }}</option>
+                    @endforeach
                 </select>
+
                 @error('role')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror

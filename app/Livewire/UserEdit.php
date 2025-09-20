@@ -4,9 +4,11 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Spatie\Permission\Models\Role;
 
 class UserEdit extends Component
 {
@@ -18,6 +20,7 @@ class UserEdit extends Component
     public $bio;
     public $social_links = [];
     public string $type = 'password';
+
     protected function rules()
     {
         return [
@@ -30,7 +33,7 @@ class UserEdit extends Component
                 Rule::unique('users')->ignore($this->user->id),
             ],
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,writer,editor',
+            'role' => 'required|exists:roles,name',
             'profile_photo_path' => 'nullable|image|max:2048',
             'bio' => 'nullable|string|max:1000',
             'social_links.*' => 'nullable|url',
@@ -42,18 +45,14 @@ class UserEdit extends Component
         $this->user = $user;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->role = $user->role;
+        $this->role = $user->roles->first()?->name ?? null; // Ambil role Spatie
         $this->bio = $user->bio;
-        $this->social_links = $user->social_links;
+        $this->social_links = $user->social_links ?? [];
     }
 
     public function togglePassword()
     {
-        if ($this->type == 'password') {
-            $this->type = 'text';
-        } else {
-            $this->type = 'password';
-        }
+        $this->type = $this->type === 'password' ? 'text' : 'password';
     }
 
     public function submit()
@@ -63,9 +62,8 @@ class UserEdit extends Component
         $data = [
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $this->role,
             'bio' => $this->bio,
-            'social_links' => $this->social_links,
+            'social_links' => $this->social_links ?? [],
         ];
 
         if ($this->password) {
@@ -73,18 +71,25 @@ class UserEdit extends Component
         }
 
         if ($this->profile_photo_path) {
-            $path = $this->profile_photo_path->store('profile-photos', 'public');
-            $data['profile_photo_path'] = $path;
+            // Hapus foto lama jika ada
+            if ($this->user->profile_photo_path) {
+                Storage::disk('public')->delete($this->user->profile_photo_path);
+            }
+            $data['profile_photo_path'] = $this->profile_photo_path->store('profile-photos', 'public');
         }
 
         $this->user->update($data);
 
-        session()->flash('success', 'Pengguna berhasil diperbarui. ✅');
+        // Sync role Spatie
+        $this->user->syncRoles([$this->role]);
+
+        session()->flash('success', 'Pengguna berhasil diperbarui ✅');
         return redirect()->route('admin.users.index');
     }
 
     public function render()
     {
-        return view('livewire.user-edit');
+        $roles = Role::all();
+        return view('livewire.user-create', compact('roles'));
     }
 }

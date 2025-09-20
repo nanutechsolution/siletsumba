@@ -69,7 +69,7 @@
                                 <td class="py-4 px-4 whitespace-nowrap text-center text-sm font-medium">
                                     <span
                                         class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800' }} dark:bg-gray-600 dark:text-gray-200">
-                                        {{ ucfirst($user->role) }}
+                                        {{ ucfirst($user->roles->pluck('name')->join(',')) }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-4 whitespace-nowrap text-center text-sm font-medium">

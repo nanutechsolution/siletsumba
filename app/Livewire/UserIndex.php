@@ -27,10 +27,14 @@ class UserIndex extends Component
 
     public function render()
     {
-        $users = User::where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
+        $users = User::with('roles')
+            ->where(function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
+            })
             ->latest()
             ->paginate(10);
+
 
         return view('livewire.user-index', compact('users'));
     }

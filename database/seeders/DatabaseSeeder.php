@@ -19,12 +19,9 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Yakobus Tena',
-            'email' => 'silet@sumba.com',
-            'role' => 'admin'
-        ]);
+
         $this->call([
+            RolePermissionSeeder::class,
             CategorySeeder::class,
             ArticleSeeder::class,
             PromptSeeder::class,

@@ -40,14 +40,18 @@
 
             {{-- Quick Action Buttons --}}
             <div class="flex flex-wrap gap-4">
-                <a href="{{ route('admin.articles.create') }}"
-                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition duration-200">
-                    Buat Berita Baru
-                </a>
-                <a href="{{ route('admin.comments.index') }}"
-                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow transition duration-200">
-                    Moderasi Komentar
-                </a>
+                @can('buat_artikel')
+                    <a href="{{ route('admin.articles.create') }}"
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow transition duration-200">
+                        Buat Berita Baru
+                    </a>
+                @endcan
+                @can('kelola_komentar')
+                    <a href="{{ route('admin.comments.index') }}"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow transition duration-200">
+                        Moderasi Komentar
+                    </a>
+                @endcan
             </div>
 
             {{-- Stats Cards --}}

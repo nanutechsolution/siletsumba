@@ -23,7 +23,7 @@ class UserCreate extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,writer,editor',
+            'role' => 'required|in:admin,editor,writer',
             'profile_photo_path' => 'nullable|image|max:2048',
             'bio' => 'nullable|string|max:1000',
             'social_links.*' => 'nullable|url',
@@ -32,31 +32,29 @@ class UserCreate extends Component
 
     public function togglePassword()
     {
-        if ($this->type == 'password') {
-            $this->type = 'text';
-        } else {
-            $this->type = 'password';
-        }
+        $this->type = $this->type === 'password' ? 'text' : 'password';
     }
 
     public function submit()
     {
         $this->validate();
 
-        $path = null;
-        if ($this->profile_photo_path) {
-            $path = $this->profile_photo_path->store('profile-photos', 'public');
-        }
+        // Upload foto profil
+        $path = $this->profile_photo_path ? $this->profile_photo_path->store('profile-photos', 'public') : null;
 
-        User::create([
+        // Buat user baru
+        $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'role' => $this->role,
             'profile_photo_path' => $path,
             'bio' => $this->bio,
             'social_links' => $this->social_links,
         ]);
+
+        // Assign role pakai Spatie
+        $user->assignRole($this->role);
+
         session()->flash('success', 'Pengguna berhasil ditambahkan. ✅');
         return redirect()->route('admin.users.index');
     }

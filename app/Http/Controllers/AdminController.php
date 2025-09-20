@@ -11,18 +11,34 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $totalArticles = Article::count();
-        $totalViews = Article::sum('views');
-        $pendingComments = Comment::where('status', 'pending')->count();
-        $activeWriters = User::has('articles')->count();
-        $recentArticles = Article::with('user', 'category')
-            ->latest()
-            ->select('title', 'slug', 'user_id', 'category_id', 'created_at', 'is_published')
-            ->take(5)
-            ->get();
-        $recentComments = Comment::with('article')->latest()->where('status', 'pending')->take(5)->get();
-        $trendingArticles = Article::with('category')->orderBy('views', 'desc')->take(5)->get();
-        $totalComments = Comment::count();
+        $user = auth()->user();
+
+        // Cek role
+        $isAdmin = $user->hasRole('admin');
+
+        // Base query
+        $articleQuery = Article::query();
+        $commentQuery = Comment::query();
+
+        if (!$isAdmin) {
+            // Kalau bukan admin, filter artikel miliknya sendiri
+            $articleQuery->where('user_id', $user->id);
+
+            // Filter komentar hanya untuk artikel miliknya
+            $commentQuery->whereHas('article', fn($q) => $q->where('user_id', $user->id));
+        }
+
+        // Hitung statistik
+        $totalArticles = $articleQuery->count();
+        $totalViews = $articleQuery->sum('views');
+        $recentArticles = $articleQuery->with('category')->latest()->take(5)->get();
+        $trendingArticles = $articleQuery->with('category')->orderBy('views', 'desc')->take(5)->get();
+
+        $totalComments = $commentQuery->count();
+        $pendingComments = $commentQuery->where('status', 'pending')->count();
+        $recentComments = $commentQuery->with('article')->latest()->where('status', 'pending')->take(5)->get();
+        // Hanya admin yang lihat jumlah writer
+        $activeWriters = $isAdmin ? User::has('articles')->count() : 0;
         return view('admin.dashboard', compact(
             'totalArticles',
             'totalViews',
@@ -31,8 +47,7 @@ class AdminController extends Controller
             'recentArticles',
             'recentComments',
             'trendingArticles',
-            'pendingComments',
-            'recentComments'
+            'pendingComments'
         ));
     }
 }
