@@ -12,23 +12,7 @@
                     @endif
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
-                        @if ($hero->hasMedia('images'))
-                            <picture>
-                                {{-- WebP responsive --}}
-                                <source
-                                    srcset="{{ $hero->getFirstMedia('images')->getSrcset('webp', '(max-width: 640px) 400w, 800w') }}"
-                                    type="image/webp">
-                                {{-- Fallback JPG/PNG responsive --}}
-                                <img srcset="{{ $hero->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
-                                    src="{{ $hero->getFirstMediaUrl('images') }}" alt="{{ $hero->title }}"
-                                    class="w-full h-full object-cover transition duration-300" loading="eager"
-                                    fetchpriority="high">
-                            </picture>
-                        @else
-                            <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
-                                class="w-full h-full object-cover transition duration-300" loading="eager"
-                                fetchpriority="high">
-                        @endif
+
 
                         {{-- Overlay sederhana --}}
                         <div
@@ -88,20 +72,7 @@
 
                         {{-- Image --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
-                            @if ($article->hasMedia('images'))
-                                <picture>
-                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
-                                        type="image/webp">
-                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
-                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                        loading="lazy" width="400" height="225"
-                                        class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
-                                </picture>
-                            @else
-                                <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
-                                    width="400" height="225"
-                                    class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
-                            @endif
+
 
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
                                 style="background-color: {{ $bgColor }}; color: {{ $textColor }};">
