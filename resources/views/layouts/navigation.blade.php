@@ -155,7 +155,7 @@
                     {{ __('Halaman Statis') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
-                    {{ __('Pengatuan') }}
+                    {{ __('Pengaturan') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
                     {{ __('Role') }}
