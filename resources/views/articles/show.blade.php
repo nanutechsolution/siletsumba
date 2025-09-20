@@ -1,7 +1,7 @@
 @extends('welcome')
 
 @section('content')
-    <div class=" mx-auto py-2">
+    <div class="mx-auto py-2">
         <!-- Breadcrumb -->
         <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4" aria-label="Breadcrumb">
             <a href="{{ url('/') }}" class="hover:text-silet-red">Home</a>
@@ -157,10 +157,9 @@
                         <div class="prose dark:prose-invert max-w-none">
                             {!! $article->full_content !!}
                         </div>
-
                         <!-- Tags -->
                         @if ($article->tags->count())
-                            <div class="flex flex-wrap gap-2 mt-4">
+                            <div class="flex flex-wrap gap-2 py-4">
                                 @foreach ($article->tags as $tag)
                                     <a href="{{ route('tags.show', $tag->slug) }}"
                                         class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
