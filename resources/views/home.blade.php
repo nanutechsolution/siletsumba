@@ -5,7 +5,7 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-lg group">
+                <div class="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
                         class="block w-full h-full">
 
@@ -16,42 +16,38 @@
                         {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
                         {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
                     "
-                                src="{{ $hero->getFirstMediaUrl('images', '800') }}" alt="Foto: {{ $hero->title }}"
+                                src="{{ $hero->getFirstMediaUrl('images', '800') }}" alt="{{ $hero->title }}"
                                 sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="eager"
-                                fetchpriority="high" width="1200" height="675"
-                                class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105 group-hover:brightness-90" />
+                                fetchpriority="high" width="1200" height="675" class="w-full h-full object-cover" />
                         @else
                             <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
-                                class="w-full h-full object-cover" loading="eager" fetchpriority="high" width="1200"
-                                height="675">
+                                class="w-full h-full object-cover" width="1200" height="675">
                         @endif
 
-                        {{-- Overlay gradient --}}
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                        {{-- Overlay gelap tipis --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
 
-                        {{-- Konten teks --}}
+                        {{-- Konten --}}
                         <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                            <span class="inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-md"
+                            <span class="inline-block text-xs font-semibold px-2 py-1 rounded mb-3"
                                 style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
-                            <h2
-                                class="text-2xl md:text-3xl font-extrabold leading-tight mb-2 group-hover:text-red-400 transition">
+                            <h2 class="text-2xl md:text-3xl font-bold leading-tight mb-2">
                                 {{ $hero->title }}
                             </h2>
-                            <div class="flex items-center text-sm text-gray-200 space-x-3">
+                            <div class="flex items-center text-xs text-gray-200 space-x-3">
                                 <span class="flex items-center">
                                     @if ($hero->user?->hasMedia('profile_photos'))
                                         <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                            alt="{{ $hero->user->name }}"
-                                            class="w-6 h-6 rounded-full mr-2 object-cover border border-white/30">
+                                            alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-2 object-cover">
                                     @else
                                         <i class="fas fa-user mr-2 text-gray-300"></i>
                                     @endif
                                     {{ $hero->user->name ?? 'Penulis' }}
                                 </span>
                                 <span class="flex items-center">
-                                    <i class="fas fa-clock mr-2"></i> {{ $hero->created_at->diffForHumans() }}
+                                    <i class="fas fa-clock mr-2"></i>{{ $hero->created_at->diffForHumans() }}
                                 </span>
                             </div>
                         </div>
