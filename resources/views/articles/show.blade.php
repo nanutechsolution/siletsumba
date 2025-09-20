@@ -304,20 +304,6 @@
                                     <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <!-- reCAPTCHA -->
-                            @if (app()->environment('production'))
-                                {{-- Mode production: tampilkan Google reCAPTCHA --}}
-                                <div class="mb-4">
-                                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}">
-                                    </div>
-                                    @error('g-recaptcha-response')
-                                        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            @else
-                                {{-- Mode dev/local: bypass token --}}
-                                <input type="hidden" name="g-recaptcha-response" value="test_token">
-                            @endif
                             <div class="flex justify-end mt-4">
                                 <button type="submit"
                                     class="bg-silet-red text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
@@ -389,8 +375,6 @@
                 </div>
             </div>
         </div>
-        @if (app()->environment('production'))
-            {{-- Hanya load script di production --}}
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        @endif
+
+
     @endsection
