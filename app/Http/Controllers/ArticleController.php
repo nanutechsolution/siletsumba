@@ -54,7 +54,7 @@ class ArticleController extends Controller
             ->take(5)
             ->get();
         $popular = Article::orderBy('views', 'desc')->take(5)->get();
-        $latest = Article::where('published', true)
+        $latest = Article::where('is_published', true)
             ->latest()
             ->take(5)
             ->get();
