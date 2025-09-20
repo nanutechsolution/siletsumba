@@ -104,20 +104,29 @@
                             <span>{{ $article->comments_count ?? 0 }} Komentar</span>
                         </div>
                     </div>
-
-
                     <div class="mb-6">
                         <div class="w-full aspect-[16/9] overflow-hidden rounded-lg">
                             @if ($article->hasMedia('images'))
                                 <picture>
-                                    {{-- WebP responsif --}}
-                                    <source srcset="{{ $article->getFirstMedia('images')?->getSrcset('webp') }}"
+                                    {{-- Versi WebP --}}
+                                    <source
+                                        srcset="
+            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+        "
                                         type="image/webp">
 
                                     {{-- Fallback JPG/PNG --}}
-                                    <img srcset="{{ $article->getFirstMedia('images')?->getSrcset() }}"
-                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                        width="1200" height="675" loading="lazy" class="w-full h-full object-cover">
+                                    <img srcset="
+            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                        src="{{ $article->getFirstMediaUrl('images', '800') }}"
+                                        alt="{{ $article->title }}"
+                                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="lazy"
+                                        width="1200" height="675" class="w-full h-full object-cover rounded-lg">
                                 </picture>
                             @else
                                 {{-- Placeholder kalau tidak ada gambar --}}
