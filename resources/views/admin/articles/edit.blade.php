@@ -127,7 +127,7 @@
                                                     class="w-full h-auto rounded-lg shadow-md object-cover">
                                             </picture>
                                             <button type="button"
-                                                class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700 opacity-0 group-hover:opacity-100 transition delete-media">
+                                                class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700 opacity-0 group-hover:opacity-100 transition delete-old-image">
                                                 &times;
                                             </button>
                                         </div>
