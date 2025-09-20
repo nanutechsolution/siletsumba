@@ -143,18 +143,7 @@
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
 
                             <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
-                                @if ($article->hasMedia('images'))
-                                    <picture>
-                                        <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
-                                            type="image/webp">
-                                        <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
-                                            src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
-                                            loading="lazy" class="w-full h-full object-cover">
-                                    </picture>
-                                @else
-                                    <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}"
-                                        loading="lazy" class="w-full h-full object-cover">
-                                @endif
+
                             </div>
 
                             <div class="flex-1">
