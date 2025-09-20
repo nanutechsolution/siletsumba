@@ -69,15 +69,23 @@
                         {{-- Image --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                             @if ($article->hasMedia('images'))
-                                <img src="{{ $article->getFirstMediaUrl('images', '800') }}"
-                                    srcset="
-        {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-        {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-        {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-                                    sizes="(max-width:
-                                    640px) 400px, (max-width: 1024px) 800px, 1200px" alt="Foto: {{ $article->title }}"
-                                    loading="lazy" decoding="async" width="1200" height="675"
-                                    class="w-full h-full object-cover rounded-lg" />
+                                <picture>
+                                    <source
+                                        srcset="
+            {{ $article->getFirstMediaUrl('images', '400', 'webp') }} 400w,
+            {{ $article->getFirstMediaUrl('images', '800', 'webp') }} 800w,
+            {{ $article->getFirstMediaUrl('images', '1200', 'webp') }} 1200w"
+                                        type="image/webp"
+                                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px">
+                                    <img src="{{ $article->getFirstMediaUrl('images', '800') }}"
+                                        srcset="
+            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w"
+                                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
+                                        alt="Foto: {{ $article->title }}" loading="lazy" decoding="async"
+                                        class="w-full h-full object-cover rounded-lg" />
+                                </picture>
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
                                     width="400" height="225"
