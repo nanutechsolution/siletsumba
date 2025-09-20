@@ -5,7 +5,7 @@
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
-                <div class="relative w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md">
+                <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md">
                     <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
                         class="block w-full h-full">
 
@@ -25,7 +25,10 @@
                         @endif
 
                         {{-- Overlay gelap tipis --}}
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent 
+            p-2 sm:p-4 flex flex-col justify-end">
+                        </div>
 
                         {{-- Konten --}}
                         <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -33,10 +36,11 @@
                                 style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
                                 {{ $hero->category->name ?? 'Umum' }}
                             </span>
-                            <h2 class="text-2xl md:text-3xl font-bold leading-tight mb-2">
+                            <h2 class="text-base sm:text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
                                 {{ $hero->title }}
                             </h2>
-                            <div class="flex items-center text-xs text-gray-200 space-x-3">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center text-gray-300 text-xs mt-2 gap-1 sm:gap-2">
                                 <span class="flex items-center">
                                     @if ($hero->user?->hasMedia('profile_photos'))
                                         <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
