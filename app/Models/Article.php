@@ -95,15 +95,30 @@ class Article extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('webp')
-            ->nonQueued()
+        // Responsive max fit (biar aman portrait/landscape)
+        $this->addMediaConversion('400')
+            ->fit(Fit::Max, 400, 400) // <= rasio tetap aman
             ->format('webp')
-            ->withResponsiveImages();
+            ->quality(80)
+            ->nonQueued();
 
+        $this->addMediaConversion('800')
+            ->fit(Fit::Max, 800, 800)
+            ->format('webp')
+            ->quality(80)
+            ->nonQueued();
+
+        $this->addMediaConversion('1200')
+            ->fit(Fit::Max, 1200, 1200)
+            ->format('webp')
+            ->quality(80)
+            ->nonQueued();
+
+        // Thumbnail square (khusus, opsional)
         $this->addMediaConversion('thumb')
             ->fit(Fit::Crop, 300, 300)
             ->format('webp')
-            ->quality(80)
+            ->quality(70)
             ->nonQueued();
     }
 }
