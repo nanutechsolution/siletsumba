@@ -4,25 +4,31 @@
   [x-cloak] {
             display: none !important;
         }
-     /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'); */
-
         * {
             font-family: 'Inter', sans-serif;
         }
 
-        .breaking-news {
-            animation: ticker 25s linear infinite;
-        }
+      .breaking-news {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll 25s linear infinite; /* sesuaikan durasi untuk kecepatan */
+}
 
-        @keyframes ticker {
-            0% {
-                transform: translateX(100%);
-            }
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 
-            100% {
-                transform: translateX(-100%);
-            }
-        }
+/* Optional: lebih cepat di mobile */
+@media (max-width: 768px) {
+  .breaking-news {
+    animation: scroll 15s linear infinite;
+  }
+}
 
         .article-card {
             transition: all 0.3s ease;
