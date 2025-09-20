@@ -10,27 +10,26 @@
                         class="block w-full h-full">
                         {{-- Gambar Hero --}}
                         @if ($hero->hasMedia('images'))
-                            <picture>
-                                <source
-                                    srcset="
+                            {{-- Preload untuk mobile LCP --}}
+                            <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
+                                imagesrcset="
             {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
-                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" type="image/webp">
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                imagesizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px">
 
-                                <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
-                                    srcset="
+                            <img src="{{ $hero->getFirstMediaUrl('images', '400') }}"
+                                srcset="
             {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
-                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
-                                    alt="{{ $hero->title }}" loading="eager" fetchpriority="high"
-                                    class="w-full h-full object-cover" />
-                            </picture>
-                        @else
-                            <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
-                                class="w-full h-full object-cover" width="1200" height="675">
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+                                alt="{{ $hero->title }}" class="w-full h-full object-cover" loading="eager"
+                                fetchpriority="high" decoding="async">
                         @endif
+
 
                         {{-- Overlay gelap tipis --}}
                         <div
