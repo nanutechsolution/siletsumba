@@ -9,26 +9,15 @@
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
                         @if ($hero->hasMedia('images'))
-                            <picture>
-                                {{-- Versi WebP --}}
-                                <source
-                                    srcset="
-            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                    type="image/webp">
-
-                                {{-- Fallback JPG/PNG --}}
-                                <img srcset="
-            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                                        src="{{ $hero->getFirstMediaUrl('images', '800') }}"
-                                    alt="{{ $hero->title }}"
-                                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="lazy"
-                                    width="1200" height="675" class="w-full h-full object-cover rounded-lg">
-                            </picture>
+                            <img srcset="
+        {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+        {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+        {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+    "
+                                src="{{ $hero->getFirstMediaUrl('images', '800') }}" alt="{{ $hero->title }}"
+                                sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="eager"
+                                fetchpriority="high" width="1200" height="675"
+                                class="w-full h-full object-cover rounded-lg" />
                         @else
                             <img src="https://via.placeholder.com/1200x675" alt="{{ $hero->title }}"
                                 class="w-full h-full object-cover transition duration-300" loading="eager"
@@ -91,26 +80,15 @@
                         {{-- Image --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                             @if ($article->hasMedia('images'))
-                                <picture>
-                                    {{-- Versi WebP --}}
-                                    <source
-                                        srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                        type="image/webp">
-
-                                    {{-- Fallback JPG/PNG --}}
-                                    <img srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-                                        src="{{ $article->getFirstMediaUrl('images', '800') }}"
-                                        alt="{{ $article->title }}"
-                                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" loading="lazy"
-                                        width="1200" height="675" class="w-full h-full object-cover rounded-lg">
-                                </picture>
+                                <img src="{{ $article->getFirstMediaUrl('images', '800') }}"
+                                    srcset="
+        {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+        {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+        {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
+                                    sizes="(max-width:
+                                    640px) 400px, (max-width: 1024px) 800px, 1200px" alt="Foto: {{ $article->title }}"
+                                    loading="lazy" decoding="async" width="1200" height="675"
+                                    class="w-full h-full object-cover rounded-lg" />
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
                                     width="400" height="225"
