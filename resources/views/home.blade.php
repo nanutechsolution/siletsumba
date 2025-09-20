@@ -12,7 +12,33 @@
                     @endif
                     <a href="{{ route('articles.show', $hero->slug) }}" class="block group"
                         aria-label="Baca artikel: {{ $hero->title }}">
+                        @if ($hero->hasMedia('images'))
+                            <picture>
+                                {{-- WebP responsive --}}
+                                <source
+                                    srcset="
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" type="image/webp">
 
+                                {{-- Fallback JPG/PNG --}}
+                                <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
+                                    srcset="
+            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
+        "
+                                    sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
+                                    alt="{{ $hero->title }}" class="w-full h-full object-cover" loading="eager"
+                                    fetchpriority="high">
+                            </picture>
+                        @else
+                            <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
+                                class="w-full h-full object-cover transition duration-300" loading="eager"
+                                fetchpriority="high">
+                        @endif
 
                         {{-- Overlay sederhana --}}
                         <div
@@ -28,12 +54,12 @@
 
                             <div class="flex items-center text-gray-300 text-xs mt-2">
                                 <span class="flex items-center">
-                                    @if ($hero->user?->hasMedia('profile_photos'))
+                                    {{-- @if ($hero->user?->hasMedia('profile_photos'))
                                         <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
                                             alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-1 object-cover">
                                     @else
                                         <i class="fas fa-user mr-1 text-gray-400"></i>
-                                    @endif
+                                    @endif --}}
                                     {{ $hero->user->name ?? 'Penulis' }}
                                 </span>
                                 <span class="mx-2">•</span>
@@ -72,7 +98,20 @@
 
                         {{-- Image --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
-
+                            @if ($article->hasMedia('images'))
+                                {{-- <picture>
+                                    <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                        type="image/webp">
+                                    <img srcset="{{ $article->getFirstMedia('images')->getSrcset('(max-width: 640px) 400w, 800w') }}"
+                                        src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                        loading="lazy" width="400" height="225"
+                                        class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                                </picture> --}}
+                            @else
+                                <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
+                                    width="400" height="225"
+                                    class="w-full h-full object-cover group-hover:brightness-90 transition duration-300">
+                            @endif
 
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold"
                                 style="background-color: {{ $bgColor }}; color: {{ $textColor }};">
@@ -143,7 +182,18 @@
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
 
                             <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
-
+                                @if ($article->hasMedia('images'))
+                                    {{-- <picture>
+                                        <source srcset="{{ $article->getFirstMedia('images')->getSrcset('webp') }}"
+                                            type="image/webp">
+                                        <img srcset="{{ $article->getFirstMedia('images')->getSrcset() }}"
+                                            src="{{ $article->getFirstMediaUrl('images') }}" alt="{{ $article->title }}"
+                                            loading="lazy" class="w-full h-full object-cover">
+                                    </picture> --}}
+                                @else
+                                    <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}"
+                                        loading="lazy" class="w-full h-full object-cover">
+                                @endif
                             </div>
 
                             <div class="flex-1">
