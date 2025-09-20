@@ -23,6 +23,7 @@ class Setting extends Model implements HasMedia
         $this->addMediaConversion('thumb')
             ->fit(Fit::Contain, 200, 200)
             ->format('webp')
-            ->quality(80);
+            ->quality(80)
+            ->performOnCollections('*');
     }
 }

@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
@@ -25,21 +23,17 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
+        // Text/textarea fields
         $data = $request->except(['_token', '_method']);
-
         foreach ($data as $key => $value) {
-            $setting = Setting::firstOrCreate(['key' => $key]);
+            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+        }
 
-            if ($request->hasFile($key)) {
-                // Hapus file lama
-                $setting->clearMediaCollection($key);
-
-                // Upload file baru
-                $setting->addMediaFromRequest($key)
-                    ->toMediaCollection($key);
-            } else {
-                $setting->update(['value' => $value]);
-            }
+        // File fields
+        if ($request->hasFile('site_logo_url')) {
+            $setting = Setting::firstOrCreate(['key' => 'site_logo_url']);
+            $setting->clearMediaCollection('site_logo_url');
+            $setting->addMediaFromRequest('site_logo_url')->toMediaCollection('site_logo_url');
         }
 
         return redirect()->route('admin.settings.index')

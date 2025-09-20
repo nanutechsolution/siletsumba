@@ -48,30 +48,32 @@
                                     <textarea name="contact_address" id="contact_address" rows="3"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ $settings['contact_address']->value ?? '' }}</textarea>
                                 </div>
-                                <div class="mt-4" x-data="{ photoPreview: '{{ $settings['site_logo_url']->value ?? '' }}' }">
+                                <div x-data="{
+                                    photoPreview: '{{ $settings['site_logo_url']->getFirstMediaUrl('site_logo_url') ?? '' }}'
+                                }">
                                     <label for="site_logo_url"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Logo Situs') }}</label>
                                     <input type="file" name="site_logo_url" id="site_logo_url"
                                         class="mt-2 block w-full text-sm text-gray-900 dark:text-gray-100"
                                         x-ref="logoInput"
                                         @change="
-                                            const file = $refs.logoInput.files[0];
-                                            if (file) {
-                                                const reader = new FileReader();
-                                                reader.onload = (e) => { photoPreview = e.target.result; };
-                                                reader.readAsDataURL(file);
-                                            } else {
-                                                photoPreview = '{{ $settings['site_logo_url']->value ?? '' }}';
-                                            }
-                                        ">
+            const file = $refs.logoInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => photoPreview = e.target.result;
+                reader.readAsDataURL(file);
+            } else {
+                photoPreview = '{{ $settings['site_logo_url']->getFirstMediaUrl('site_logo_url') ?? '' }}';
+            }
+        ">
 
                                     <div class="mt-4" x-show="photoPreview">
                                         <h5 class="text-sm font-semibold mb-2">Pratinjau:</h5>
-                                        <img :src="photoPreview.startsWith('http') ? photoPreview : '{{ Storage::url('') }}' +
-                                            photoPreview"
-                                            alt="Logo Preview" class="h-20 max-w-full object-contain">
+                                        <img :src="photoPreview" alt="Logo Preview"
+                                            class="h-20 max-w-full object-contain">
                                     </div>
                                 </div>
+
                             </div>
 
                             <div class="border-b border-gray-200 dark:border-gray-700 pb-6">

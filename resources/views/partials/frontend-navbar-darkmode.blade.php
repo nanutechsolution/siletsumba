@@ -6,7 +6,7 @@
              <div class="w-16 h-16 rounded items-center justify-center flex-shrink-0 hidden md:flex">
                  @php
                      $logoSetting = $settings['site_logo_url'] ?? null;
-                     $logoUrl = $logoSetting?->getFirstMediaUrl('site_logo', 'thumb');
+                     $logoUrl = $logoSetting?->getFirstMediaUrl('site_logo_url', 'thumb');
                  @endphp
                  @if ($logoUrl)
                      <img src="{{ $logoUrl }}" alt="{{ $settings['site_name']->value ?? 'Logo' }}"
