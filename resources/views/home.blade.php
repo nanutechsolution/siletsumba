@@ -4,64 +4,7 @@
         {{-- Main Content (2/3) --}}
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
-            @if ($hero)
-                <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-md">
-                    {{-- Preload hero image --}}
-                    @if ($hero->hasMedia('images'))
-                        <picture>
-                            <source
-                                srcset="
-                    {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                    {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                    {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                "
-                                sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" type="image/webp">
 
-                            {{-- Fallback JPG/PNG (original) --}}
-                            <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
-                                srcset="
-                    {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                    {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                    {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                "
-                                sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px" alt="{{ $hero->title }}"
-                                class="w-full h-full object-cover transition duration-300" loading="eager"
-                                fetchpriority="high">
-                        </picture>
-                    @else
-                        <img src="https://via.placeholder.com/800x450" alt="{{ $hero->title }}"
-                            class="w-full h-full object-cover transition duration-300" loading="eager" fetchpriority="high">
-                    @endif
-
-                    {{-- Overlay sederhana --}}
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end">
-                        <span class="text-xs font-medium px-2 py-1 rounded text-white"
-                            style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
-                            {{ $hero->category->name ?? 'Umum' }}
-                        </span>
-
-                        <h2 class="text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
-                            {{ $hero->title }}
-                        </h2>
-
-                        <div class="flex items-center text-gray-300 text-xs mt-2">
-                            <span class="flex items-center">
-                                @if ($hero->user?->hasMedia('profile_photos'))
-                                    <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}"
-                                        alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-1 object-cover">
-                                @else
-                                    <i class="fas fa-user mr-1 text-gray-400"></i>
-                                @endif
-                                {{ $hero->user->name ?? 'Penulis' }}
-                            </span>
-                            <span class="mx-2">•</span>
-                            <span><i class="fas fa-clock mr-1"></i> {{ $hero->created_at->diffForHumans() }}</span>
-                        </div>
-                    </div>
-                    </a>
-                </div>
-            @endif
 
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -85,8 +28,7 @@
                         $textColor = getContrastColor($bgColor);
                     @endphp
 
-                    <a href="{{ route('articles.show', $article->slug) }}"
-                        aria-label="Baca artikel: {{ $article->title }}"
+                    <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca artikel: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
 
                         {{-- Image --}}
