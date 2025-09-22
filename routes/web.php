@@ -45,7 +45,7 @@ Route::get('/sitemap.xml', function () {
         // Artikel (ambil dari database)
         Article::where('is_published', true)->get()->each(function ($article) use ($sitemap) {
             $sitemap->add(
-                Url::create("/articles/{$article->slug}")
+                Url::create("/berita/{$article->slug}")
                     ->setLastModificationDate($article->updated_at)
                     ->setPriority(0.8)
                     ->setChangeFrequency('daily')
@@ -80,9 +80,9 @@ Route::middleware(['auth', 'role:admin|editor|writer'])->prefix('admin')->name('
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('categories', AdminCategoryController::class);
-    Route::delete('articles/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
-    Route::post('articles/{slug}/like', [ArticleController::class, 'like'])->name('articles.like');
-    Route::post('articles/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content'); // Tambahkan baris ini
+    Route::delete('berita/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
+    Route::post('berita/{slug}/like', [ArticleController::class, 'like'])->name('articles.like');
+    Route::post('berita/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content'); // Tambahkan baris ini
     Route::resource('prompts', PromptController::class);
     Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
     Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
