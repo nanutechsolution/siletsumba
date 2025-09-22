@@ -25,6 +25,7 @@
     <title>{{ $metaTitle }}</title>
     <meta name="description" content="{{ $metaDescription }}">
     <link rel="canonical" href="{{ $metaUrl }}" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
