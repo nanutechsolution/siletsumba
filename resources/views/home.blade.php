@@ -1,7 +1,6 @@
 @extends('welcome')
 @section('content')
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {{-- Main Content (2/3) --}}
         <main class="lg:col-span-2 space-y-6">
             {{-- Featured Hero Article --}}
             @if ($hero)
