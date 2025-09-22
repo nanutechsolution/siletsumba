@@ -119,8 +119,7 @@ class HomeController extends Controller
         $categories = Category::whereHas('articles', function ($query) {
             $query->where('is_published', true);
         })->get();
-
-        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews', 'latestFive'));
+        return view('home', compact('hero', 'latestArticles', 'trending', 'categories', 'breakingNews', 'latestFive', 'category'));
     }
 
     public function getByTag($slug)
