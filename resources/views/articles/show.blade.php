@@ -52,12 +52,13 @@
                     <!-- Featured Image -->
                     <div class="relative w-full rounded-lg overflow-hidden">
                         @if ($article->hasMedia('images'))
-                            <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}"
-                                srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}" sizes="100vw"
-                                alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
+                            @php $media = $article->getFirstMedia('images'); @endphp
+                            <img src="{{ $media->getUrl('responsive') }}" srcset="{{ $media->getSrcset('responsive') }}"
+                                sizes="100vw" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
                                 class="w-full h-auto object-cover object-center" />
                         @endif
                     </div>
+
                     <!-- Interaction Bar -->
                     <div
                         class="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2 shadow-sm rounded-lg mt-4">
