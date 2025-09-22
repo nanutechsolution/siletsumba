@@ -8,7 +8,7 @@
     <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="usersApp()">
 
         <!-- Tombol Tambah User -->
-        <div class="mb-4">
+        <div class="mb-4 space-y-3">
             <button @click="openAddUser()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                 Tambah User
             </button>
