@@ -28,14 +28,13 @@
 
                         <div
                             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
-                            <h3 class="text-2xl font-bold">Daftar Berita</h3>
                             <div class="flex flex-wrap items-center space-x-2">
                                 <button type="submit" id="mass-delete-btn" disabled
                                     class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition opacity-50 cursor-not-allowed text-sm">
                                     Hapus Terpilih (<span id="selected-count">0</span>)
                                 </button>
                                 <a href="{{ route('admin.articles.create') }}"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition text-sm">
+                                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition text-sm">
                                     Tambah Berita
                                 </a>
                             </div>
@@ -82,17 +81,17 @@
                                     </div>
 
                                     <div
-                                        class="flex flex-wrap items-center justify-between text-sm font-medium pt-3 border-t dark:border-gray-600">
-                                        <a href="{{ route('articles.show', $article->slug) }}"
-                                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded transition"
-                                            title="Lihat Berita">
-                                            Lihat
-                                        </a>
+                                        class="flex flex-wrap items-center justify-end text-sm font-medium pt-3 border-t dark:border-gray-600">
                                         <div class="flex items-center space-x-3">
                                             <a href="{{ route('admin.articles.edit', $article->slug) }}"
-                                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition"
+                                                class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded transition"
                                                 title="Edit Berita">
                                                 Edit
+                                            </a>
+                                            <a href="{{ route('articles.show', $article->slug) }}"
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition"
+                                                title="Lihat Berita">
+                                                Lihat
                                             </a>
                                             @can('admin|editor')
                                                 <form action="{{ route('admin.articles.destroy', $article->slug) }}"
