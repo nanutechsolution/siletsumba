@@ -49,15 +49,15 @@
                         class="p-4 space-y-6 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
                         {!! $article->title !!}
                     </h1>
-                    <!-- Featured Image -->
-                    <div class="relative w-full rounded-lg overflow-hidden">
+                    <div class="relative w-full h-[400px] md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden">
                         @if ($article->hasMedia('images'))
                             @php $media = $article->getFirstMedia('images'); @endphp
                             <img src="{{ $media->getUrl('responsive') }}" srcset="{{ $media->getSrcset('responsive') }}"
                                 sizes="100vw" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
-                                class="w-full h-auto object-cover object-center" />
+                                class="w-full h-full object-cover object-center" />
                         @endif
                     </div>
+
 
                     <!-- Interaction Bar -->
                     <div
