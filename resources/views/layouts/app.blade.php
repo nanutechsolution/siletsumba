@@ -24,7 +24,6 @@
         }
     </script>
     @livewireStyles
-    @include('partials._variables')
 </head>
 
 <body class="font-sans antialiased">
