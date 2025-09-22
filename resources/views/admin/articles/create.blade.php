@@ -496,7 +496,7 @@
 
                     // Init Cropper
                     cropper = new Cropper(cropImage, {
-                        aspectRatio: 16 / 9, // Sesuaikan kebutuhan
+                        aspectRatio: 16 / 9,
                         viewMode: 1,
                     });
                 };

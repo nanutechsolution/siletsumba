@@ -45,7 +45,9 @@
                             </div>
                         </div>
                     </div>
-
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
+                        {!! $article->title !!}
+                    </h1>
                     <!-- Featured Image -->
                     <div class="relative w-full rounded-lg overflow-hidden">
                         <picture>
@@ -150,9 +152,7 @@
                     </div>
                     <!-- Content -->
                     <div class="px-4  space-y-6">
-                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
-                            {!! $article->title !!}
-                        </h1>
+
 
                         <div class="prose dark:prose-invert max-w-none">
                             {!! $article->full_content !!}
