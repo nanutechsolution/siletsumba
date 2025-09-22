@@ -5,7 +5,7 @@
 
             {{-- Hero Section --}}
             @if ($hero)
-                <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md">
+                <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md bg-gray-200">
 
                     {{-- Preload responsive images --}}
                     <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
