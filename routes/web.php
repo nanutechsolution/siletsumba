@@ -11,27 +11,21 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\GuestController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\WriterArticleController;
-use App\Http\Controllers\WriterController;
-use App\Livewire\Roles\RolesList;
-use App\Livewire\UserIndex;
 use App\Models\Article;
 use App\Models\Page;
-use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('/berita/{slug}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/tag/{slug}', [ArticleController::class, 'show'])->name('tags.show');
 Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
 Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategory'])
