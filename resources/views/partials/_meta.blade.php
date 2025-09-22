@@ -1,13 +1,22 @@
 @php
-    $metaTitle =
-        isset($article) && request()->routeIs('articles.show')
-            ? Str::limit($article->title, 60) . ' - Silet Sumba'
-            : 'Silet Sumba - Berita Terbaru Sumba';
-
+    // Default untuk home atau halaman yang tidak spesifik
+    $metaTitle = 'Silet Sumba - Berita Terbaru Sumba';
     $metaDescription =
-        isset($article) && request()->routeIs('articles.show')
-            ? $article->excerpt ?? Str::words(strip_tags($article->content), 25, '...')
-            : 'Portal berita terbaru dan terpercaya dari Sumba. Update politik, ekonomi, budaya, dan peristiwa penting hari ini.';
+        'Portal berita terbaru dan terpercaya dari Sumba. Update politik, ekonomi, budaya, dan peristiwa penting hari ini.';
+
+    if (request()->routeIs('articles.show') && isset($article)) {
+        $metaTitle = Str::limit($article->title, 60) . ' - Silet Sumba';
+        $metaDescription = $article->excerpt ?? Str::words(strip_tags($article->content), 25, '...');
+    } elseif (request()->routeIs('articles.category') && isset($category)) {
+        $metaTitle = $category->name . ' - Silet Sumba';
+        $metaDescription = $category->description ?? 'Berita terbaru kategori ' . $category->name . ' di Sumba.';
+    } elseif (request()->routeIs('tags.show') && isset($tag)) {
+        $metaTitle = 'Tag: ' . $tag->name . ' - Silet Sumba';
+        $metaDescription = 'Berita terbaru dengan tag ' . $tag->name . ' di Silet Sumba.';
+    } elseif (request()->routeIs('page.show') && isset($page)) {
+        $metaTitle = Str::limit($page->title, 60) . ' - Silet Sumba';
+        $metaDescription = $page->excerpt ?? Str::words(strip_tags($page->content), 25, '...');
+    }
     $metaImage =
         isset($article) && $article->hasMedia('images') && $article->getFirstMedia('images')
             ? $article->getFirstMediaUrl('images', 'thumb') // conversion 'thumb'
