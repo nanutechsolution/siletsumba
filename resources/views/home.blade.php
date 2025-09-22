@@ -93,7 +93,7 @@
                                     {{ $article->getFirstMediaUrl('images', '1200') }} 1200w"
                                         sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                                         alt="Foto: {{ $article->title }}" loading="lazy" decoding="async"
-                                        class="w-full h-full object-cover rounded-lg" />
+                                        fetchpriority="high" class="w-full h-full object-cover rounded-lg" />
                                 </picture>
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
