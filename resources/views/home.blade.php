@@ -2,41 +2,48 @@
 @section('content')
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <main class="lg:col-span-2 space-y-6">
-            {{-- Featured Hero Article --}}
+
+            {{-- Hero Section --}}
             @if ($hero)
                 <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md">
+
+                    {{-- Preload responsive images --}}
+                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
+                        media="(max-width: 640px)">
+                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '800') }}"
+                        media="(max-width: 1024px)">
+                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '1200') }}"
+                        media="(min-width: 1025px)">
+
                     <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
                         class="block w-full h-full">
-                        {{-- Gambar Hero --}}
-                        @if ($hero->hasMedia('images'))
-                            {{-- Preload untuk mobile LCP --}}
-                            <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '1200') }}">
-                            <img src="{{ $hero->getFirstMediaUrl('images', '1200') }}"
-                                srcset="{{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-             {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
-                                sizes="(max-width: 640px) 100vw,
-            (max-width: 1024px) 80vw,
-            1200px"
-                                class="w-full h-auto object-cover" loading="eager" fetchpriority="high" decoding="async"
-                                alt="{{ $hero->title }}">
-                        @endif
 
+                        {{-- Hero Image --}}
+                        <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
+                            srcset="{{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+                             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+                             {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
+                            sizes="(max-width: 640px) 100vw,
+                            (max-width: 1024px) 80vw,
+                            1200px"
+                            class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async"
+                            alt="{{ $hero->title }}">
 
-                        {{-- Overlay gelap tipis --}}
+                        {{-- Overlay --}}
                         <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent 
-            p-2 sm:p-4 flex flex-col justify-end">
+                            class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent flex flex-col justify-end p-2 sm:p-4">
 
-                            {{-- Konten --}}
-                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            {{-- Konten hero --}}
+                            <div class="p-6 text-white">
                                 <span class="inline-block text-xs font-semibold px-2 py-1 rounded mb-3"
                                     style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
                                     {{ $hero->category->name ?? 'Umum' }}
                                 </span>
-                                <h2 class="text-base sm:text-lg md:text-2xl font-bold text-white mt-1 line-clamp-2">
+
+                                <h2 class="text-base sm:text-lg md:text-2xl font-bold line-clamp-2">
                                     {{ $hero->title }}
                                 </h2>
+
                                 <div
                                     class="flex flex-col sm:flex-row sm:items-center text-gray-300 text-xs mt-2 gap-1 sm:gap-2">
                                     <span class="flex items-center">
@@ -49,16 +56,17 @@
                                         @endif
                                         {{ $hero->user->name ?? 'Penulis' }}
                                     </span>
+
                                     <span class="flex items-center">
                                         <i class="fas fa-clock mr-2"></i>{{ $hero->created_at->diffForHumans() }}
                                     </span>
                                 </div>
                             </div>
+
                         </div>
                     </a>
                 </div>
             @endif
-
 
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -66,36 +74,39 @@
                     <a href="{{ route('articles.show', $article->slug) }}"
                         aria-label="Baca artikel: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                        {{-- Image --}}
+
+                        {{-- Image wrapper --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                             @if ($article->hasMedia('images'))
                                 <picture>
                                     <source
                                         srcset="
-            {{ $article->getFirstMediaUrl('images', '400', 'webp') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800', 'webp') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200', 'webp') }} 1200w"
+                                {{ $article->getFirstMediaUrl('images', '400', 'webp') }} 400w,
+                                {{ $article->getFirstMediaUrl('images', '800', 'webp') }} 800w,
+                                {{ $article->getFirstMediaUrl('images', '1200', 'webp') }} 1200w"
                                         type="image/webp"
                                         sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px">
                                     <img src="{{ $article->getFirstMediaUrl('images', '800') }}"
                                         srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w"
+                                    {{ $article->getFirstMediaUrl('images', '400') }} 400w,
+                                    {{ $article->getFirstMediaUrl('images', '800') }} 800w,
+                                    {{ $article->getFirstMediaUrl('images', '1200') }} 1200w"
                                         sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
                                         alt="Foto: {{ $article->title }}" loading="lazy" decoding="async"
-                                        class="w-full h-auto object-cover rounded-lg" />
+                                        class="w-full h-full object-cover rounded-lg" />
                                 </picture>
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
-                                    width="400" height="225"
-                                    class="w-full h-auto object-cover group-hover:brightness-90 transition duration-300">
+                                    width="400" height="225" class="w-full h-full object-cover rounded-lg">
                             @endif
+
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white"
-                                style="background-color: {{ $article->category->color }};">
+                                style="background-color: {{ $article->category->color ?? '#FF0000' }}">
                                 {{ $article->category->name ?? 'Umum' }}
                             </span>
                         </div>
+
+                        {{-- Konten artikel --}}
                         <div
                             class="p-3 md:p-4 flex flex-col justify-start min-h-[180px] bg-white dark:bg-gray-800 rounded shadow dark:shadow-lg transition-colors duration-300">
                             <h3
@@ -115,14 +126,15 @@
                             </div>
                         </div>
 
-
                     </a>
                 @endforeach
             </div>
+
             {{-- Pagination --}}
             <div class="mt-6">
                 {{ $latestArticles->links() }}
             </div>
+
         </main>
 
         {{-- Sidebar (1/3) --}}
