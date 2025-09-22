@@ -52,14 +52,6 @@ class Article extends Model implements HasMedia
         return $this->hasMany(Comment::class);
     }
 
-    // public function getImageUrlAttribute()
-    // {
-    //     $firstImage = $this->images()->first();
-    //     return $firstImage
-    //         ? asset('storage/' . $firstImage->path)
-    //         : 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef45b1f9-f063-4044-83e2-a9a97cb7c150.png';
-    // }
-
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
@@ -92,26 +84,11 @@ class Article extends Model implements HasMedia
     {
         return 'slug';
     }
-
-    // public function registerMediaConversionss(Media $media = null): void
-    // {
-    //     $this->addMediaConversion('webp')
-    //         ->nonQueued()
-    //         ->format('webp')
-    //         ->withResponsiveImages();
-
-    //     $this->addMediaConversion('thumb')
-    //         ->fit(Fit::Crop, 300, 300)
-    //         ->format('webp')
-    //         ->quality(80)
-    //         ->nonQueued();
-    // }
-
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         // Responsive max fit (biar aman portrait/landscape)
         $this->addMediaConversion('400')
-            ->fit(Fit::Max, 400, 400) // <= rasio tetap aman
+            ->fit(Fit::Max, 400, 400)
             ->format('webp')
             ->quality(80)
             ->nonQueued();

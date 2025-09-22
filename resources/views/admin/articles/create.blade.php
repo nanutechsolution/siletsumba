@@ -481,7 +481,6 @@
             imageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
-
                 // Validasi ukuran maksimal 5MB
                 if (file.size > 5 * 1024 * 1024) {
                     alert('Ukuran maksimal 5MB!');
@@ -491,14 +490,26 @@
                 currentFile = file;
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    cropImage.src = event.target.result;
-                    cropModal.classList.remove('hidden');
+                    const img = new Image();
+                    img.onload = function() {
+                        if (img.height > img.width) {
+                            cropImage.src = event.target.result;
+                            cropModal.classList.remove('hidden');
 
-                    // Init Cropper
-                    cropper = new Cropper(cropImage, {
-                        aspectRatio: 16 / 9,
-                        viewMode: 1,
-                    });
+                            // Init Cropper
+                            cropper = new Cropper(cropImage, {
+                                aspectRatio: 16 / 9,
+                                viewMode: 1,
+                            });
+                        } else {
+                            imagePreview.innerHTML = '';
+                            const imgEl = document.createElement('img');
+                            imgEl.src = event.target.result;
+                            imgEl.className = 'w-full h-64 object-cover rounded shadow';
+                            imagePreview.appendChild(imgEl);
+                        }
+                    };
+                    img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             });
@@ -513,7 +524,7 @@
             // Tombol Apply Crop
             applyCrop.addEventListener('click', function() {
                 const canvas = cropper.getCroppedCanvas({
-                    width: 1200, // Ukuran final crop
+                    width: 1200,
                     height: 675,
                 });
                 canvas.toBlob(function(blob) {
