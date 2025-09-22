@@ -28,7 +28,6 @@ class SettingController extends Controller
         foreach ($data as $key => $value) {
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
-
         // File fields
         if ($request->hasFile('site_logo_url')) {
             $setting = Setting::firstOrCreate(['key' => 'site_logo_url']);

@@ -18,12 +18,12 @@ class Setting extends Model implements HasMedia
         'value',
     ];
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->fit(Fit::Contain, 200, 200)
+            ->fit(Fit::Crop, 300, 300)
             ->format('webp')
-            ->quality(80)
-            ->performOnCollections('*');
+            ->quality(70)
+            ->nonQueued();
     }
 }
