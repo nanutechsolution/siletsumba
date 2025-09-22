@@ -12,8 +12,8 @@
                         @if ($hero->hasMedia('images'))
                             <img src="{{ $hero->getFirstMedia('images')->getUrl('responsive') }}"
                                 class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async"
-                                srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}" sizes="100vw"
-                                alt="{{ $hero->title }}">
+                                srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}"
+                                sizes="(max-width: 768px) 100vw, 1200px" alt="{{ $hero->title }}">
                         @endif
                         {{-- Overlay --}}
                         <div
