@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <h1
-                        class="px-4 space-y-6 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
+                        class="p-4 space-y-6 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
                         {!! $article->title !!}
                     </h1>
                     <!-- Featured Image -->
