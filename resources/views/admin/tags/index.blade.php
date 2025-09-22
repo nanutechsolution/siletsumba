@@ -23,12 +23,11 @@
                         bg-white dark:bg-gray-800">
                 <div class="p-6">
                     <div class="mb-6 flex items-center justify-between">
-                        <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Daftar Tag</h3>
                         <a href="{{ route('admin.tags.create') }}"
-                            class="rounded-md bg-blue-600 px-4 py-2 text-white font-semibold shadow
-                                  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400
-                                  dark:focus:ring-blue-600 transition">
-                            Tambah Tag
+                            class="rounded-md bg-green-600 px-4 py-2 text-white font-semibold shadow
+                                  hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400
+                                  dark:focus:ring-green-600 transition">
+                            Tambah Tagar
                         </a>
                     </div>
 

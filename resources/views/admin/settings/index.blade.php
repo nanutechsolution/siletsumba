@@ -17,7 +17,6 @@
                         </div>
                     @endif
 
-                    <h3 class="text-2xl font-bold mb-6">{{ __('Kelola Pengaturan') }}</h3>
 
                     <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data"
                         id="settings-form">

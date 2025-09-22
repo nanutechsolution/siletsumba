@@ -16,9 +16,8 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-2xl font-bold">Daftar Kategori</h3>
                         <a href="{{ route('admin.categories.create') }}"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
                             Tambah Kategori
                         </a>
                     </div>
@@ -52,7 +51,7 @@
                                         </td>
                                         <td class="py-2 px-4 text-center whitespace-nowrap">
                                             <a href="{{ route('admin.categories.edit', $category->slug) }}"
-                                                class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition">
+                                                class="inline-block px-3 py-1 text-xs font-semibold text-white bg-yellow-500 rounded hover:bg-yellow-600 transition">
                                                 Edit
                                             </a>
                                             <form action="{{ route('admin.categories.destroy', $category->slug) }}"
@@ -61,7 +60,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200 ml-4 transition">
+                                                    class="inline-block px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded hover:bg-red-600 transition">
                                                     Hapus
                                                 </button>
                                             </form>

@@ -16,8 +16,6 @@
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-2xl font-bold mb-6">Daftar Komentar</h3>
-
                     {{-- Tampilan Mobile (Cards) --}}
                     <div class="md:hidden space-y-4">
                         @forelse ($comments as $comment)

@@ -7,8 +7,8 @@
 
     <div class="container mx-auto px-4 py-6">
         <a href="{{ route('admin.pages.create') }}"
-            class="inline-block px-4 py-2 mb-4 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
-            + Tambah Halaman
+            class="inline-block px-4 py-2 mb-4 text-sm font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition">
+            Tambah Halaman
         </a>
 
         @if (session('success'))

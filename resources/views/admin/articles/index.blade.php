@@ -167,19 +167,25 @@
                                                 class="py-4 px-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                                 {{ $article->category->name }}
                                             </td>
-                                            <td class="py-4 px-4 whitespace-nowrap text-center text-sm font-medium">
-                                                <a href="{{ route('articles.show', $article->slug) }}"
-                                                    class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 mr-4 transition">{{ __('Preview') }}</a>
+                                            <td class="py-4 px-2  whitespace-nowrap text-center text-sm font-medium">
                                                 <a href="{{ route('admin.articles.edit', $article->slug) }}"
-                                                    class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition">{{ __('Edit') }}</a>
-                                                <form action="{{ route('admin.articles.destroy', $article->slug) }}"
+                                                    class="bg-yellow-600 mr-2 hover:bg-yellow-700 text-white px-3 py-1 rounded transition"
+                                                    title="Edit Berita">
+                                                    Edit
+                                                </a>
+                                                <a href="{{ route('articles.show', $article->slug) }}"
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition"
+                                                    title="Lihat Berita">
+                                                    Lihat
+                                                </a>
+                                                {{-- <form action="{{ route('admin.articles.destroy', $article->slug) }}"
                                                     method="POST" class="inline-block ml-4"
                                                     onsubmit="return confirm('{{ __('Apakah Anda yakin ingin menghapus berita ini?') }}');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
                                                         class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200 transition">{{ __('Hapus') }}</button>
-                                                </form>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @empty

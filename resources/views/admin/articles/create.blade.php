@@ -17,10 +17,8 @@
                     <div class="mb-5">
                         <label for="title" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Judul
                             Berita <span class="text-red-500">*</span></label>
-                        <input type="text" name="title" id="title" value="{{ old('title') }}"
-                            placeholder="Masukkan judul berita"
-                            class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                            required>
+                        <textarea name="title" id="title" rows="2"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('title') }} </textarea>
                         @error('title')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror

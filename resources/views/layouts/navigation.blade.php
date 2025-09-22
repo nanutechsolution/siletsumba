@@ -41,13 +41,13 @@
                     <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-nav-link>
                 @endrole
             </div>
-
             <!-- Theme Toggle + User Dropdown -->
+
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Theme Toggle Button -->
-                <button id="theme-toggle" type="button"
+                <button id="theme-toggle-desktop" type="button"
                     class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5">
-                    <svg id="theme-icon" class="w-5 h-5 transition-transform duration-300" fill="currentColor"
+                    <svg id="theme-icon-desktop" class="w-5 h-5 transition-transform duration-300" fill="currentColor"
                         viewBox="0 0 20 20"></svg>
                 </button>
                 <!-- User Dropdown -->
@@ -78,6 +78,11 @@
 
             <!-- Mobile Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
+                <button id="theme-toggle-mobile" type="button"
+                    class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5">
+                    <svg id="theme-icon-mobile" class="w-5 h-5 transition-transform duration-300" fill="currentColor"
+                        viewBox="0 0 20 20"></svg>
+                </button>
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-900">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -91,9 +96,9 @@
             </div>
         </div>
     </div>
-
     <!-- Mobile Menu -->
     <div x-show="open" class="sm:hidden px-2 pt-2 pb-3 space-y-1" x-transition>
+        <!-- Nav Links -->
         <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">Dashboard</x-responsive-nav-link>
         <x-responsive-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">Berita</x-responsive-nav-link>
         @role('admin')
@@ -105,13 +110,38 @@
             <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">Halaman Statis</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-responsive-nav-link>
         @endrole
+
+        <!-- User Menu -->
+        <div class="pt-4 border-t border-gray-200 dark:border-gray-600">
+            <div class="px-4">
+                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            </div>
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('profile.edit')">Profile</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('home')">Kembali Ke Web</x-responsive-nav-link>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-responsive-nav-link :href="route('logout')"
+                        onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-responsive-nav-link>
+                </form>
+            </div>
+        </div>
     </div>
+
 </nav>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
+        const toggleButtons = [{
+                btn: document.getElementById('theme-toggle-desktop'),
+                icon: document.getElementById('theme-icon-desktop')
+            },
+            {
+                btn: document.getElementById('theme-toggle-mobile'),
+                icon: document.getElementById('theme-icon-mobile')
+            }
+        ];
 
         const moonIconPath = "M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z";
         const sunIconPath =
@@ -131,15 +161,14 @@
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
             }
-            setIcon(themeIcon, !isDark);
+            toggleButtons.forEach(t => setIcon(t.icon, !isDark));
         }
 
-        // Init theme
-        const isDarkInitial = localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in
-            localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        if (isDarkInitial) document.documentElement.classList.add('dark');
-        setIcon(themeIcon, isDarkInitial);
+        const isDarkInitial = localStorage.getItem('color-theme') === 'dark' ||
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+        if (isDarkInitial) document.documentElement.classList.add('dark');
+        toggleButtons.forEach(t => setIcon(t.icon, isDarkInitial));
+        toggleButtons.forEach(t => t.btn.addEventListener('click', toggleTheme));
     });
 </script>
