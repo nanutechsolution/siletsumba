@@ -2,7 +2,6 @@
         $metaTitle = isset($article)
             ? Str::limit($article->title, 60) . ' - Silet Sumba'
             : 'Silet Sumba - Berita Terbaru Sumba';
-
         $metaDescription = isset($article)
             ? $article->excerpt ?? Str::words(strip_tags($article->content), 25, '...')
             : 'Portal berita terbaru dan terpercaya dari Sumba. Update politik, ekonomi, budaya, dan peristiwa penting hari ini.';
