@@ -84,7 +84,20 @@ class Article extends Model implements HasMedia
     {
         return 'slug';
     }
+
     public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('responsive')
+            ->quality(80)
+            ->nonQueued()
+            ->withResponsiveImages();
+        $this->addMediaConversion('thumb')
+            ->fit(Fit::Crop, 300, 300)
+            ->format('webp')
+            ->quality(70)
+            ->nonQueued();
+    }
+    public function registerMediaConversionsdss(?Media $media = null): void
     {
         // Responsive max fit (biar aman portrait/landscape)
         $this->addMediaConversion('400')

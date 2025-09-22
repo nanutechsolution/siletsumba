@@ -6,29 +6,15 @@
             {{-- Hero Section --}}
             @if ($hero)
                 <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md bg-gray-200">
-
-                    {{-- Preload responsive images --}}
-                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
-                        media="(max-width: 640px)">
-                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '800') }}"
-                        media="(max-width: 1024px)">
-                    <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '1200') }}"
-                        media="(min-width: 1025px)">
-
                     <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
                         class="block w-full h-full">
-
                         {{-- Hero Image --}}
-                        <img src="{{ $hero->getFirstMediaUrl('images', '800') }}"
-                            srcset="{{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-                             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-                             {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
-                            sizes="(max-width: 640px) 100vw,
-                            (max-width: 1024px) 80vw,
-                            1200px"
-                            class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async"
-                            alt="{{ $hero->title }}">
-
+                        @if ($hero->hasMedia('images'))
+                            <img src="{{ $hero->getFirstMedia('images')->getUrl('responsive') }}"
+                                class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async"
+                                srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}" sizes="100vw"
+                                alt="{{ $hero->title }}">
+                        @endif
                         {{-- Overlay --}}
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent flex flex-col justify-end p-2 sm:p-4">
@@ -74,51 +60,14 @@
                     <a href="{{ route('articles.show', $article->slug) }}"
                         aria-label="Baca artikel: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-
                         {{-- Image wrapper --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
-                            {{-- @if ($article->hasMedia('images'))
-                                <picture>
-                                    <source
-                                        srcset="
-                                {{ $article->getFirstMediaUrl('images', '400', 'webp') }} 400w,
-                                {{ $article->getFirstMediaUrl('images', '800', 'webp') }} 800w,
-                                {{ $article->getFirstMediaUrl('images', '1200', 'webp') }} 1200w"
-                                        type="image/webp"
-                                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px">
-                                    <img src="{{ $article->getFirstMediaUrl('images', '800') }}"
-                                        srcset="
-                                    {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-                                    {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-                                    {{ $article->getFirstMediaUrl('images', '1200') }} 1200w"
-                                        sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
-                                        alt="Foto: {{ $article->title }}" loading="lazy" decoding="async"
-                                        fetchpriority="high" class="w-full h-full object-cover rounded-lg" />
-                                </picture>
-                            @else
-                                <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
-                                    width="400" height="225" class="w-full h-full object-cover rounded-lg">
-                            @endif --}}
                             @if ($article->hasMedia('images'))
-                                @php
-                                    $media = $article->getFirstMedia('images');
-                                    $conversion = '800';
-                                    $width = 800;
-                                    $height = 600;
-                                    $attributeString = 'class="w-full h-auto object-cover rounded-lg"';
-                                    $loadingAttributeValue = 'eager';
-                                @endphp
-
-                                @include('vendor.media-library.responsiveImageWithPlaceholder', [
-                                    'media' => $media,
-                                    'conversion' => $conversion,
-                                    'width' => $width,
-                                    'height' => $height,
-                                    'attributeString' => $attributeString,
-                                    'loadingAttributeValue' => $loadingAttributeValue,
-                                ])
+                                <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}"
+                                    srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}"
+                                    sizes="100vw" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" width="400"
+                                    height="225" class="w-full h-auto object-cover object-center" />
                             @endif
-
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white"
                                 style="background-color: {{ $article->category->color ?? '#FF0000' }}">
                                 {{ $article->category->name ?? 'Umum' }}
@@ -193,28 +142,10 @@
 
                             <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
                                 @if ($article->hasMedia('images'))
-                                    <picture>
-                                        {{-- Versi WebP --}}
-                                        <source
-                                            srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                            type="image/webp">
-
-                                        {{-- Fallback JPG/PNG --}}
-                                        <img srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                            src="{{ $article->getFirstMediaUrl('images', '800') }}"
-                                            alt="{{ $article->title }}"
-                                            sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"
-                                            loading="lazy" width="1200" height="675"
-                                            class="w-full h-full object-cover rounded-lg">
-                                    </picture>
+                                    <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}"
+                                        srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}"
+                                        sizes="100vw" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
+                                        width="400" height="225" class="w-full h-auto object-cover object-center" />
                                 @else
                                     <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}"
                                         loading="lazy" class="w-full h-full object-cover">

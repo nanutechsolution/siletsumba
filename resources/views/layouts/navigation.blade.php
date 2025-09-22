@@ -57,9 +57,9 @@
                         <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
                             {{ __('Pengaturan') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
+                        {{-- <x-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
                             {{ __('Manajemen Role') }}
-                        </x-nav-link>
+                        </x-nav-link> --}}
                     @endrole
                 </div>
             </div>
@@ -157,9 +157,9 @@
                 <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">
                     {{ __('Pengaturan') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
+                {{-- <x-responsive-nav-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.*')">
                     {{ __('Role') }}
-                </x-responsive-nav-link>
+                </x-responsive-nav-link> --}}
             @endrole
         </div>
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

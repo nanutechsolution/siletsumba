@@ -51,17 +51,12 @@
                     </h1>
                     <!-- Featured Image -->
                     <div class="relative w-full rounded-lg overflow-hidden">
-                        <picture>
-                            <source
-                                srcset="
-            {{ $article->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $article->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $article->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                type="image/webp">
-                            <img src="{{ $article->getFirstMediaUrl('images', '800') }}" alt="{{ $article->title }}"
-                                class="w-full h-auto object-cover object-center" loading="lazy">
-                        </picture>
+                        @if ($article->hasMedia('images'))
+                            <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}"
+                                srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}" sizes="100vw"
+                                alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
+                                class="w-full h-auto object-cover object-center" />
+                        @endif
                     </div>
                     <!-- Interaction Bar -->
                     <div

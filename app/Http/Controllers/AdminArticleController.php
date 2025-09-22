@@ -171,6 +171,7 @@ class AdminArticleController extends Controller
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $image) {
                 $article->addMedia($image)
+                    ->withResponsiveImages()
                     ->toMediaCollection('images');
             }
         }
