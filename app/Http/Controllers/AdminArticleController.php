@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class AdminArticleController extends Controller
 {
@@ -106,6 +105,7 @@ class AdminArticleController extends Controller
         $article->tags()->sync($tags);
         if ($request->hasFile('image')) {
             $article->addMediaFromRequest('image')
+                ->withResponsiveImages()
                 ->toMediaCollection('images');
         }
 
