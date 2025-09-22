@@ -142,15 +142,19 @@
 
                             <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
                                 @if ($article->hasMedia('images'))
-                                    <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}"
-                                        srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}"
-                                        sizes="100vw" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
-                                        width="400" height="225" class="w-full h-auto object-cover object-center" />
+                                    @php
+                                        $media = $article->getFirstMedia('images');
+                                    @endphp
+                                    <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}"
+                                        sizes="80px" width="100" height="80"
+                                        alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
+                                        class="w-full h-full object-cover object-center" />
                                 @else
                                     <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}"
-                                        loading="lazy" class="w-full h-full object-cover">
+                                        loading="lazy" class="w-full h-full object-cover" />
                                 @endif
                             </div>
+
 
                             <div class="flex-1">
                                 <h3 class="font-medium text-sm hover:text-red-600 cursor-pointer line-clamp-2">
