@@ -77,7 +77,7 @@
 
                         {{-- Image wrapper --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
-                            @if ($article->hasMedia('images'))
+                            {{-- @if ($article->hasMedia('images'))
                                 <picture>
                                     <source
                                         srcset="
@@ -98,6 +98,25 @@
                             @else
                                 <img src="https://via.placeholder.com/400x225" alt="{{ $article->title }}" loading="lazy"
                                     width="400" height="225" class="w-full h-full object-cover rounded-lg">
+                            @endif --}}
+                            @if ($article->hasMedia('images'))
+                                @php
+                                    $media = $article->getFirstMedia('images');
+                                    $conversion = '800';
+                                    $width = 800;
+                                    $height = 600;
+                                    $attributeString = 'class="w-full h-auto object-cover rounded-lg"';
+                                    $loadingAttributeValue = 'eager';
+                                @endphp
+
+                                @include('vendor.media-library.responsiveImageWithPlaceholder', [
+                                    'media' => $media,
+                                    'conversion' => $conversion,
+                                    'width' => $width,
+                                    'height' => $height,
+                                    'attributeString' => $attributeString,
+                                    'loadingAttributeValue' => $loadingAttributeValue,
+                                ])
                             @endif
 
                             <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white"
