@@ -1,8 +1,11 @@
     @php
-        $metaTitle = isset($article) ? $article->title . ' - Silet Sumba' : 'Silet Sumba';
+        $metaTitle = isset($article)
+            ? Str::limit($article->title, 60) . ' - Silet Sumba'
+            : 'Silet Sumba - Berita Terbaru Sumba';
+
         $metaDescription = isset($article)
-            ? $article->excerpt ?? Str::limit(strip_tags($article->content), 160)
-            : 'Berita terbaru Silet Sumba';
+            ? $article->excerpt ?? Str::words(strip_tags($article->content), 25, '...')
+            : 'Portal berita terbaru dan terpercaya dari Sumba. Update politik, ekonomi, budaya, dan peristiwa penting hari ini.';
         $metaImage =
             isset($article) && $article->hasMedia('images') && $article->getFirstMedia('images')
                 ? $article->getFirstMediaUrl('images', 'thumb') // conversion 'thumb'
