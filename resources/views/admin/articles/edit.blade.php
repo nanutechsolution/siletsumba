@@ -120,11 +120,7 @@
                                         @foreach ($article->getMedia('images') as $media)
                                             <div class="relative group" data-id="{{ $media->id }}">
                                                 <picture>
-                                                    <source srcset="{{ $media->getUrl('400') }}"
-                                                        media="(max-width: 480px)">
-                                                    <source srcset="{{ $media->getUrl('800') }}"
-                                                        media="(max-width: 1024px)">
-                                                    <img src="{{ $media->getUrl('1200') }}"
+                                                    <img src="{{ $media->getUrl('responsive') }}"
                                                         class="w-full h-auto rounded-lg shadow-md object-cover"
                                                         alt="Gambar artikel">
                                                 </picture>
