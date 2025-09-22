@@ -11,8 +11,8 @@
                         {{-- Hero Image --}}
                         @if ($hero->hasMedia('images'))
                             <img src="{{ $hero->getFirstMedia('images')->getUrl('responsive') }}"
-                                class="w-full h-full object-cover" loading="eager" fetchpriority="high" decoding="async"
-                                srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}"
+                                class="w-full h-full object-cover object-center" loading="eager" fetchpriority="high"
+                                decoding="async" srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}"
                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
                                 alt="{{ $hero->title }}">
                         @endif
