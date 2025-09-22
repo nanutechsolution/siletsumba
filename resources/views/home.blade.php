@@ -11,22 +11,16 @@
                         {{-- Gambar Hero --}}
                         @if ($hero->hasMedia('images'))
                             {{-- Preload untuk mobile LCP --}}
-                            <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '400') }}"
-                                imagesrcset="
-            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-        "
-                                imagesizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px">
-
-                            <img src="{{ $hero->getFirstMediaUrl('images', '400') }}"
-                                srcset="
-            {{ $hero->getFirstMediaUrl('images', '400') }} 400w,
-            {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
-            {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w
-                                sizes="(max-width:
-                                640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $hero->title }}"
-                                class="w-full h-auto object-cover" loading="eager" fetchpriority="high" decoding="async">
+                            <link rel="preload" as="image" href="{{ $hero->getFirstMediaUrl('images', '1200') }}">
+                            <img src="{{ $hero->getFirstMediaUrl('images', '1200') }}"
+                                srcset="{{ $hero->getFirstMediaUrl('images', '400') }} 400w,
+             {{ $hero->getFirstMediaUrl('images', '800') }} 800w,
+             {{ $hero->getFirstMediaUrl('images', '1200') }} 1200w"
+                                sizes="(max-width: 640px) 100vw,
+            (max-width: 1024px) 80vw,
+            1200px"
+                                class="w-full h-auto object-cover" loading="eager" fetchpriority="high" decoding="async"
+                                alt="{{ $hero->title }}">
                         @endif
 
 
