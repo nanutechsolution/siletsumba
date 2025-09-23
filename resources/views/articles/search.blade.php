@@ -10,13 +10,12 @@
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div class=" mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Main Content -->
         <div class="lg:col-span-3 space-y-6">
             <!-- Search Header -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Hasil Pencarian</h1>
-
                 <!-- Search Form -->
                 <form action="{{ route('articles.search') }}" method="GET" class="mb-6">
                     <div class="relative">
