@@ -103,26 +103,22 @@
          <div class="flex items-center space-x-2 mt-3 md:mt-0 flex-shrink-0">
              @guest
                  <a href="{{ route('login') }}" x-data="{ loading: false }"
-                     @click.prevent="loading = true; window.location.href = '{{ route('login') }}';"
+                     @click.prevent="loading = true; window.location.href='{{ route('login') }}';"
                      :class="loading ? 'opacity-70 cursor-not-allowed' : ''"
-                     class="bg-red-600 text-white px-4 py-2 rounded flex items-center justify-center space-x-2 hover:bg-red-700 transition text-sm md:text-base">
+                     class="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
 
-                     <!-- Icon Login -->
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor" x-show="!loading">
+                     <svg x-show="!loading" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                      </svg>
 
-                     <!-- Spinner -->
                      <div x-show="loading"
                          class="animate-spin h-5 w-5 border-2 border-t-2 border-white border-t-transparent rounded-full">
                      </div>
-
-                     <!-- Text -->
                      <span x-text="loading ? 'Loading...' : 'Login'"></span>
                  </a>
              @endguest
+
              @auth
                  <x-dropdown align="right" width="48">
                      <x-slot name="trigger">
@@ -191,7 +187,7 @@
      </nav>
 
  </div>
-
+ {{-- 
  <script>
      document.addEventListener('DOMContentLoaded', () => {
          const loginBtn = document.getElementById('loginBtn');
@@ -219,4 +215,4 @@
              this.classList.add('opacity-70', 'cursor-not-allowed');
          });
      });
- </script>
+ </script> --}}
