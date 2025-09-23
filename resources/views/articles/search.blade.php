@@ -71,8 +71,14 @@
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                         <div class="flex flex-col md:flex-row gap-6">
                             <div class="md:w-1/4">
-                                <img src="{{ $item->image_url ? $item->image_url : 'https://via.placeholder.com/300x200' }}"
-                                    alt="{{ $item->title }}" class="w-full h-40 md:h-32 lg:h-40 object-cover rounded-lg">
+                                @if ($item->hasMedia('images'))
+                                    <img src="{{ $item->getFirstMedia('images')->getUrl('responsive') }}"
+                                        class="w-full h-full object-cover object-center" loading="eager"
+                                        fetchpriority="high" decoding="async"
+                                        srcset="{{ $item->getFirstMedia('images')->getSrcset('responsive') }}"
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+                                        alt="{{ $item->title }}">
+                                @endif
                             </div>
                             <div class="md:w-3/4 flex flex-col justify-between">
                                 <div>

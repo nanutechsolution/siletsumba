@@ -50,6 +50,7 @@
                             {{-- Status Publikasi --}}
                             <div class="flex items-center">
                                 <label for="is_published" class="inline-flex items-center cursor-pointer">
+                                    <input type="hidden" name="is_published" value="0">
                                     <input type="checkbox" name="is_published" id="is_published" value="1"
                                         class="sr-only peer"
                                         {{ old('is_published', $article->is_published) ? 'checked' : '' }}>
@@ -69,6 +70,7 @@
                             <div>
                                 <label for="location_short"
                                     class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Lokasi Singkat</label>
+
                                 <input type="text" name="location_short" id="location_short"
                                     value="{{ old('location_short', $article->location_short) }}"
                                     class="w-full border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
@@ -78,6 +80,8 @@
                             {{-- Breaking News --}}
                             <div class="flex items-center">
                                 <label for="is_breaking" class="inline-flex items-center cursor-pointer">
+                                    <input type="hidden" name="is_breaking" value="0">
+
                                     <input type="checkbox" name="is_breaking" id="is_breaking" value="1"
                                         class="sr-only peer"
                                         {{ old('is_breaking', $article->is_breaking) ? 'checked' : '' }}>
