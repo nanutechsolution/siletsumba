@@ -183,30 +183,17 @@
  </div>
 
  <script>
-     document.addEventListener('DOMContentLoaded', () => {
+     window.addEventListener('pageshow', function(event) {
          const loginBtn = document.getElementById('loginBtn');
          if (!loginBtn) return;
 
-         // Reset button setiap page load
+         // Reset spinner & ikon
          const spinner = loginBtn.querySelector('.animate-spin');
          if (spinner) spinner.remove();
+
          const oldIcon = loginBtn.querySelector('svg');
          if (oldIcon) oldIcon.style.display = 'inline-block';
+
          loginBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-
-         loginBtn.addEventListener('click', function() {
-             // hide old icon
-             const oldIcon = this.querySelector('svg');
-             if (oldIcon) oldIcon.style.display = 'none';
-
-             // add spinner
-             const spinner = document.createElement('div');
-             spinner.className =
-                 'animate-spin h-5 w-5 border-2 border-t-2 border-white border-t-transparent rounded-full mr-1';
-             this.prepend(spinner);
-
-             // disable tombol biar ga diklik lagi
-             this.classList.add('opacity-70', 'cursor-not-allowed');
-         });
      });
  </script>
