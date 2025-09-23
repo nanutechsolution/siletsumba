@@ -119,7 +119,7 @@ class AdminArticleController extends Controller
                 . "───────────────────────\n"
                 . "⚠️ Status : *Belum Dipublikasikan*\n\n"
                 . "👉 Silakan cek & review di dashboard admin:\n"
-                . url("/admin/articles/{$article->id}/edit");
+                . url("/admin/articles/");
 
             FonnteService::send($adminPhone, $msg);
         }
