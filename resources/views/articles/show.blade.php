@@ -78,7 +78,6 @@
                                     <span>{{ number_format($article->views) }}</span>
                                 </div>
                             @endauth
-
                             <!-- Likes -->
                             <div class="flex items-center space-x-1">
                                 @guest
@@ -164,7 +163,7 @@
 
                     <!-- Login Modal (tailwind) -->
                     <div id="login-modal"
-                        class="hidden fixed inset-0 bg-black bg-opacity-50  items-center justify-center z-50">
+                        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80 text-center space-y-4">
                             <h3 class="font-bold text-lg text-gray-800 dark:text-white">Silakan login</h3>
                             <p class="text-gray-600 dark:text-gray-300 text-sm">Anda harus login untuk menyukai artikel
