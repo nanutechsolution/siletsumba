@@ -40,4 +40,10 @@ return [
         'sitekey' => env('RECAPTCHA_SITE_KEY'),
     ],
 
+    'fonnte' => [
+        'token' => env('FONNTE_TOKEN'),
+        'admin_phone' => env('HP_ADMIN'),
+    ],
+
+
 ];

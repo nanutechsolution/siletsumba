@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Prompt;
 use App\Models\Tag;
 use App\Rules\RequiredHtmlContent;
+use App\Services\FonnteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,7 +109,20 @@ class AdminArticleController extends Controller
                 ->withResponsiveImages()
                 ->toMediaCollection('images');
         }
+        if (auth()->user()->hasRole('user')) {
+            $adminPhone = config('services.fonnte.admin_phone');
+            $msg = "📢 *Notifikasi Berita Baru*\n"
+                . "───────────────────────\n"
+                . "✍️ Penulis : *{$article->user->name}*\n"
+                . "📰 Judul   : *{$article->title}*\n"
+                . "📅 Tanggal : " . now()->format('d-m-Y H:i') . "\n"
+                . "───────────────────────\n"
+                . "⚠️ Status : *Belum Dipublikasikan*\n\n"
+                . "👉 Silakan cek & review di dashboard admin:\n"
+                . url("/admin/articles/{$article->id}/edit");
 
+            FonnteService::send($adminPhone, $msg);
+        }
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');
     }
 
