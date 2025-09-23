@@ -6,7 +6,7 @@
             {{-- Hero Section --}}
             @if ($hero)
                 <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md bg-gray-200">
-                    <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca artikel: {{ $hero->title }}"
+                    <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca berita: {{ $hero->title }}"
                         class="block w-full h-full">
                         {{-- Hero Image --}}
                         @if ($hero->hasMedia('images'))
@@ -58,8 +58,7 @@
             {{-- Latest Articles Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                 @foreach ($latestArticles as $article)
-                    <a href="{{ route('articles.show', $article->slug) }}"
-                        aria-label="Baca artikel: {{ $article->title }}"
+                    <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita: {{ $article->title }}"
                         class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
                         {{-- Image wrapper --}}
                         <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
@@ -75,7 +74,7 @@
                             </span>
                         </div>
 
-                        {{-- Konten artikel --}}
+                        {{-- Konten berita --}}
                         <div
                             class="p-3 md:p-4 flex flex-col justify-start min-h-[180px] bg-white dark:bg-gray-800 rounded shadow dark:shadow-lg transition-colors duration-300">
                             <h3
@@ -131,7 +130,7 @@
                 <div class="space-y-3">
                     @foreach ($trending as $index => $article)
                         <a href="{{ route('articles.show', $article->slug) }}"
-                            aria-label="Baca artikel trending: {{ $article->title }}"
+                            aria-label="Baca berita trending: {{ $article->title }}"
                             class="flex items-start space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition">
                             <span class="bg-red-600 text-white text-xs px-2 py-1 rounded mt-1">{{ $index + 1 }}</span>
                             <div>
@@ -153,7 +152,7 @@
                 <div class="space-y-4">
                     @foreach ($latestFive as $article)
                         <a href="{{ route('articles.show', $article->slug) }}"
-                            aria-label="Baca artikel terbaru: {{ $article->title }}"
+                            aria-label="Baca berita terbaru: {{ $article->title }}"
                             class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
 
                             <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">

@@ -148,25 +148,19 @@
                     @endforeach
                 </div>
             </div>
-
-            <!-- Advertisement -->
-            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-6 text-center">
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">ADVERTISEMENT</p>
-                <div class="bg-white dark:bg-gray-600 p-4 rounded">
-                    <img src="https://via.placeholder.com/300x250" alt="Iklan" class="mx-auto rounded">
-                    <p class="text-sm mt-2 text-gray-600 dark:text-gray-300">Sponsored Content</p>
-                </div>
-            </div>
-
             <!-- Recent News -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">BERITA TERBARU</h2>
                 <div class="space-y-3">
                     @foreach ($trendingArticles as $item)
-                        <div
-                            class="text-sm font-medium text-gray-800 dark:text-white hover:text-tribun-red cursor-pointer line-clamp-2">
-                            {{ $item->title }}
-                        </div>
+                        <a href="{{ route('articles.show', $item->slug) }}"
+                            aria-label="Baca berita terbaru: {{ $item->title }}"
+                            class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
+                            <div
+                                class="text-sm font-medium text-gray-800 dark:text-white hover:text-tribun-red cursor-pointer line-clamp-2">
+                                {{ $item->title }}
+                            </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
