@@ -19,7 +19,7 @@
              </div>
 
              <div class="min-w-0">
-                 <h1 class="text-xl md:text-2xl font-bold text-red-600 dark:text-red-400 truncate">
+                 <h1 class="text-xl md:text-2xl font-bold text-silet-red dark:text-silet-red truncate">
                      {{ $settings['site_name']->value ?? 'SILET SUMBA' }}
                  </h1>
                  <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
