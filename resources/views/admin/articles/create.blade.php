@@ -268,7 +268,7 @@
 
                 <!-- Modal Cropper -->
                 <div id="cropModal"
-                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                    class="fixed inset-0 bg-black bg-opacity-50  items-center justify-center hidden z-50">
                     <div class="bg-white rounded-lg p-4 max-w-lg w-full">
                         <h2 class="text-lg font-bold mb-2">Crop Gambar</h2>
                         <div class="overflow-hidden">
