@@ -140,7 +140,7 @@
                      <x-slot name="content">
                          <x-dropdown-link :href="route('admin.dashboard')">Dashboard</x-dropdown-link>
                          @can('buat_artikel')
-                             <x-dropdown-link :href="route('admin.articles.create')">+ Berita</x-dropdown-link>
+                             <x-dropdown-link :href="route('admin.articles.create')">Buat Berita</x-dropdown-link>
                          @endcan
                          <x-dropdown-link :href="route('profile.edit')">Profil</x-dropdown-link>
                          <form method="POST" action="{{ route('logout') }}">
