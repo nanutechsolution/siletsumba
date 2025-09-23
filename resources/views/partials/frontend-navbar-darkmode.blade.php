@@ -1,4 +1,9 @@
- <div class="container mx-auto px-4" x-data="{ searchOpen: false, query: '', recent: ['Berita Sumba', 'Politik', 'Olahraga'], filtered: [] }">
+ <div class="container mx-auto px-4" x-data="{
+     searchOpen: false,
+     query: '',
+     recent: @json($popularSearches->pluck('query')),
+     filtered: []
+ }">
 
      <div class="flex items-center justify-between py-3 border-b flex-wrap">
          <!-- Logo & Nama -->

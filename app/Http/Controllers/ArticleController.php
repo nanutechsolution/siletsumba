@@ -50,11 +50,15 @@ class ArticleController extends Controller
         // ambil artikel terkait (misal kategori sama)
         $related = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
+            ->where('is_published', 1)
             ->latest()
             ->take(5)
             ->get();
-        $popular = Article::orderBy('views', 'desc')->take(5)->get();
-        $latest = Article::where('is_published', true)
+        $popular = Article::where('is_published', 1)
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+        $latest = Article::where('is_published', 1)
             ->latest()
             ->take(5)
             ->get();
@@ -70,10 +74,15 @@ class ArticleController extends Controller
             'Googlebot',
             'Bingbot',
             'Slurp',
+            'DuckDuckBot',
             'Baiduspider',
             'YandexBot',
-            'DuckDuckBot',
+            'Sogou',
+            'Exabot',
+            'facebot',
+            'ia_archiver'
         ];
+
 
         foreach ($bots as $bot) {
             if (stripos($userAgent, $bot) !== false) {
@@ -89,50 +98,56 @@ class ArticleController extends Controller
         $query = $request->input('q');
         $categorySlug = $request->input('category');
         $sort = $request->input('sort');
+
+        // Logging pencarian aman
         if ($query) {
-            // Simpan log pencarian
-            \App\Models\SearchLog::updateOrCreate(
+            $searchLog = \App\Models\SearchLog::firstOrCreate(
                 ['query' => $query],
-                ['count' => DB::raw('count + 1')]
+                ['count' => 0, 'last_searched_at' => now()]
+            );
+            $searchLog->increment('count');
+            $searchLog->update(['last_searched_at' => now()]);
+        }
+
+        $queryBuilder = Article::query()->with(['category', 'tags'])
+            ->where('is_published', 1);
+
+        if ($query) {
+            $queryBuilder->whereRaw(
+                "MATCH(title, content) AGAINST(? IN NATURAL LANGUAGE MODE)",
+                [$query]
             );
         }
-        $queryBuilder = Article::query()->with(['category', 'tags']);
 
-        if ($query) {
-            $queryBuilder->where(function ($q) use ($query) {
-                $q->where('title', 'like', "%{$query}%")
-                    ->orWhere('content', 'like', "%{$query}%");
-            });
-        }
-        // Ambil semua kategori untuk filter dropdown
-        // $categories = Category::all();
-        // if ($categorySlug) {
-        //     $category = Category::where('slug', $categorySlug)->first();
-        //     if ($category) {
-        //         $queryBuilder->where('category_id', $category->id);
-        //     }
-        // }
-        $categories = Category::whereHas('articles')->get();
-
-        if ($categories) {
-            $category = Category::where('slug', $categorySlug)
-                ->whereHas('articles') // pastikan punya artikel
-                ->first();
-
+        if ($categorySlug) {
+            $category = Category::where('slug', $categorySlug)->first();
             if ($category) {
                 $queryBuilder->where('category_id', $category->id);
             }
         }
 
         // Sorting
-        if ($sort == 'latest') $queryBuilder->latest();
-        elseif ($sort == 'oldest') $queryBuilder->oldest();
-        else $queryBuilder->latest(); // default
+        if ($sort === 'oldest') $queryBuilder->oldest();
+        else $queryBuilder->latest();
 
-        $articles = $queryBuilder->paginate(5)->withQueryString();
+        // Cache hasil search 1 menit
+        $cacheKey = 'search:' . md5($query . $categorySlug . $sort . $request->get('page', 1));
+        $articles = cache()->remember($cacheKey, 60, fn() => $queryBuilder->paginate(5)->withQueryString());
 
-        // Trending tags
-        $trendingArticles = Article::orderBy('views', 'desc')->take(5)->get();
+        // Trending articles bulan ini (cache 5 menit)
+        $trendingArticles = cache()->remember(
+            'trending_articles_month',
+            300,
+            fn() =>
+            Article::where('is_published', 1)
+                ->whereMonth('created_at', now()->month)
+                ->with('tags')
+                ->orderBy('views', 'desc')
+                ->take(5)
+                ->get()
+        );
+
+        // Trending tags dari artikel bulan ini
         $trendingTags = $trendingArticles->pluck('tags')
             ->flatten()
             ->map(fn($tag) => $tag->name)
@@ -140,8 +155,17 @@ class ArticleController extends Controller
             ->sortDesc()
             ->take(5);
 
-        // Popular searches
-        $popularSearches = SearchLog::orderBy('count', 'desc')->take(5)->get();
+        // Popular searches 30 hari terakhir (cache 5 menit)
+        $popularSearches = cache()->remember(
+            'popular_searches_30d',
+            300,
+            fn() =>
+            SearchLog::where('last_searched_at', '>=', now()->subDays(30))
+                ->orderBy('count', 'desc')
+                ->take(5)
+                ->get()
+        );
+        $categories = Category::whereHas('articles')->get();
 
         $end = microtime(true);
         $searchTime = number_format($end - $start, 2);
@@ -156,6 +180,7 @@ class ArticleController extends Controller
             'categories'
         ));
     }
+
 
     public function like(string $slug): RedirectResponse
     {

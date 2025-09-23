@@ -9,5 +9,5 @@ class SearchLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['query', 'count'];
+    protected $fillable = ['query', 'count', 'last_searched_at'];
 }
