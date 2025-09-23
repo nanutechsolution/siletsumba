@@ -53,7 +53,7 @@
                         @if ($article->hasMedia('images'))
                             @php $media = $article->getFirstMedia('images'); @endphp
                             <img src="{{ $media->getUrl('responsive') }}" srcset="{{ $media->getSrcset('responsive') }}"
-                                sizes="100vw" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy"
+                                sizes="100vw" alt="{{ $article->title ?? 'Hero Image' }}" loading="lazy"
                                 class="w-full h-full object-cover object-center" />
                         @endif
                     </div>
@@ -183,16 +183,19 @@
                             {!! $article->full_content !!}
                         </div>
                         <!-- Tags -->
-                        @if ($article->tags->count())
-                            <div class="flex flex-wrap gap-2 py-4">
-                                @foreach ($article->tags as $tag)
-                                    <a href="{{ route('tags.show', $tag->slug) }}"
-                                        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
-                                        #{{ $tag->name }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endif
+                        <section aria-label="tags">
+                            @if ($article->tags->count())
+                                <div class="flex flex-wrap gap-2 py-4">
+                                    @foreach ($article->tags as $tag)
+                                        <a href="{{ route('tags.show', $tag->slug) }}"
+                                            class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
+                                            #{{ $tag->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </section>
+
                     </div>
                 </article>
                 <!-- Comments -->
