@@ -1,16 +1,15 @@
 @extends('welcome')
 @section('content')
     <!-- Breadcrumb -->
-    <div class="bg-tribun-gray dark:bg-gray-800 py-2">
+    <div class="bg-silet-gray dark:bg-gray-800 py-2">
         <div class="container mx-auto px-4">
             <nav class="text-sm text-gray-600 dark:text-gray-400">
-                <a href="/" class="hover:text-tribun-red">Home</a> &gt;
-                <span class="text-tribun-red">Hasil Pencarian</span>
+                <a href="/" class="hover:text-silet-red">Beranda</a> &gt;
+                <span class="text-silet-red">Hasil Pencarian</span>
             </nav>
         </div>
     </div>
-
-    <div class=" mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div class="mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Main Content -->
         <div class="lg:col-span-3 space-y-6">
             <!-- Search Header -->
@@ -20,10 +19,10 @@
                 <form action="{{ route('articles.search') }}" method="GET" class="mb-6">
                     <div class="relative">
                         <input type="text" name="q" value="{{ $query }}"
-                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-tribun-red focus:border-transparent dark:bg-gray-700 dark:text-white pr-12"
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-silet-red focus:border-transparent dark:bg-gray-700 dark:text-white pr-12"
                             placeholder="Cari berita...">
                         <button type="submit"
-                            class="absolute right-2 top-1/2 -translate-y-1/2 bg-tribun-red text-white p-2 rounded-lg hover:bg-red-700">
+                            class="absolute right-2 top-1/2 -translate-y-1/2 bg-silet-red text-white p-2 rounded-lg hover:bg-red-700">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -81,10 +80,10 @@
                             </div>
                             <div class="md:w-3/4 flex flex-col justify-between">
                                 <div>
-                                    <span class="bg-tribun-red text-white px-2 py-1 rounded text-xs font-medium">
+                                    <span class="bg-silet-red text-white px-2 py-1 rounded text-xs font-medium">
                                         {{ $item->category->name }}</span>
                                     <h2
-                                        class="text-xl font-bold text-gray-800 dark:text-white mt-2 hover:text-tribun-red cursor-pointer line-clamp-2">
+                                        class="text-xl font-bold text-gray-800 dark:text-white mt-2 hover:text-silet-red cursor-pointer line-clamp-2">
                                         {{ $item->title }}
                                     </h2>
                                     <p class="text-gray-600 dark:text-gray-300 mt-2 line-clamp-3">
@@ -100,7 +99,7 @@
                                 </div>
 
                                 <a href="{{ route('articles.show', $item->slug) }}"
-                                    class="text-tribun-red mt-2 font-medium inline-block">Baca selengkapnya</a>
+                                    class="text-silet-red mt-2 font-medium inline-block">Baca selengkapnya</a>
                             </div>
                         </div>
                     </div>
@@ -128,7 +127,7 @@
                 <div class="space-y-2">
                     @foreach ($popularSearches as $item)
                         <a href="{{ route('articles.search', ['q' => $item->query]) }}"
-                            class="block text-sm text-gray-600 dark:text-gray-300 hover:text-tribun-red line-clamp-2">
+                            class="block text-sm text-gray-600 dark:text-gray-300 hover:text-silet-red line-clamp-2">
                             <i class="fas fa-search mr-2 text-xs"></i>{{ $item->query }}
                         </a>
                     @endforeach
@@ -141,7 +140,7 @@
                 <div class="flex flex-wrap gap-2">
                     @foreach ($trendingTags as $tagName => $count)
                         <a href="{{ route('tags.show', $tagName) }}"
-                            class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-tribun-red hover:text-white cursor-pointer line-clamp-1">
+                            class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white cursor-pointer line-clamp-1">
                             #{{ $tagName }} ({{ $count }})
                         </a>
                     @endforeach
@@ -156,7 +155,7 @@
                             aria-label="Baca berita terbaru: {{ $item->title }}"
                             class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
                             <div
-                                class="text-sm font-medium text-gray-800 dark:text-white hover:text-tribun-red cursor-pointer line-clamp-2">
+                                class="text-sm font-medium text-gray-800 dark:text-white hover:text-silet-red cursor-pointer line-clamp-2">
                                 {{ $item->title }}
                             </div>
                         </a>
