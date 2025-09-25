@@ -109,7 +109,7 @@ class AdminArticleController extends Controller
                 ->withResponsiveImages()
                 ->toMediaCollection('images');
         }
-        if (auth()->user()->hasRole('user')) {
+        if (auth()->user()->hasRole('writer')) {
             $adminPhone = config('services.fonnte.admin_phone');
             $msg = "📢 *Notifikasi Berita Baru*\n"
                 . "───────────────────────\n"
