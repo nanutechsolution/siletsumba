@@ -117,7 +117,7 @@
 
                                 <!-- Header Modal -->
                                 <div class="flex justify-between items-center mb-4">
-                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Bagikan Artikel</h2>
+                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Bagikan Berita</h2>
                                     <button @click="open = false" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -177,7 +177,7 @@
                 <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80 text-center space-y-4">
                         <h3 class="font-bold text-lg text-gray-800 dark:text-white">Silakan login</h3>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">Anda harus login untuk menyukai artikel
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">Anda harus login untuk menyukai berita
                             ini.
                         </p>
                         <a href="{{ route('login') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Login</a>
