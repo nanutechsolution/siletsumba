@@ -1,5 +1,5 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed top-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="flex justify-between h-16 items-center">
             <!-- Logo -->
             <a href="{{ url('/') }}" class="flex items-center gap-4 min-w-0">
@@ -12,7 +12,6 @@
                     </p>
                 </div>
             </a>
-
             <!-- Desktop Menu -->
             <div class="hidden sm:flex items-center space-x-4 flex-wrap overflow-x-auto max-w-full">
                 <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">Dashboard</x-nav-link>

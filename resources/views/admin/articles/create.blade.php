@@ -5,49 +5,42 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg p-8 space-y-6">
                 {{-- Form --}}
-                <form id="article-form" action="{{ route('admin.articles.store') }}" method="POST"
-                    enctype="multipart/form-data">
+                <form id="article-form" action="{{ route('admin.articles.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     {{-- Judul --}}
                     <div class="mb-5">
                         <label for="title" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Judul
                             Berita <span class="text-red-500">*</span></label>
-                        <textarea name="title" id="title" rows="2"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('title') }} </textarea>
+                        <textarea name="title" id="title" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('title') }} </textarea>
                         @error('title')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Kategori --}}
                     <div class="mb-5">
-                        <label class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Kategori <span
-                                class="text-red-500">*</span></label>
-                        <select name="category_id"
-                            class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                            required>
+                        <label class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Kategori <span class="text-red-500">*</span></label>
+                        <select name="category_id" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" required>
                             <option value="">-- Pilih Kategori --</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
-                                </option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
+                            </option>
                             @endforeach
                         </select>
                         @error('category_id')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Breaking News --}}
                     <div class="mb-5">
                         <label class="flex items-start space-x-3 cursor-pointer">
-                            <input type="checkbox" name="is_breaking" value="1"
-                                class="mt-1 h-5 w-5 text-blue-600 dark:text-blue-400 rounded border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-400">
+                            <input type="checkbox" name="is_breaking" value="1" class="mt-1 h-5 w-5 text-blue-600 dark:text-blue-400 rounded border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-400">
                             <div class="flex flex-col">
                                 <span class="font-semibold text-gray-800 dark:text-gray-200">Tandai sebagai Breaking
                                     News</span>
@@ -58,25 +51,22 @@
                             </div>
                         </label>
                         @error('is_breaking')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                         <div>
-                            <label for="location_short"
-                                class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">
+                            <label for="location_short" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">
                                 Lokasi Singkat
                             </label>
-                            <input type="text" name="location_short" id="location_short"
-                                value="{{ old('location_short') }}" placeholder="Wewewa Barat, Sumba Barat Daya"
-                                class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                            <input type="text" name="location_short" id="location_short" value="{{ old('location_short') }}" placeholder="Wewewa Barat, Sumba Barat Daya" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 Gunakan nama daerah / kabupaten. Contoh: "Wewewa Barat, Sumba Barat Daya".
                             </p>
                             @error('location_short')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
@@ -84,15 +74,13 @@
                             <label for="location" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">
                                 Lokasi Detail
                             </label>
-                            <input type="text" name="location" id="location" value="{{ old('location') }}"
-                                placeholder="Desa / Kecamatan / Kota, Sumba"
-                                class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                            <input type="text" name="location" id="location" value="{{ old('location') }}" placeholder="Desa / Kecamatan / Kota, Sumba" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 Masukkan lokasi lengkap (desa / kecamatan / kota). AI akan menggunakan informasi ini
                                 saat membuat konten.
                             </p>
                             @error('location')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -102,15 +90,13 @@
                         <label for="facts" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">
                             Fakta / Kronologi
                         </label>
-                        <textarea name="facts" id="facts" rows="4"
-                            placeholder="Masukkan kronologi, data, atau poin penting yang AI gunakan untuk menulis berita"
-                            class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('facts') }}</textarea>
+                        <textarea name="facts" id="facts" rows="4" placeholder="Masukkan kronologi, data, atau poin penting yang AI gunakan untuk menulis berita" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('facts') }}</textarea>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Isi bagian ini dengan informasi yang jelas dan lengkap. AI akan menggunakan data ini untuk
                             membuat konten berita.
                         </p>
                         @error('facts')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -119,33 +105,29 @@
                         <label for="quotes" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">
                             Kutipan / Narasumber
                         </label>
-                        <textarea name="quotes" id="quotes" rows="3"
-                            placeholder="Masukkan pernyataan narasumber atau kutipan yang relevan"
-                            class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('quotes') }}</textarea>
+                        <textarea name="quotes" id="quotes" rows="3" placeholder="Masukkan pernyataan narasumber atau kutipan yang relevan" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">{{ old('quotes') }}</textarea>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Bisa diisi kutipan langsung dari narasumber atau pernyataan penting yang ingin ditampilkan
                             dalam berita.
                         </p>
                         @error('quotes')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-5">
-                        <label for="tags"
-                            class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Tags</label>
+                        <label for="tags" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Tags</label>
                         <select id="tags" name="tags[]" multiple>
                             @foreach ($tags as $tag)
-                                <option value="{{ $tag->id }}"
-                                    {{ in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>
-                                    {{ $tag->name }}
-                                </option>
+                            <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>
+                                {{ $tag->name }}
+                            </option>
                             @endforeach
                         </select>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Ketik untuk menambahkan tag atau pilih dari daftar saran.
                         </p>
                         @error('tags')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-5">
@@ -158,66 +140,56 @@
                         </p>
 
                         <!-- File Input -->
-                        <input type="file" name="image" id="imageInput"
-                            class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                        <input type="file" name="image" id="imageInput" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
 
                         <!-- Preview -->
                         <div id="imagePreview" class="mt-4 rounded-lg overflow-hidden shadow-sm"></div>
 
                         @error('image')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     @role('admin|editor')
-                        <div x-data="{ publishOption: 'now' }" class="mb-5">
-                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Opsi Publikasi</h2>
+                    <div x-data="{ publishOption: 'now' }" class="mb-5">
+                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Opsi Publikasi</h2>
 
-                            <!-- Pilihan -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
-                                <!-- Terbit Sekarang -->
-                                <label
-                                    :class="publishOption === 'now'
+                        <!-- Pilihan -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
+                            <!-- Terbit Sekarang -->
+                            <label :class="publishOption === 'now'
                                         ?
                                         'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400' :
-                                        'border-gray-300 dark:border-gray-600'"
-                                    class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
-                                    <input type="radio" name="publish_option" value="now" x-model="publishOption"
-                                        class="hidden" />
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-900 dark:text-gray-100">Terbit Sekarang</span>
-                                        <span class="text-sm text-gray-500 dark:text-gray-400">Artikel langsung tampil
-                                            setelah disimpan</span>
-                                    </div>
-                                </label>
+                                        'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
+                                <input type="radio" name="publish_option" value="now" x-model="publishOption" class="hidden" />
+                                <div class="flex flex-col">
+                                    <span class="font-medium text-gray-900 dark:text-gray-100">Terbit Sekarang</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Artikel langsung tampil
+                                        setelah disimpan</span>
+                                </div>
+                            </label>
 
-                                <!-- Jadwalkan -->
-                                <label
-                                    :class="publishOption === 'schedule'
+                            <!-- Jadwalkan -->
+                            <label :class="publishOption === 'schedule'
                                         ?
                                         'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400' :
-                                        'border-gray-300 dark:border-gray-600'"
-                                    class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
-                                    <input type="radio" name="publish_option" value="schedule" x-model="publishOption"
-                                        class="hidden" />
-                                    <div class="flex flex-col">
-                                        <span class="font-medium text-gray-900 dark:text-gray-100">Jadwalkan Terbit</span>
-                                        <span class="text-sm text-gray-500 dark:text-gray-400">Artikel akan otomatis terbit
-                                            di waktu tertentu</span>
-                                    </div>
-                                </label>
-                            </div>
-                            <!-- Input Jadwal -->
-                            <div x-show="publishOption==='schedule'" x-transition
-                                class="rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 p-4">
-                                <label for="scheduled_at"
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal & Jam
-                                    Terbit</label>
-                                <input type="datetime-local" name="scheduled_at" id="scheduled_at"
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-500 p-2">
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Biarkan kosong jika tidak ingin
-                                    menjadwalkan.</p>
-                            </div>
+                                        'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
+                                <input type="radio" name="publish_option" value="schedule" x-model="publishOption" class="hidden" />
+                                <div class="flex flex-col">
+                                    <span class="font-medium text-gray-900 dark:text-gray-100">Jadwalkan Terbit</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Artikel akan otomatis terbit
+                                        di waktu tertentu</span>
+                                </div>
+                            </label>
                         </div>
+                        <!-- Input Jadwal -->
+                        <div x-show="publishOption==='schedule'" x-transition class="rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 p-4">
+                            <label for="scheduled_at" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Tanggal & Jam
+                                Terbit</label>
+                            <input type="datetime-local" name="scheduled_at" id="scheduled_at" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-500 p-2">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Biarkan kosong jika tidak ingin
+                                menjadwalkan.</p>
+                        </div>
+                    </div>
                     @endrole
 
                     {{-- Tombol AI --}}
@@ -230,55 +202,45 @@
                         </p>
                         <div class="flex flex-wrap gap-2 mb-4 overflow-x-auto">
                             @foreach ($prompts as $prompt)
-                                <button type="button"
-                                    class="py-2 px-4 rounded-lg text-white font-medium hover:opacity-90 transition shadow-sm hover:shadow-md flex-shrink-0"
-                                    data-prompt-name="{{ $prompt->name }}"
-                                    data-prompt-template="{{ $prompt->prompt_template }}"
-                                    style="background-color: {{ $prompt->color ?? 'gray' }};">
-                                    {{ $prompt->button_text }}
-                                </button>
+                            <button type="button" class="py-2 px-4 rounded-lg text-white font-medium hover:opacity-90 transition shadow-sm hover:shadow-md flex-shrink-0" data-prompt-name="{{ $prompt->name }}" data-prompt-template="{{ $prompt->prompt_template }}" style="background-color: {{ $prompt->color ?? 'gray' }};">
+                                {{ $prompt->button_text }}
+                            </button>
                             @endforeach
                         </div>
                     </div>
 
                     {{-- Konten Artikel --}}
                     <div class="mb-5">
-                        <label class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Isi Berita <span
-                                class="text-red-500">*</span></label>
+                        <label class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">Isi Berita <span class="text-red-500">*</span></label>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Ketik langsung di sini atau klik tombol AI untuk membuat draft otomatis.
                             Konten bisa dihasilkan dalam bahasa lain sesuai template.
                         </p>
 
-                        <div id="editor"
-                            class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg h-64">
+                        <div id="editor" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg h-64">
                         </div>
                         <textarea name="content" id="content" class="hidden">{{ old('content') }}</textarea>
                         @error('content')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     {{-- Tombol Submit --}}
                     <div class="flex items-center justify-between">
                         <x-submit-button text="Simpan" color="blue" />
-                        <a href="{{ route('admin.articles.index') }}"
-                            class="text-blue-500 hover:text-blue-700 font-semibold">Batal</a>
+                        <a href="{{ route('admin.articles.index') }}" class="text-blue-500 hover:text-blue-700 font-semibold">Batal</a>
                     </div>
                 </form>
 
                 <!-- Modal Cropper -->
-                <div id="cropModal"
-                    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div id="cropModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                     <div class="bg-white rounded-lg p-4 max-w-lg w-full">
                         <h2 class="text-lg font-bold mb-2">Crop Gambar</h2>
                         <div class="overflow-hidden">
                             <img id="cropImage" class="max-w-full">
                         </div>
                         <div class="mt-4 flex justify-end gap-2">
-                            <button id="cancelCrop" type="button"
-                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Batal</button>
-                            <button id="applyCrop" type="button"
-                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Crop</button>
+                            <button id="cancelCrop" type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Batal</button>
+                            <button id="applyCrop" type="button" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Crop</button>
                         </div>
                     </div>
                 </div>
@@ -289,15 +251,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script>
         new TomSelect("#tags", {
-            plugins: ['remove_button'],
-            create: true,
-            sortField: {
-                field: "text",
-                direction: "asc"
+            plugins: ['remove_button']
+            , create: true
+            , sortField: {
+                field: "text"
+                , direction: "asc"
             },
             // load old tags jika ada
-            items: {!! json_encode(old('tags', [])) !!}
+            items: {
+                !!json_encode(old('tags', [])) !!
+            }
         });
+
     </script>
 
     {{-- Quill --}}
@@ -311,27 +276,27 @@
             const firstError = document.querySelector('.text-red-500.text-sm');
             if (firstError) {
                 firstError.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
+                    behavior: 'smooth'
+                    , block: 'center'
                 });
             }
             // ====== Quill Editors ======
             const editorQuill = new Quill('#editor', {
-                placeholder: 'Tulis isi berita disini...',
-                theme: 'snow',
-                modules: {
+                placeholder: 'Tulis isi berita disini...'
+                , theme: 'snow'
+                , modules: {
                     toolbar: [
                         [{
                             header: [1, 2, false]
-                        }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        ['link', 'image'],
-                        [{
+                        }]
+                        , ['bold', 'italic', 'underline', 'strike']
+                        , ['link', 'image']
+                        , [{
                             list: 'ordered'
                         }, {
                             list: 'bullet'
-                        }],
-                        ['clean']
+                        }]
+                        , ['clean']
                     ]
                 }
             });
@@ -374,12 +339,12 @@
                 setButtonLoading(button, true);
                 try {
                     const res = await fetch("{{ route('admin.articles.generate-content') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
+                        method: 'POST'
+                        , headers: {
+                            'Content-Type': 'application/json'
+                            , 'X-CSRF-TOKEN': csrfToken
+                        }
+                        , body: JSON.stringify({
                             prompt
                         })
                     });
@@ -465,6 +430,7 @@
                 e.preventDefault();
             }
         });
+
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -496,9 +462,9 @@
 
                             // Init Cropper
                             cropper = new Cropper(cropImage, {
-                                aspectRatio: 16 / 9,
-                                viewMode: 1,
-                            });
+                                aspectRatio: 16 / 9
+                                , viewMode: 1
+                            , });
                         } else {
                             imagePreview.innerHTML = '';
                             const imgEl = document.createElement('img');
@@ -522,9 +488,9 @@
             // Tombol Apply Crop
             applyCrop.addEventListener('click', function() {
                 const canvas = cropper.getCroppedCanvas({
-                    width: 1200,
-                    height: 675,
-                });
+                    width: 1200
+                    , height: 675
+                , });
                 canvas.toBlob(function(blob) {
                     // Update file input dengan hasil crop
                     const dataTransfer = new DataTransfer();
@@ -545,5 +511,6 @@
                 });
             });
         });
+
     </script>
 </x-app-layout>
