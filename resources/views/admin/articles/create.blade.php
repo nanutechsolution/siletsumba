@@ -251,16 +251,14 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script>
         new TomSelect("#tags", {
-            plugins: ['remove_button']
-            , create: true
-            , sortField: {
-                field: "text"
-                , direction: "asc"
+            plugins: ['remove_button'],
+            create: true,
+            sortField: {
+                field: "text",
+                direction: "asc"
             },
             // load old tags jika ada
-            items: {
-                !!json_encode(old('tags', [])) !!
-            }
+            items: @json(old('tags', [])),
         });
 
     </script>
@@ -488,9 +486,7 @@
             // Tombol Apply Crop
             applyCrop.addEventListener('click', function() {
                 const canvas = cropper.getCroppedCanvas({
-                    width: 1200
-                    , height: 675
-                , });
+                    width: 1200, height: 675,});
                 canvas.toBlob(function(blob) {
                     // Update file input dengan hasil crop
                     const dataTransfer = new DataTransfer();
@@ -498,7 +494,6 @@
                         type: blob.type
                     }));
                     imageInput.files = dataTransfer.files;
-
                     // Preview hasil crop
                     imagePreview.innerHTML = '';
                     const imgEl = document.createElement('img');
