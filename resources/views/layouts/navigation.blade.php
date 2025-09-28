@@ -93,7 +93,7 @@
         <x-responsive-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">Prompt AI</x-responsive-nav-link>
         <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">Pengguna</x-responsive-nav-link>
         @endrole
-        @role('admin')
+        @role('admin|super-admin')
         <x-responsive-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')">Komentar</x-responsive-nav-link>
         <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">Kategori</x-responsive-nav-link>
         <x-responsive-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">Tag</x-responsive-nav-link>
