@@ -183,94 +183,108 @@
             </div>
         </div>
     </div>
-</x-app-layout>
-
-{{-- Quill.js CSS & JS --}}
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- Inisialisasi Quill Editor ---
-        const quill = new Quill('#editor', {
-            theme: 'snow'
-            , placeholder: 'Tulis konten berita di sini...'
-            , modules: {
-                toolbar: [
-                    [{
-                        'header': [1, 2, false]
-                    }]
-                    , ['bold', 'italic', 'underline']
-                    , ['link', 'image', 'video']
-                    , [{
-                        'list': 'ordered'
-                    }, {
-                        'list': 'bullet'
-                    }]
-                    , ['clean']
-                ]
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <script>
+        new TomSelect("#tags", {
+            plugins: ['remove_button']
+            , create: true
+            , sortField: {
+                field: "text"
+                , direction: "asc"
             }
-        });
+        , });
 
-        // Set konten Quill dari input hidden
-        const contentInput = document.getElementById('content-input');
-        quill.root.innerHTML = contentInput.value;
-        quill.root.classList.add('dark:text-gray-100');
-        // Sinkronisasi konten Quill ke input hidden saat form disubmit
-        const form = document.getElementById('article-form');
-        form.addEventListener('submit', function() {
-            contentInput.value = quill.root.innerHTML;
-        });
+    </script>
 
-        let deletedImageIds = [];
-        const oldImagePreviewContainer = document.getElementById('old-image-preview');
-        const deleteImagesContainer = document.getElementById('delete-images');
 
-        oldImagePreviewContainer.addEventListener('click', function(e) {
-            const deleteButton = e.target.closest('.delete-old-image');
-            if (!deleteButton) return;
+    {{-- Quill.js CSS & JS --}}
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-            const imageContainer = deleteButton.closest('[data-id]');
-            const imageId = imageContainer.dataset.id;
-
-            if (confirm('Apakah Anda yakin ingin menghapus gambar ini?')) {
-                // Tambahkan ID ke array
-                deletedImageIds.push(imageId);
-
-                // Hapus semua hidden input lama
-                deleteImagesContainer.innerHTML = '';
-
-                // Buat hidden input baru per ID
-                deletedImageIds.forEach(id => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'delete_images[]';
-                    input.value = id;
-                    deleteImagesContainer.appendChild(input);
-                });
-
-                // Hapus preview di frontend
-                imageContainer.remove();
-            }
-        });
-        // --- Logika Preview Gambar Baru ---
-        const newImagesInput = document.getElementById('new-images');
-        const newImagePreviewContainer = document.getElementById('new-image-preview');
-
-        newImagesInput.addEventListener('change', function(event) {
-            newImagePreviewContainer.innerHTML = '';
-            Array.from(event.target.files).forEach(file => {
-                const container = document.createElement('div');
-                container.className = 'relative w-full overflow-hidden rounded-lg shadow-md';
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.alt = file.name;
-                img.className = 'w-full h-full object-cover hover:scale-105 transition-transform';
-                container.appendChild(img);
-                newImagePreviewContainer.appendChild(container);
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Inisialisasi Quill Editor ---
+            const quill = new Quill('#editor', {
+                theme: 'snow'
+                , placeholder: 'Tulis konten berita di sini...'
+                , modules: {
+                    toolbar: [
+                        [{
+                            'header': [1, 2, false]
+                        }]
+                        , ['bold', 'italic', 'underline']
+                        , ['link', 'image', 'video']
+                        , [{
+                            'list': 'ordered'
+                        }, {
+                            'list': 'bullet'
+                        }]
+                        , ['clean']
+                    ]
+                }
             });
+
+            // Set konten Quill dari input hidden
+            const contentInput = document.getElementById('content-input');
+            quill.root.innerHTML = contentInput.value;
+            quill.root.classList.add('dark:text-gray-100');
+            // Sinkronisasi konten Quill ke input hidden saat form disubmit
+            const form = document.getElementById('article-form');
+            form.addEventListener('submit', function() {
+                contentInput.value = quill.root.innerHTML;
+            });
+
+            let deletedImageIds = [];
+            const oldImagePreviewContainer = document.getElementById('old-image-preview');
+            const deleteImagesContainer = document.getElementById('delete-images');
+
+            oldImagePreviewContainer.addEventListener('click', function(e) {
+                const deleteButton = e.target.closest('.delete-old-image');
+                if (!deleteButton) return;
+
+                const imageContainer = deleteButton.closest('[data-id]');
+                const imageId = imageContainer.dataset.id;
+
+                if (confirm('Apakah Anda yakin ingin menghapus gambar ini?')) {
+                    // Tambahkan ID ke array
+                    deletedImageIds.push(imageId);
+
+                    // Hapus semua hidden input lama
+                    deleteImagesContainer.innerHTML = '';
+
+                    // Buat hidden input baru per ID
+                    deletedImageIds.forEach(id => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'delete_images[]';
+                        input.value = id;
+                        deleteImagesContainer.appendChild(input);
+                    });
+
+                    // Hapus preview di frontend
+                    imageContainer.remove();
+                }
+            });
+            // --- Logika Preview Gambar Baru ---
+            const newImagesInput = document.getElementById('new-images');
+            const newImagePreviewContainer = document.getElementById('new-image-preview');
+
+            newImagesInput.addEventListener('change', function(event) {
+                newImagePreviewContainer.innerHTML = '';
+                Array.from(event.target.files).forEach(file => {
+                    const container = document.createElement('div');
+                    container.className = 'relative w-full overflow-hidden rounded-lg shadow-md';
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.alt = file.name;
+                    img.className = 'w-full h-full object-cover hover:scale-105 transition-transform';
+                    container.appendChild(img);
+                    newImagePreviewContainer.appendChild(container);
+                });
+            });
+
         });
 
-    });
-
-</script>
+    </script>
+</x-app-layout>

@@ -111,20 +111,20 @@ class AdminArticleController extends Controller
         }
 
         // Notifikasi jika writer
-        // if (auth()->user()->hasRole('writer')) {
-        //     $adminPhone = config('services.fonnte.admin_phone');
-        //     $msg = "📢 *Notifikasi Berita Baru*\n"
-        //         . "───────────────────────\n"
-        //         . "✍️ Penulis : *{$article->user->name}*\n"
-        //         . "📰 Judul   : *{$article->title}*\n"
-        //         . "📅 Tanggal : " . now()->format('d-m-Y H:i') . "\n"
-        //         . "───────────────────────\n"
-        //         . "⚠️ Status : *" . strtoupper($article->status) . "*\n\n"
-        //         . "👉 Silakan cek & review di dashboard admin:\n"
-        //         . url("/admin/articles/");
+        if (auth()->user()->hasRole('writer')) {
+            $adminPhone = config('services.fonnte.admin_phone');
+            $msg = "📢 *Notifikasi Berita Baru*\n"
+                . "───────────────────────\n"
+                . "✍️ Penulis : *{$article->user->name}*\n"
+                . "📰 Judul   : *{$article->title}*\n"
+                . "📅 Tanggal : " . now()->format('d-m-Y H:i') . "\n"
+                . "───────────────────────\n"
+                . "⚠️ Status : *" . strtoupper($article->status) . "*\n\n"
+                . "👉 Silakan cek & review di dashboard admin:\n"
+                . url("/admin/articles/");
 
-        //     FonnteService::send($adminPhone, $msg);
-        // }
+            FonnteService::send($adminPhone, $msg);
+        }
 
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');
     }
