@@ -130,13 +130,18 @@ class AdminArticleController extends Controller
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');
     }
 
-
     public function edit(Article $article)
     {
         $user = auth()->user();
 
-        if (!$user->hasRole(['admin', 'editor']) && $user->id !== $article->user_id) {
-            abort(403, 'Anda tidak punya akses untuk mengedit artikel ini.');
+        // Admin & Editor boleh edit semua
+        if ($user->hasRole(['admin', 'editor', 'super-admin'])) {
+            // lanjut
+        } else {
+            // Writer hanya bisa edit artikelnya sendiri & status masih draft
+            if ($user->id !== $article->user_id || $article->status !== 'draft') {
+                abort(403, 'Anda tidak punya akses untuk mengedit artikel ini.');
+            }
         }
 
         $categories = Category::all();
@@ -145,6 +150,7 @@ class AdminArticleController extends Controller
 
         return view('admin.articles.edit', compact('article', 'categories', 'tags'));
     }
+
     public function update(Request $request, Article $article)
     {
         $validated = $request->validate([
@@ -176,7 +182,7 @@ class AdminArticleController extends Controller
             $validated['status'] = 'draft';
         }
         // Update artikel
-        $article->update([
+        $data = [
             'title' => $validated['title'],
             'status' => $validated['status'],
             'scheduled_at' => $validated['scheduled_at'],
@@ -187,9 +193,14 @@ class AdminArticleController extends Controller
             'category_id' => $validated['category_id'],
             'slug' => Str::slug($validated['title']),
             'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
-            'user_id' => auth()->id(),
-        ]);
 
+        ];
+        // Catat siapa yang publish
+        if ($validated['status'] === 'published' && auth()->user()->hasRole(['admin', 'editor', 'super-admin'])) {
+            $data['published_by'] = auth()->id();
+        }
+        $data['updated_by'] = auth()->id();
+        $article->update($data);
         // Sinkronisasi tags
         $tags = collect($validated['tags'] ?? [])->map(function ($tag) {
             if (is_numeric($tag)) {
