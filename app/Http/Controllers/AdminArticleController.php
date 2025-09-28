@@ -20,7 +20,7 @@ class AdminArticleController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
+        $isAdminOrEditor = $user->hasRole(roles: ['admin', 'editor', 'super-admin']);
         // Jika peran pengguna adalah 'admin', tampilkan semua berita
         if ($isAdminOrEditor) {
             $articles = Article::with('category')->latest()->paginate(15);
