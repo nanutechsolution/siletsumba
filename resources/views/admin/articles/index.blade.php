@@ -43,60 +43,66 @@
                         {{-- Tampilan Mobile (Cards) --}}
                         <div class="md:hidden space-y-4">
                             @forelse ($articles as $article)
-                            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
-                                <div class="flex items-start space-x-3">
-                                    {{-- Checkbox --}}
-                                    <input type="checkbox" name="selected_articles[]" value="{{ $article->slug }}" class="article-checkbox mt-1 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                                    {{-- Gambar Thumbnail --}}
-                                    <div class="w-20 h-16 flex-shrink-0 overflow-hidden rounded-md bg-gray-200 dark:bg-gray-600">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                                <div class="flex">
+                                    {{-- Thumbnail --}}
+                                    <div class="w-28 h-20 flex-shrink-0 bg-gray-100 dark:bg-gray-700">
                                         @if ($article->hasMedia('images'))
                                         @php $media = $article->getFirstMedia('images'); @endphp
-                                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-cover object-center" />
+                                        <img src="{{ $media->getUrl('thumb') }}" alt="{{ $article->name ?? 'Thumbnail' }}" loading="lazy" class="w-full h-full object-cover">
                                         @else
-                                        <div class="flex items-center justify-center w-full h-full text-gray-400 text-sm">
-                                            🖼️
-                                        </div>
+                                        <div class="flex items-center justify-center w-full h-full text-gray-400 text-sm">🖼️</div>
                                         @endif
                                     </div>
 
-                                    {{-- Info Artikel --}}
-                                    <div class="flex-1">
+                                    {{-- Info --}}
+                                    <div class="flex-1 p-3">
                                         {{-- Judul --}}
-                                        <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-2">
+                                        <h4 class="font-semibold text-sm text-gray-900 dark:text-gray-100 line-clamp-2">
                                             {{ $article->title }}
                                         </h4>
 
-                                        {{-- Status Badge --}}
-                                        <x-status-badge :status="$article->status" :scheduledAt="$article->scheduled_at" />
+                                        {{-- Status + Kategori --}}
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <x-status-badge :status="$article->status" :scheduledAt="$article->scheduled_at" />
+                                            <span class="text-xs text-gray-600 dark:text-gray-400">📂 {{ $article->category->name }}</span>
+                                        </div>
 
-                                        {{-- Info Tambahan --}}
-                                        <p class="text-xs text-gray-600 dark:text-gray-300">
-                                            Kategori: <span class="font-medium">{{ $article->category->name }}</span>
-                                        </p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                        {{-- Tanggal --}}
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                             {{ $article->created_at->format('d M Y, H:i') }} WITA
                                         </p>
                                     </div>
                                 </div>
 
                                 {{-- Aksi --}}
-                                <div class="flex flex-wrap justify-end gap-2 mt-3">
-                                    <a href="{{ route('admin.articles.edit', $article->slug) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">✏️ Edit</a>
+                                <div class="flex justify-end gap-2 p-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                    {{-- Edit --}}
+                                    <a href="{{ route('admin.articles.edit', $article->slug) }}" class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-1">
+                                        ✏️ Edit
+                                    </a>
 
+                                    {{-- Status-based Action --}}
                                     @if ($article->status === 'published')
-                                    <a href="{{ route('articles.show', $article->slug) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">👁️ Lihat</a>
+                                    {{-- Lihat --}}
+                                    <a href="{{ route('articles.show', $article->slug) }}" target="_blank" class="px-3 py-1 text-xs font-medium rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1">
+                                        👁️ Lihat
+                                    </a>
 
+                                    {{-- Draft (hanya admin/editor) --}}
                                     @if (auth()->user()->hasRole(['admin','editor']))
                                     <form action="{{ route('admin.articles.unpublish', $article->slug) }}" method="POST" onsubmit="return confirm('Yakin ingin mengembalikan ke draft?')" class="inline-block">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">🔄 Draft</button>
+                                        <button type="submit" class="px-3 py-1 text-xs font-medium rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center gap-1">
+                                            🔄 Draft
+                                        </button>
                                     </form>
                                     @endif
                                     @else
-                                    <a href="{{ route('admin.articles.preview', $article->slug) }}" target="_blank" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm">
-                                        Preview (Belum Tayang)
+                                    {{-- Preview --}}
+                                    <a href="{{ route('admin.articles.preview', $article->slug) }}" target="_blank" class="px-3 py-1 text-xs font-medium rounded-full bg-gray-500 hover:bg-gray-600 text-white flex items-center gap-1">
+                                        👁️ Preview
                                     </a>
                                     @endif
                                 </div>
@@ -107,6 +113,7 @@
                             </div>
                             @endforelse
                         </div>
+
                         {{-- Tampilan Desktop (Tabel) --}}
                         <div class="hidden md:block overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
