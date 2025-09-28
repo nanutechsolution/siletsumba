@@ -147,9 +147,10 @@
                             @error('new_images.*')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
-                            <div id="new-image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4"></div>
+                            <div class="mt-4 rounded-lg overflow-hidden shadow-sm w-full aspect-w-16 aspect-h-9 bg-gray-100 dark:bg-gray-800">
+                                <div id="new-image-preview" class="w-full h-full object-cover object-center"></div>
+                            </div>
                         </div>
-
                         {{-- Konten (Quill Editor) --}}
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Konten Berita</label>
@@ -253,7 +254,7 @@
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
                 img.alt = file.name;
-                img.className = 'w-full h-32 object-cover hover:scale-105 transition-transform';
+                img.className = 'w-full h-full object-cover hover:scale-105 transition-transform';
                 container.appendChild(img);
                 newImagePreviewContainer.appendChild(container);
             });
