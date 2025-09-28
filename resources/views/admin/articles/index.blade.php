@@ -70,7 +70,6 @@
                                     </div>
                                 </div>
 
-                                {{-- Aksi --}}
                                 {{-- Aksi Mobile --}}
                                 <div class="flex flex-wrap justify-end space-x-2 mt-3 relative z-10">
                                     <a href="{{ route('admin.articles.edit', $article->slug) }}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm inline-block">
@@ -95,7 +94,7 @@
                                         Lihat
                                     </a>
                                     @endif
-                                    @if (auth()->user()->hasRole(['admin','editor']))
+                                    {{-- @if (auth()->user()->hasRole(['admin','editor']))
                                     <form action="{{ route('admin.articles.destroy', $article->slug) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
                                         @csrf
                                         @method('DELETE')
@@ -103,7 +102,7 @@
                                             Hapus
                                         </button>
                                     </form>
-                                    @endif
+                                    @endif --}}
                                 </div>
 
                             </div>
