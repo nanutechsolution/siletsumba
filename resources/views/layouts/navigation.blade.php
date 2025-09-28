@@ -16,49 +16,45 @@
             <div class="hidden sm:flex items-center space-x-4 flex-wrap overflow-x-auto max-w-full">
                 <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">Dashboard</x-nav-link>
                 @can('buat_artikel')
-                    <x-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">Berita</x-nav-link>
+                <x-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">Berita</x-nav-link>
                 @endcan
                 @can('kelola_komentar')
-                    <x-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')" class="relative">
-                        <span class="flex items-center">
-                            Komentar
-                            @if ($pendingComments > 0)
-                                <span
-                                    class="ms-2 px-2 py-1 text-xs font-bold text-red-100 dark:text-red-900 bg-red-600 dark:bg-red-300 rounded-full">
-                                    {{ $pendingComments }}
-                                </span>
-                            @endif
+                <x-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')" class="relative">
+                    <span class="flex items-center">
+                        Komentar
+                        @if ($pendingComments > 0)
+                        <span class="ms-2 px-2 py-1 text-xs font-bold text-red-100 dark:text-red-900 bg-red-600 dark:bg-red-300 rounded-full">
+                            {{ $pendingComments }}
                         </span>
-                    </x-nav-link>
+                        @endif
+                    </span>
+                </x-nav-link>
                 @endcan
-                @role('admin')
-                    <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">Kategori</x-nav-link>
-                    <x-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">Prompt AI</x-nav-link>
-                    <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">Pengguna</x-nav-link>
-                    <x-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">Tag</x-nav-link>
-                    <x-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">Halaman Statis</x-nav-link>
-                    <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-nav-link>
+                @role('super-admin')
+                <x-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">Prompt AI</x-nav-link>
+                <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">Pengguna</x-nav-link>
+                @endrole
+                @role('admin|super-admin')
+                <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">Kategori</x-nav-link>
+                <x-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">Tag</x-nav-link>
+                <x-nav-link :href="route(name: 'admin.pages.index')" :active="request()->routeIs('admin.pages.*')">Halaman Statis</x-nav-link>
+                <x-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-nav-link>
                 @endrole
             </div>
             <!-- Theme Toggle + User Dropdown -->
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Theme Toggle Button -->
-                <button id="theme-toggle-desktop" type="button"
-                    class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5">
-                    <svg id="theme-icon-desktop" class="w-5 h-5 transition-transform duration-300" fill="currentColor"
-                        viewBox="0 0 20 20"></svg>
+                <button id="theme-toggle-desktop" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5">
+                    <svg id="theme-icon-desktop" class="w-5 h-5 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20"></svg>
                 </button>
                 <!-- User Dropdown -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300">
                             <div>{{ Auth::user()->name }}</div>
                             <svg class="fill-current h-4 w-4 ms-1" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </button>
                     </x-slot>
@@ -67,8 +63,7 @@
                         <x-dropdown-link :href="route('profile.edit')">Profile</x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();">Log
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log
                                 Out</x-dropdown-link>
                         </form>
                     </x-slot>
@@ -77,19 +72,13 @@
 
             <!-- Mobile Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button id="theme-toggle-mobile" type="button"
-                    class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5">
-                    <svg id="theme-icon-mobile" class="w-5 h-5 transition-transform duration-300" fill="currentColor"
-                        viewBox="0 0 20 20"></svg>
+                <button id="theme-toggle-mobile" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5">
+                    <svg id="theme-icon-mobile" class="w-5 h-5 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20"></svg>
                 </button>
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-900">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-900">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -100,14 +89,16 @@
         <!-- Nav Links -->
         <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">Dashboard</x-responsive-nav-link>
         <x-responsive-nav-link :href="route('admin.articles.index')" :active="request()->routeIs('admin.articles.*')">Berita</x-responsive-nav-link>
+        @role('super-admin')
+        <x-responsive-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">Prompt AI</x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">Pengguna</x-responsive-nav-link>
+        @endrole
         @role('admin')
-            <x-responsive-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')">Komentar</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">Kategori</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.prompts.index')" :active="request()->routeIs('admin.prompts.*')">Prompt AI</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">Pengguna</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">Tag</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">Halaman Statis</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.comments.index')" :active="request()->routeIs('admin.comments.*')">Komentar</x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">Kategori</x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.tags.index')" :active="request()->routeIs('admin.tags.*')">Tag</x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">Halaman Statis</x-responsive-nav-link>
+        <x-responsive-nav-link :href="route('admin.settings.index')" :active="request()->routeIs('admin.settings.*')">Pengaturan</x-responsive-nav-link>
         @endrole
 
         <!-- User Menu -->
@@ -121,8 +112,7 @@
                 <x-responsive-nav-link :href="route('home')">Kembali Ke Web</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-responsive-nav-link :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-responsive-nav-link>
                 </form>
             </div>
         </div>
@@ -133,12 +123,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const toggleButtons = [{
-                btn: document.getElementById('theme-toggle-desktop'),
-                icon: document.getElementById('theme-icon-desktop')
-            },
-            {
-                btn: document.getElementById('theme-toggle-mobile'),
-                icon: document.getElementById('theme-icon-mobile')
+                btn: document.getElementById('theme-toggle-desktop')
+                , icon: document.getElementById('theme-icon-desktop')
+            }
+            , {
+                btn: document.getElementById('theme-toggle-mobile')
+                , icon: document.getElementById('theme-icon-mobile')
             }
         ];
 
@@ -170,4 +160,5 @@
         toggleButtons.forEach(t => setIcon(t.icon, isDarkInitial));
         toggleButtons.forEach(t => t.btn.addEventListener('click', toggleTheme));
     });
+
 </script>

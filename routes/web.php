@@ -65,7 +65,7 @@ Route::get('/sitemap.xml', function () {
     });
 });
 
-Route::middleware(['auth', 'role:admin|editor|writer'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin|editor|writer|super-admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data');
     Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
@@ -94,7 +94,7 @@ Route::middleware(['auth', 'role:admin|editor|writer'])->prefix('admin')->name('
     Route::resource('pages', AdminPageController::class);
     Route::resource('articles', AdminArticleController::class);
     Route::put('articles/{article:slug}/unpublish', [AdminArticleController::class, 'unpublish'])
-    ->name('articles.unpublish');
+        ->name('articles.unpublish');
 
 });
 
