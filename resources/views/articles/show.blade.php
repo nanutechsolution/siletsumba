@@ -46,9 +46,13 @@
                 <h1 class="p-4 space-y-6 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
                     {!! $article->title !!}
                 </h1>
-                <div class="w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-md">
-                    <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-[450px] md:h-[600px] lg:h-[700px] object-cover object-center rounded-lg">
+                {{-- Detail Article --}}
+                @if ($article->hasMedia('images'))
+                <div class="w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
+                    <img src="{{ $article->getFirstMediaUrl('images', 'detail') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-auto object-contain object-center rounded-lg" loading="lazy" decoding="async">
                 </div>
+                @endif
+
                 <!-- Interaction Bar -->
                 <div class="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2 shadow-sm rounded-lg mt-4">
                     <!-- Left: Views, Likes, Comments -->
