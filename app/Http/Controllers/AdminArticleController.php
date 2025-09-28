@@ -56,7 +56,6 @@ class AdminArticleController extends Controller
             'status' => 'required|in:draft,published,scheduled',
             'scheduled_at' => 'nullable|date',
         ]);
-
         // Tambahan data default
         $validated['user_id'] = auth()->id();
         $validated['is_breaking'] = $request->boolean('is_breaking', false);
@@ -81,6 +80,8 @@ class AdminArticleController extends Controller
         } else {
             // Draft → biarkan null
             $validated['scheduled_at'] = null;
+            $validated['status'] = 'draft';
+
         }
 
         // Simpan artikel

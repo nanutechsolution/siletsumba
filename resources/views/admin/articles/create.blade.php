@@ -151,7 +151,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    @role('admin|editor')
+                    @role('admin|editor|super-admin')
                     <div x-data="{ status: 'draft' }" class="mb-5">
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Opsi Publikasi</h2>
 
@@ -202,7 +202,9 @@
                             </p>
                         </div>
                     </div>
-
+                    @else
+                    {{-- Writer otomatis draft --}}
+                    <input type="hidden" name="status" value="draft">
                     @endrole
 
                     {{-- Tombol AI --}}
