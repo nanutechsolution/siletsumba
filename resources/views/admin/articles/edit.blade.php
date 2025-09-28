@@ -125,9 +125,9 @@
                             <div id="old-image-preview" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                                 @if ($article->hasMedia('images'))
                                 @foreach ($article->getMedia('images') as $media)
-                                <div class="relative group w-full">
+                                <div class="relative group" data-id="{{ $media->id }}">
                                     <picture>
-                                        <img src="{{ $media->getUrl('responsive') }}" alt="Gambar artikel" class="w-full h-48 sm:h-32 md:h-40 lg:h-48 object-cover rounded-lg shadow-md">
+                                        <img src="{{ $media->getUrl('responsive') }}" class="w-full h-auto rounded-lg shadow-md object-cover" alt="Gambar artikel">
                                     </picture>
                                     <button type="button" class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700 opacity-0 group-hover:opacity-100 transition delete-old-image">
                                         &times;
