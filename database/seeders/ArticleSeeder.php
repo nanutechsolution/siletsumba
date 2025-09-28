@@ -132,7 +132,6 @@ class ArticleSeeder extends Seeder
             Article::create([
                 'title' => $articleData['title'],
                 'slug' => Str::slug($articleData['title']),
-                'is_published' => $articleData['is_published'],
                 'content' => $articleData['content'],
                 'location_short' => $articleData['location_short'],
                 'is_breaking' => $articleData['is_breaking'],

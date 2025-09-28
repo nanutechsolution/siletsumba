@@ -328,7 +328,7 @@ class AdminArticleController extends Controller
         $user = auth()->user();
 
         // Cek role, hanya admin dan editor yang boleh
-        if (!$user->hasAnyRole(['admin', 'editor'])) {
+        if (!$user->hasAnyRole(['admin', 'editor', 'super-admin'])) {
             abort(403, 'Anda tidak memiliki izin untuk menghapus artikel.');
         }
 

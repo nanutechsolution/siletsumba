@@ -30,7 +30,7 @@
 
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                             <div class="flex items-center space-x-2">
-                                @role(['admin','editor'])
+                                @role(['admin','editor', 'super-admin'])
                                 <button type="submit" id="mass-delete-btn" disabled class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition opacity-50 cursor-not-allowed text-sm">
                                     Hapus Terpilih (<span id="selected-count">0</span>)
                                 </button>
@@ -155,7 +155,7 @@
                                             </a>
                                             @endif
 
-                                            @if (auth()->user()->hasRole(['admin','editor']))
+                                            @if (auth()->user()->hasRole(['admin','editor', 'super-admin']))
                                             <form action="{{ route('admin.articles.destroy', $article->slug) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
                                                 @csrf
                                                 @method('DELETE')
