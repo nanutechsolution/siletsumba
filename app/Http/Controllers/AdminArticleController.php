@@ -60,9 +60,12 @@ class AdminArticleController extends Controller
         ]);
         $validated['slug'] = Str::slug($validated['title']);
         $validated['user_id'] = auth()->id();
-        $validated['scheduled_at'] = $request->scheduled_at ?? null;
+        $validated['is_breaking'] = $request->boolean('is_breaking', false);
+        $slug = Str::slug($validated['title']);
+        $count = Article::where('slug', 'like', "{$slug}%")->count();
+        $validated['slug'] = $count ? "{$slug}-{$count}" : $slug;
         if ($request->input('publish_option') === 'now') {
-            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor')) {
+            if (auth()->user()->hasRole(roles: 'admin') || auth()->user()->hasRole('editor')) {
                 $validated['is_published'] = true;
                 $validated['scheduled_at'] = now();
             }
@@ -82,7 +85,9 @@ class AdminArticleController extends Controller
             $validated['scheduled_at'] = null;
         }
         // Auto-generate excerpt
-        $validated['excerpt'] = Str::limit(strip_tags($validated['content']), 150);
+        $validated['excerpt'] = Str::words(strip_tags($validated['content']), 150, '...');
+
+        // $validated['excerpt'] = Str::limit(strip_tags($validated['content']), 150);
         // Hapus key 'image' supaya tidak di-insert ke articles
         $imageFile = $validated['image'];
         unset($validated['image']);
@@ -295,4 +300,22 @@ class AdminArticleController extends Controller
         });
         return redirect()->route('admin.articles.index')->with('success', "$deletedCount berita berhasil dihapus.");
     }
+
+    public function unpublish(Article $article)
+    {
+        $user = auth()->user();
+
+        if (!$user->hasRole(['admin', 'editor'])) {
+            abort(403, 'Anda tidak punya izin untuk unpublish artikel ini.');
+        }
+
+        $article->update([
+            'is_published' => false,
+            'scheduled_at' => null,
+        ]);
+
+        return redirect()->route('admin.articles.index')
+            ->with('success', 'Artikel berhasil dikembalikan ke draft.');
+    }
+
 }

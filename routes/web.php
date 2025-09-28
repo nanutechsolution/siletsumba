@@ -93,6 +93,9 @@ Route::middleware(['auth', 'role:admin|editor|writer'])->prefix('admin')->name('
     Route::resource('ads', AdController::class);
     Route::resource('pages', AdminPageController::class);
     Route::resource('articles', AdminArticleController::class);
+    Route::put('articles/{article:slug}/unpublish', [AdminArticleController::class, 'unpublish'])
+    ->name('articles.unpublish');
+
 });
 
 
