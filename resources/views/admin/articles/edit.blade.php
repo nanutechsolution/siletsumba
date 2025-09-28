@@ -122,12 +122,12 @@
                         {{-- Gambar Saat Ini --}}
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar Saat Ini</label>
-                            <div id="old-image-preview" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <div id="old-image-preview" class="w-full aspect-w-16 aspect-h-9 ">
                                 @if ($article->hasMedia('images'))
                                 @foreach ($article->getMedia('images') as $media)
                                 <div class="relative group" data-id="{{ $media->id }}">
                                     <picture>
-                                        <img src="{{ $media->getUrl('responsive') }}" class="w-full h-auto rounded-lg shadow-md object-cover" alt="Gambar artikel">
+                                        <img src="{{ $media->getUrl('responsive') }}" class="w-full h-full object-cover object-center" alt="Gambar artikel">
                                     </picture>
                                     <button type="button" class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700 opacity-0 group-hover:opacity-100 transition delete-old-image">
                                         &times;
