@@ -54,15 +54,7 @@
                                         </h4>
 
                                         {{-- Status --}}
-                                        @if ($article->is_published)
-                                        <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                            Dipublikasikan
-                                        </span>
-                                        @else
-                                        <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            Draft
-                                        </span>
-                                        @endif
+                                        <x-status-badge :status="$article->status" :scheduledAt="$article->scheduled_at" />
 
                                         <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">
                                             Kategori: {{ $article->category->name }}
@@ -96,108 +88,100 @@
                                     @endif
                                     {{-- @if (auth()->user()->hasRole(['admin','editor']))
                                     <form action="{{ route('admin.articles.destroy', $article->slug) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                    @endif --}}
-                                </div>
-
-                            </div>
-                            @empty
-                            <div class="p-4 text-center text-gray-500 dark:text-gray-300">
-                                Tidak ada berita.
-                            </div>
-                            @endforelse
-                        </div>
-
-                        {{-- Tampilan Desktop (Tabel) --}}
-                        <div class="hidden md:block overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="py-3 px-4 w-10">
-                                            <input type="checkbox" id="select-all-checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                        </th>
-                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Judul</th>
-                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Status</th>
-                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Kategori</th>
-                                        <th class="py-3 px-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @forelse ($articles as $article)
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                                        <td class="py-4 px-4 w-10">
-                                            <input type="checkbox" name="selected_articles[]" value="{{ $article->slug }}" class="article-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                        </td>
-                                        <td class="py-4 px-4 text-sm font-medium">{{ $article->title }}</td>
-                                        <td class="py-4 px-4 text-sm">
-                                            @if ($article->is_published)
-                                            <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                                Dipublikasikan
-                                            </span>
-                                            @else
-                                            <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                Draft
-                                            </span>
-                                            @endif
-                                        </td>
-                                        <td class="py-4 px-4 text-sm text-gray-500">{{ $article->category->name }}</td>
-                                        <td class="py-4 px-2 text-center text-sm space-x-2">
-                                            <a href="{{ route('admin.articles.edit', $article->slug) }}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
-                                                Edit
-                                            </a>
-
-                                            @if ($article->is_published)
-                                            <a href="{{ route('articles.show', $article->slug) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                Lihat
-                                            </a>
-
-                                            @if (auth()->user()->hasRole(['admin','editor']))
-                                            <form action="{{ route('admin.articles.unpublish', $article->slug) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin mengembalikan ke draft?')">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
-                                                    Draft
-                                                </button>
-                                            </form>
-                                            @endif
-                                            @else
-                                            <a href="#" onclick="showDraftModal(event)" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                                Lihat
-                                            </a>
-                                            @endif
-
-                                            @if (auth()->user()->hasRole(['admin','editor']))
-                                            <form action="{{ route('admin.articles.destroy', $article->slug) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="5" class="py-4 text-center text-gray-500">Tidak ada berita.</td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                        Hapus
+                                    </button>
                     </form>
-
-                    <div class="mt-4">
-                        {{ $articles->links() }}
-                    </div>
+                    @endif --}}
                 </div>
+
             </div>
+            @empty
+            <div class="p-4 text-center text-gray-500 dark:text-gray-300">
+                Tidak ada berita.
+            </div>
+            @endforelse
         </div>
+
+        {{-- Tampilan Desktop (Tabel) --}}
+        <div class="hidden md:block overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="py-3 px-4 w-10">
+                            <input type="checkbox" id="select-all-checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                        </th>
+                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Judul</th>
+                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Status</th>
+                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Kategori</th>
+                        <th class="py-3 px-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @forelse ($articles as $article)
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                        <td class="py-4 px-4 w-10">
+                            <input type="checkbox" name="selected_articles[]" value="{{ $article->slug }}" class="article-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                        </td>
+                        <td class="py-4 px-4 text-sm font-medium">{{ $article->title }}</td>
+                        <td class="py-4 px-4 text-sm">
+                            <x-status-badge :status="$article->status" :scheduledAt="$article->scheduled_at" />
+                        </td>
+                        <td class="py-4 px-4 text-sm text-gray-500">{{ $article->category->name }}</td>
+                        <td class="py-4 px-2 text-center text-sm space-x-2">
+                            <a href="{{ route('admin.articles.edit', $article->slug) }}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm">
+                                Edit
+                            </a>
+
+                            @if ($article->is_published)
+                            <a href="{{ route('articles.show', $article->slug) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                Lihat
+                            </a>
+
+                            @if (auth()->user()->hasRole(['admin','editor']))
+                            <form action="{{ route('admin.articles.unpublish', $article->slug) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin mengembalikan ke draft?')">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                                    Draft
+                                </button>
+                            </form>
+                            @endif
+                            @else
+                            <a href="#" onclick="showDraftModal(event)" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                                Lihat
+                            </a>
+                            @endif
+
+                            @if (auth()->user()->hasRole(['admin','editor']))
+                            <form action="{{ route('admin.articles.destroy', $article->slug) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                    Hapus
+                                </button>
+                            </form>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="py-4 text-center text-gray-500">Tidak ada berita.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        </form>
+
+        <div class="mt-4">
+            {{ $articles->links() }}
+        </div>
+    </div>
+    </div>
+    </div>
     </div>
 
     {{-- Modal Draft --}}

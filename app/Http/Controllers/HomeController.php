@@ -14,12 +14,12 @@ class HomeController extends Controller
     {
         // 1. Mengambil artikel hero (artikel terbaru pertama)
         $hero = Article::with(['category'])
-            ->where('status', 'published')
+            ->published()
             ->latest()
             ->first();
         // 2. Mengambil artikel terbaru (kecuali artikel hero)
         $latestArticles = Article::with(relations: ['category'])
-            ->where('status', 'published')
+            ->published()
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('id', '!=', $hero->id);
             })
@@ -28,7 +28,7 @@ class HomeController extends Controller
             ->withQueryString();
         // 2.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
         $latestFive = Article::with(['category'])
-            ->where('status', operator: 'published')
+            ->published()
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('id', '!=', $hero->id);
             })
@@ -156,8 +156,7 @@ class HomeController extends Controller
         // 3. Artikel terpopuler (trending)
         $trending = $tag->articles()
             ->with(['category', 'user', 'tags'])
-            ->where('status', 'published')
-            ->orderBy('views', 'desc')
+            ->trending(5)
             ->take(5)
             ->get();
 

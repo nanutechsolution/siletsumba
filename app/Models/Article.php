@@ -133,4 +133,18 @@ class Article extends Model implements HasMedia
             ->quality(70)
             ->nonQueued();
     }
+
+
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'published');
+    }
+
+    public function scopeTrending($query, $limit = 5)
+    {
+        return $query->published()
+            ->orderBy('views', 'desc')
+            ->take($limit);
+    }
 }
