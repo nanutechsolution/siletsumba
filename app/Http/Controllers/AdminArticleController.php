@@ -92,7 +92,7 @@ class AdminArticleController extends Controller
         $validated['slug'] = $count ? "{$slug}-{$count}" : $slug;
 
         // Excerpt auto
-        $validated['excerpt'] = Str::words(strip_tags($validated['content']), 150, '...');
+        $validated['excerpt'] = Str::words(strip_tags($validated['content']), 25, '...');
 
         // Handle status & scheduled_at
         if ($validated['status'] === 'published') {
@@ -213,7 +213,7 @@ class AdminArticleController extends Controller
             'status' => $validated['status'],
             'scheduled_at' => $validated['scheduled_at'],
             'content' => $validated['content'],
-            'excerpt' => Str::words(strip_tags($validated['content']), 150, '...'),
+            'excerpt' => Str::words(strip_tags($validated['content']), 25, '...'),
             'lokasi_short' => $validated['lokasi_short'] ?? null,
             'location_short' => $validated['location_short'] ?? null,
             'category_id' => $validated['category_id'],
