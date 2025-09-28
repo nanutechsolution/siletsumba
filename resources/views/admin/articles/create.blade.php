@@ -136,14 +136,16 @@
                         <!-- Info & petunjuk -->
                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
                             Pilih gambar untuk artikel. Maksimal 5MB, format jpeg/png/jpg/gif/svg.
-                            Setelah dipilih, gambar akan tampil di preview di bawah. Gunakan fitur crop jika perlu.
+                            Setelah dipilih, gambar akan tampil di preview di bawah.
                         </p>
 
                         <!-- File Input -->
                         <input type="file" name="image" id="imageInput" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
 
                         <!-- Preview -->
-                        <div id="imagePreview" class="mt-4 rounded-lg overflow-hidden shadow-sm"></div>
+                        <div id="imagePreview" class="mt-4 rounded-lg overflow-hidden shadow-sm w-full aspect-w-16 aspect-h-9 bg-gray-100 dark:bg-gray-800">
+                            <img id="previewImage" src="" alt="Preview Gambar" class="w-full h-full object-cover object-center hidden">
+                        </div>
 
                         @error('image')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -230,20 +232,6 @@
                         <a href="{{ route('admin.articles.index') }}" class="text-blue-500 hover:text-blue-700 font-semibold">Batal</a>
                     </div>
                 </form>
-
-                <!-- Modal Cropper -->
-                <div id="cropModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-                    <div class="bg-white rounded-lg p-4 max-w-lg w-full">
-                        <h2 class="text-lg font-bold mb-2">Crop Gambar</h2>
-                        <div class="overflow-hidden">
-                            <img id="cropImage" class="max-w-full">
-                        </div>
-                        <div class="mt-4 flex justify-end gap-2">
-                            <button id="cancelCrop" type="button" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Batal</button>
-                            <button id="applyCrop" type="button" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Crop</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -251,15 +239,15 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script>
         new TomSelect("#tags", {
-            plugins: ['remove_button'],
-            create: true,
-            sortField: {
-                field: "text",
-                direction: "asc"
+            plugins: ['remove_button']
+            , create: true
+            , sortField: {
+                field: "text"
+                , direction: "asc"
             },
             // load old tags jika ada
-            items: @json(old('tags', [])),
-        });
+            items: @json(old('tags', []))
+        , });
 
     </script>
 
@@ -430,82 +418,34 @@
         });
 
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const imageInput = document.getElementById('imageInput');
-            const imagePreview = document.getElementById('imagePreview');
-            const cropModal = document.getElementById('cropModal');
-            const cropImage = document.getElementById('cropImage');
-            const applyCrop = document.getElementById('applyCrop');
-            const cancelCrop = document.getElementById('cancelCrop');
-            let cropper;
-            let currentFile;
+            const previewImage = document.getElementById('previewImage');
+
             imageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
+
                 // Validasi ukuran maksimal 5MB
                 if (file.size > 5 * 1024 * 1024) {
                     alert('Ukuran maksimal 5MB!');
                     imageInput.value = '';
+                    previewImage.src = '';
+                    previewImage.classList.add('hidden');
                     return;
                 }
-                currentFile = file;
+
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    const img = new Image();
-                    img.onload = function() {
-                        if (img.height > img.width) {
-                            cropImage.src = event.target.result;
-                            cropModal.classList.remove('hidden');
-
-                            // Init Cropper
-                            cropper = new Cropper(cropImage, {
-                                aspectRatio: 16 / 9
-                                , viewMode: 1
-                            , });
-                        } else {
-                            imagePreview.innerHTML = '';
-                            const imgEl = document.createElement('img');
-                            imgEl.src = event.target.result;
-                            imgEl.className = 'w-full h-64 object-cover rounded shadow';
-                            imagePreview.appendChild(imgEl);
-                        }
-                    };
-                    img.src = event.target.result;
+                    previewImage.src = event.target.result;
+                    previewImage.classList.remove('hidden');
                 };
                 reader.readAsDataURL(file);
-            });
-
-            // Tombol Batal
-            cancelCrop.addEventListener('click', function() {
-                cropper.destroy();
-                cropModal.classList.add('hidden');
-                imageInput.value = '';
-            });
-
-            // Tombol Apply Crop
-            applyCrop.addEventListener('click', function() {
-                const canvas = cropper.getCroppedCanvas({
-                    width: 1200, height: 675,});
-                canvas.toBlob(function(blob) {
-                    // Update file input dengan hasil crop
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(new File([blob], currentFile.name, {
-                        type: blob.type
-                    }));
-                    imageInput.files = dataTransfer.files;
-                    // Preview hasil crop
-                    imagePreview.innerHTML = '';
-                    const imgEl = document.createElement('img');
-                    imgEl.src = URL.createObjectURL(blob);
-                    imgEl.className = 'w-full h-64 object-cover rounded shadow';
-                    imagePreview.appendChild(imgEl);
-
-                    cropper.destroy();
-                    cropModal.classList.add('hidden');
-                });
             });
         });
 
     </script>
+
 </x-app-layout>
