@@ -173,8 +173,8 @@ class AdminArticleController extends Controller
             $validated['scheduled_at'] = \Carbon\Carbon::parse($request->input('scheduled_at'));
         } else {
             $validated['scheduled_at'] = null;
+            $validated['status'] = 'draft';
         }
-
         // Update artikel
         $article->update([
             'title' => $validated['title'],
