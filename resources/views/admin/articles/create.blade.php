@@ -130,27 +130,52 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="mb-5">
-                        <label class="block font-bold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
+                    <div x-data="imageUploader()" class="mb-5">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Upload Gambar</label>
 
-                        <!-- Info & petunjuk -->
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                            Pilih gambar untuk artikel. Maksimal 5MB, format jpeg/png/jpg/gif/svg.
-                            Setelah dipilih, gambar akan tampil di preview di bawah.
-                        </p>
+                        <!-- Dropzone -->
+                        <div @dragover.prevent="dragOver=true" @dragleave.prevent="dragOver=false" @drop.prevent="handleDrop($event)" :class="dragOver
+            ? 'border-blue-400 bg-blue-50 dark:bg-blue-900'
+            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800'" class="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer transition-all">
 
-                        <!-- File Input -->
-                        <input type="file" name="image" id="imageInput" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                            <!-- Preview Placeholder -->
+                            <template x-if="!preview">
+                                <div class="text-center text-gray-400 dark:text-gray-400">
+                                    <svg class="mx-auto w-10 h-10 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4h10v12M5 20h14a2 2 0 002-2v-4H3v4a2 2 0 002 2z" />
+                                    </svg>
+                                    <p class="text-sm">Drag & drop file di sini atau klik untuk memilih</p>
+                                </div>
+                            </template>
 
-                        <!-- Preview -->
-                        <div id="imagePreview" class="mt-4 rounded-lg overflow-hidden shadow-sm w-full aspect-w-16 aspect-h-9 bg-gray-100 dark:bg-gray-800">
-                            <img id="previewImage" src="" alt="Preview Gambar" class="w-full h-full object-cover object-center hidden">
+                            <!-- Input File -->
+                            <input type="file" name="image" x-ref="input" @change="handleFile($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+
+                            <!-- Preview Image -->
+                            <template x-if="preview">
+                                <div class="relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600 shadow-sm">
+                                    <img :src="preview" class="w-full h-full object-cover object-center" />
+                                    <button type="button" @click="resetFile()" class="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center hover:bg-red-600 transition">&times;</button>
+                                </div>
+                            </template>
                         </div>
 
-                        @error('image')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                        <!-- File Info -->
+                        <template x-if="preview">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                                <p><strong>Nama File:</strong> <span x-text="fileName"></span></p>
+                                <p><strong>Ukuran:</strong> <span x-text="fileSize"></span></p>
+                            </div>
+                        </template>
+
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            Format yang didukung: JPG, PNG, GIF. Maksimal 5MB.
+                        </p>
                     </div>
+
+
+
+
                     @role('admin|editor|super-admin')
                     <div x-data="{ status: 'draft' }" class="mb-5">
                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Opsi Publikasi</h2>
@@ -432,33 +457,60 @@
 
     </script>
 
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageInput = document.getElementById('imageInput');
-            const previewImage = document.getElementById('previewImage');
+        function imageUploader() {
+            return {
+                file: null
+                , preview: null
+                , fileName: ''
+                , fileSize: ''
+                , dragOver: false,
 
-            imageInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
+                handleFile(event) {
+                    const f = event.target.files[0];
+                    if (!f) return;
+                    this.assignFile(f);
+                },
 
-                // Validasi ukuran maksimal 5MB
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('Ukuran maksimal 5MB!');
-                    imageInput.value = '';
-                    previewImage.src = '';
-                    previewImage.classList.add('hidden');
-                    return;
+                handleDrop(event) {
+                    const f = event.dataTransfer.files[0];
+                    if (!f) return;
+                    this.assignFile(f);
+                    this.$refs.input.files = event.dataTransfer.files; // Kunci: Laravel bisa menerima file
+                    this.dragOver = false;
+                },
+
+                assignFile(f) {
+                    if (f.size > 5 * 1024 * 1024) {
+                        alert('Ukuran maksimal 5MB!');
+                        this.resetFile();
+                        return;
+                    }
+                    this.file = f;
+                    this.fileName = f.name;
+                    this.fileSize = (f.size / 1024 / 1024).toFixed(2) + ' MB';
+
+                    // Preview
+                    const reader = new FileReader();
+                    reader.onload = e => this.preview = e.target.result;
+                    reader.readAsDataURL(f);
+
+                    // Assign file ke input supaya Laravel bisa menerima
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(f);
+                    this.$refs.input.files = dataTransfer.files;
+                },
+
+                resetFile() {
+                    this.file = null;
+                    this.preview = null;
+                    this.fileName = '';
+                    this.fileSize = '';
+                    this.$refs.input.value = '';
                 }
-
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    previewImage.src = event.target.result;
-                    previewImage.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            });
-        });
+            }
+        }
 
     </script>
-
 </x-app-layout>

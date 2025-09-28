@@ -147,7 +147,8 @@
                                             <a href="{{ route('articles.show', $article->slug) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
                                                 Lihat
                                             </a>
-                                            @if (auth()->user()->hasRole(['admin','editor']))
+                                            @if (auth()->user()->hasRole(['admin','editor', 'super-admin']))
+                                            {{-- Tombol Draft untuk Admin dan Editor --}}
                                             <form action="{{ route('admin.articles.unpublish', $article->slug) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin mengembalikan ke draft?')">
                                                 @csrf
                                                 @method('PUT')
