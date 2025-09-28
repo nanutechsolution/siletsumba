@@ -17,6 +17,32 @@ use Illuminate\Support\Str;
 
 class AdminArticleController extends Controller
 {
+    public function preview($slug)
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+
+        // Cek status, hanya boleh preview draft/scheduled
+        if (!in_array($article->status, ['draft', 'scheduled'])) {
+            abort(403, 'Artikel ini sudah dipublikasikan.');
+        }
+
+        // Cek role: penulis artikel, admin, atau editor
+        if (
+            auth()->id() !== $article->user_id &&
+            !auth()->user()->hasRole(['admin', 'editor'])
+        ) {
+            abort(403, 'Anda tidak punya akses untuk preview artikel ini.');
+        }
+        $popular = Article::where('status', 'published')
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+        $latest = Article::where('status', 'published')
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('articles.show', compact('article', 'popular', 'latest'));
+    }
     public function index()
     {
         $user = auth()->user();

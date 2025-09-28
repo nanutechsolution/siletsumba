@@ -96,6 +96,9 @@ Route::middleware(['auth', 'role:admin|editor|writer|super-admin'])->prefix('adm
     Route::put('articles/{article:slug}/unpublish', [AdminArticleController::class, 'unpublish'])
         ->name('articles.unpublish');
 
+    Route::get('/articles/preview/{slug}', [AdminArticleController::class, 'preview'])
+        ->name('articles.preview');
+
 });
 
 

@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="mx-auto py-2">
+    @if(!$article->is_published)
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
+        <div class="font-semibold">⚠️ Mode Preview</div>
+        <p>Artikel ini <strong>belum dipublikasikan</strong>.
+            Jangan dibagikan ke publik sebelum statusnya tayang.</p>
+    </div>
+    @endif
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4" aria-label="Breadcrumb">
         <a href="{{ url('/') }}" class="hover:text-silet-red">Home</a>
@@ -101,6 +108,7 @@
                             <span>{{ $article->comments_count ?? 0 }}</span>
                         </div>
                     </div>
+                    @if($article->is_published)
                     <div x-data="{ open: false, copied: false }" class="relative">
                         <!-- Tombol Share -->
                         <button @click="open = true" class="flex items-center justify-center p-2 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm hover:shadow-md transform hover:scale-105 transition">
@@ -108,7 +116,6 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
                             </svg>
                         </button>
-
                         <!-- Modal Share -->
                         <div x-show="open" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                             <div @click.outside="open = false" x-transition.scale class="bg-white dark:bg-gray-800 rounded-xl p-5 w-80 sm:w-96 shadow-xl transform transition-all">
@@ -182,6 +189,13 @@
                             </div>
                         </div>
                     </div>
+                    @else
+                    <button disabled class="flex items-center justify-center p-2 rounded-lg bg-gray-300 text-gray-500 cursor-not-allowed">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314M16.783 7.093a2.25 2.25 0 113.935-2.186 2.25 2.25 0 01-3.935 2.186zm0 12.814a2.25 2.25 0 103.935-2.186 2.25 2.25 0 00-3.935 2.186z" />
+                        </svg>
+                    </button>
+                    @endif
                 </div>
 
                 <div id="login-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
