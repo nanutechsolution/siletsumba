@@ -128,15 +128,16 @@ class AdminArticleController extends Controller
 
     public function edit(Article $article)
     {
-
         $user = auth()->user();
-        $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
-        if (!$isAdminOrEditor) {
-            abort(403);
+
+        if (!$user->hasRole(['admin', 'editor']) && $user->id !== $article->user_id) {
+            abort(403, 'Anda tidak punya akses untuk mengedit artikel ini.');
         }
+
         $categories = Category::all();
         $article->load('images');
         $tags = Tag::all();
+
         return view('admin.articles.edit', compact('article', 'categories', 'tags'));
     }
     public function update(Request $request, Article $article)
@@ -150,22 +151,32 @@ class AdminArticleController extends Controller
             'is_breaking' => 'nullable|boolean',
             'lokasi_short' => 'nullable|string|max:255',
             'location_short' => 'nullable|string|max:255',
-            'is_published' => 'nullable|boolean',
+            'publish_option' => 'nullable|in:now,schedule',
+            'scheduled_at' => 'nullable|date',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
             'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
+
         $user = auth()->user();
         $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
+        $isPublished = false;
+        $scheduledAt = null;
         if ($isAdminOrEditor) {
-            $isPublished = $validated['is_published'];
-        } else {
-            $isPublished = false;
+            if ($request->input('publish_option') === 'now') {
+                $isPublished = true;
+                $scheduledAt = now();
+            } elseif ($request->input('publish_option') === 'schedule') {
+                $isPublished = false;
+                $scheduledAt = $request->filled('scheduled_at')
+                    ? \Carbon\Carbon::parse($request->input('scheduled_at'))
+                    : null;
+            }
         }
-
         $article->update([
             'title' => $validated['title'],
             'is_published' => $isPublished,
+            'scheduled_at' => $scheduledAt,
             'content' => $validated['content'],
             'excerpt' => Str::limit(strip_tags($validated['content']), 150),
             'lokasi_short' => $validated['lokasi_short'] ?? null,
@@ -174,13 +185,20 @@ class AdminArticleController extends Controller
             'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
             'user_id' => auth()->id(),
         ]);
+
+        // Sinkronisasi tags
         $article->tags()->sync($validated['tags'] ?? []);
+
+        // Hapus gambar lama
         if (!empty($validated['delete_images'])) {
             foreach ($validated['delete_images'] as $id) {
                 $media = $article->media()->find($id);
-                if ($media) $media->delete();
+                if ($media) {
+                    $media->delete();
+                }
             }
         }
+
         // Upload gambar baru
         if ($request->hasFile('new_images')) {
             foreach ($request->file('new_images') as $image) {
@@ -192,6 +210,7 @@ class AdminArticleController extends Controller
 
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
+
 
 
     public function destroy(Article $article)
@@ -221,14 +240,14 @@ class AdminArticleController extends Controller
             'Content-Type' => 'application/json',
             'X-goog-api-key' => $apiKey,
         ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', [
-            'contents' => [
-                [
-                    'parts' => [
-                        ['text' =>  $request->prompt]
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $request->prompt]
+                            ]
+                        ]
                     ]
-                ]
-            ]
-        ]);
+                ]);
 
         if ($response->failed()) {
             return response()->json([
@@ -264,7 +283,8 @@ class AdminArticleController extends Controller
         DB::transaction(function () use ($request, &$deletedCount) {
             foreach ($request->input('selected_articles') as $slug) {
                 $article = Article::where('slug', $slug)->first();
-                if (!$article) continue;
+                if (!$article)
+                    continue;
 
                 // Hapus media terkait
                 $article->clearMediaCollection('images');

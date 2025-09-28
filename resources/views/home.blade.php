@@ -45,7 +45,7 @@
                                     </span>
 
                                     <span class="flex items-center">
-                                        <i class="fas fa-clock mr-2"></i>{{ $hero->created_at->diffForHumans() }}
+                                        <i class="fas fa-clock mr-2"></i>{{ $hero->scheduled_at->diffForHumans() }}
                                     </span>
                                 </div>
                             </div>
