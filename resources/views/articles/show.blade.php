@@ -46,11 +46,12 @@
                 <h1 class="p-4 space-y-6 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-white leading-snug">
                     {!! $article->title !!}
                 </h1>
-                <div class="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden bg-gray-100">
+                <div class="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 transition-colors">
                     @if ($article->hasMedia('images'))
-                    <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-full object-contain md:object-cover object-center transition" loading="eager" fetchpriority="high" decoding="async">
+                    <img src="{{ $article->getFirstMedia('images')->getUrl('responsive') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-full object-contain md:object-cover object-center transition-transform duration-300 ease-in-out dark:brightness-90" loading="eager" fetchpriority="high" decoding="async">
                     @endif
                 </div>
+
                 <!-- Interaction Bar -->
                 <div class="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2 shadow-sm rounded-lg mt-4">
                     <!-- Left: Views, Likes, Comments -->
