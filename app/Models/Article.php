@@ -31,10 +31,12 @@ class Article extends Model implements HasMedia
         'location_short',
         'user_id',
         'views',
-        'is_published',
+        'published_by',
+        'updated_by',
     ];
     protected $casts = [
         'scheduled_at' => 'datetime',
+        'is_breaking' => 'boolean',
     ];
     protected $dates = ['deleted_at'];
 
@@ -135,7 +137,14 @@ class Article extends Model implements HasMedia
     }
 
 
-
+    public function publisher()
+    {
+        return $this->belongsTo(User::class, 'published_by');
+    }
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
