@@ -22,16 +22,16 @@ class Article extends Model implements HasMedia
     protected $fillable = [
         'title',
         'slug',
+        'status',
+        'scheduled_at',
         'content',
         'excerpt',
-        'image_url',
         'category_id',
         'is_breaking',
         'location_short',
         'user_id',
         'views',
         'is_published',
-        'scheduled_at'
     ];
     protected $casts = [
         'scheduled_at' => 'datetime',
@@ -84,6 +84,13 @@ class Article extends Model implements HasMedia
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+    public function getIsPublishedAttribute($value)
+    {
+        if (!is_null($this->status)) {
+            return $this->status === 'published';
+        }
+        return (bool) $value;
     }
 
     public function registerMediaConversions(?Media $media = null): void

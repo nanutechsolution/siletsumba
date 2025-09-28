@@ -63,16 +63,27 @@
                             @enderror
                         </div>
                         @role('admin|editor')
-                        <div x-data="{ publishOption: '{{ old('publish_option', $article->scheduled_at && !$article->is_published ? 'schedule' : 'now') }}' }" class="mb-5">
+                        <div x-data="{ status: '{{ old('status', $article->status) }}' }" class="mb-5">
                             <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Opsi Publikasi</h2>
 
                             <!-- Pilihan -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+                                <!-- Draft -->
+                                <label :class="status === 'draft'
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400'
+            : 'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
+                                    <input type="radio" name="status" value="draft" x-model="status" class="hidden" />
+                                    <div class="flex flex-col">
+                                        <span class="font-medium text-gray-900 dark:text-gray-100">Simpan sebagai Draft</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">Artikel tidak akan tampil ke publik</span>
+                                    </div>
+                                </label>
+
                                 <!-- Terbit Sekarang -->
-                                <label :class="publishOption === 'now'
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400'
-                : 'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
-                                    <input type="radio" name="publish_option" value="now" x-model="publishOption" class="hidden" />
+                                <label :class="status === 'published'
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400'
+            : 'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
+                                    <input type="radio" name="status" value="published" x-model="status" class="hidden" />
                                     <div class="flex flex-col">
                                         <span class="font-medium text-gray-900 dark:text-gray-100">Terbit Sekarang</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">Artikel langsung tampil setelah disimpan</span>
@@ -80,10 +91,10 @@
                                 </label>
 
                                 <!-- Jadwalkan -->
-                                <label :class="publishOption === 'schedule'
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400'
-                : 'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
-                                    <input type="radio" name="publish_option" value="schedule" x-model="publishOption" class="hidden" />
+                                <label :class="status === 'scheduled'
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 ring-2 ring-blue-400'
+            : 'border-gray-300 dark:border-gray-600'" class="flex cursor-pointer items-center space-x-3 rounded-xl border p-4 shadow-sm transition hover:shadow-md">
+                                    <input type="radio" name="status" value="scheduled" x-model="status" class="hidden" />
                                     <div class="flex flex-col">
                                         <span class="font-medium text-gray-900 dark:text-gray-100">Jadwalkan Terbit</span>
                                         <span class="text-sm text-gray-500 dark:text-gray-400">Artikel akan otomatis terbit di waktu tertentu</span>
@@ -92,7 +103,7 @@
                             </div>
 
                             <!-- Input Jadwal -->
-                            <div x-show="publishOption==='schedule'" x-transition class="rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 p-4">
+                            <div x-show="status==='scheduled'" x-transition class="rounded-lg border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 p-4">
                                 <label for="scheduled_at" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                                     Tanggal & Jam Terbit
                                 </label>

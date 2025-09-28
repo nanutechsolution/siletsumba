@@ -19,9 +19,9 @@ class ArticleController extends Controller
      */
     public function index(): View
     {
-        $categories = Category::withCount('articles')->get();
-        $articles = Article::with(['category', 'user', 'images', 'tags'])
-            ->where('is_published', 1)
+        $categories = Category::withCount(relations: 'articles')->get();
+        $articles = Article::with(relations: ['category', 'user', 'images', 'tags'])
+            ->where('status', 'published')
             ->latest()
             ->paginate(10);
 
@@ -31,7 +31,7 @@ class ArticleController extends Controller
     public function show($slug, Request $request)
     {
         $article = Article::where('slug', $slug)
-            ->where('is_published', 1)
+            ->where('status', 'published')
             ->with(['category', 'tags'])
             ->firstOrFail();
         $ip = $request->ip();
@@ -45,20 +45,20 @@ class ArticleController extends Controller
             Cache::put($cacheKey, true, $expiresAt);
         }
         $categories = Category::whereHas('articles', function ($q) {
-            $q->where('is_published', 1);
+            $q->where('status', 'published');
         })->get();
         // ambil artikel terkait (misal kategori sama)
         $related = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
-            ->where('is_published', 1)
+            ->where('status', 1)
             ->latest()
             ->take(5)
             ->get();
-        $popular = Article::where('is_published', 1)
+        $popular = Article::where('status', 'published')
             ->orderBy('views', 'desc')
             ->take(5)
             ->get();
-        $latest = Article::where('is_published', 1)
+        $latest = Article::where('status', 'published')
             ->latest()
             ->take(5)
             ->get();
@@ -110,7 +110,7 @@ class ArticleController extends Controller
         }
 
         $queryBuilder = Article::query()->with(['category', 'tags'])
-            ->where('is_published', 1);
+            ->where('status', 'published');
 
         if ($query) {
             $queryBuilder->whereRaw(
@@ -127,8 +127,10 @@ class ArticleController extends Controller
         }
 
         // Sorting
-        if ($sort === 'oldest') $queryBuilder->oldest();
-        else $queryBuilder->latest();
+        if ($sort === 'oldest')
+            $queryBuilder->oldest();
+        else
+            $queryBuilder->latest();
 
         // Cache hasil search 1 menit
         $cacheKey = 'search:' . md5($query . $categorySlug . $sort . $request->get('page', 1));
@@ -139,7 +141,7 @@ class ArticleController extends Controller
             'trending_articles_month',
             300,
             fn() =>
-            Article::where('is_published', 1)
+            Article::where('status', 'published')
                 ->whereMonth('created_at', now()->month)
                 ->with('tags')
                 ->orderBy('views', 'desc')

@@ -44,7 +44,6 @@ class AdminArticleController extends Controller
 
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'title' => 'required|max:255',
             'content' => ['required', new RequiredHtmlContent()],
@@ -54,82 +53,82 @@ class AdminArticleController extends Controller
             'tags.*' => 'string',
             'is_breaking' => 'nullable|boolean',
             'location_short' => 'required|string|max:255',
-            'publish_option' => 'nullable|in:now,schedule',
+            'status' => 'required|in:draft,published,scheduled',
             'scheduled_at' => 'nullable|date',
-
         ]);
-        $validated['slug'] = Str::slug($validated['title']);
+
+        // Tambahan data default
         $validated['user_id'] = auth()->id();
         $validated['is_breaking'] = $request->boolean('is_breaking', false);
+
+        // Slug unik
         $slug = Str::slug($validated['title']);
         $count = Article::where('slug', 'like', "{$slug}%")->count();
         $validated['slug'] = $count ? "{$slug}-{$count}" : $slug;
-        if ($request->input('publish_option') === 'now') {
-            if (auth()->user()->hasRole(roles: 'admin') || auth()->user()->hasRole('editor')) {
-                $validated['is_published'] = true;
-                $validated['scheduled_at'] = now();
-            }
-        } elseif ($request->input('publish_option') === 'schedule') {
-            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('editor')) {
-                $validated['is_published'] = false;
-                $validated['scheduled_at'] = $request->filled('scheduled_at')
-                    ? \Carbon\Carbon::parse($request->input('scheduled_at'))
-                    : null;
-            } else {
-                // Penulis tetap draft
-                $validated['is_published'] = false;
-                $validated['scheduled_at'] = null;
-            }
-        } else {
-            $validated['is_published'] = false;
-            $validated['scheduled_at'] = null;
-        }
-        // Auto-generate excerpt
+
+        // Excerpt auto
         $validated['excerpt'] = Str::words(strip_tags($validated['content']), 150, '...');
 
-        // $validated['excerpt'] = Str::limit(strip_tags($validated['content']), 150);
-        // Hapus key 'image' supaya tidak di-insert ke articles
+        // Handle status & scheduled_at
+        if ($validated['status'] === 'published') {
+            // Langsung terbit
+            $validated['scheduled_at'] = now();
+        } elseif ($validated['status'] === 'scheduled') {
+            if (!$request->filled('scheduled_at')) {
+                return back()->withErrors(['scheduled_at' => 'Tanggal terbit wajib diisi untuk jadwal publikasi.']);
+            }
+            $validated['scheduled_at'] = \Carbon\Carbon::parse($request->input('scheduled_at'));
+        } else {
+            // Draft → biarkan null
+            $validated['scheduled_at'] = null;
+        }
+
+        // Simpan artikel
         $imageFile = $validated['image'];
         unset($validated['image']);
-
         $article = Article::create($validated);
+
+        // Sinkronisasi tags
         $tags = collect($validated['tags'] ?? [])->map(function ($tag) {
             if (is_numeric($tag)) {
-                // Tag lama
-                return (int) $tag;
+                return (int) $tag; // tag lama
             } else {
-                // Tag baru
                 $slug = Str::slug($tag);
                 $newTag = \App\Models\Tag::firstOrCreate(
-                    ['slug' => $slug], // cek kalau sudah ada slug
-                    ['name' => $tag]   // kalau belum ada, buat baru
+                    ['slug' => $slug],
+                    ['name' => $tag]
                 );
                 return $newTag->id;
             }
         })->toArray();
-
         $article->tags()->sync($tags);
+
+        // Upload image
         if ($request->hasFile('image')) {
             $article->addMediaFromRequest('image')
                 ->withResponsiveImages()
                 ->toMediaCollection('images');
         }
-        if (auth()->user()->hasRole('writer')) {
-            $adminPhone = config('services.fonnte.admin_phone');
-            $msg = "📢 *Notifikasi Berita Baru*\n"
-                . "───────────────────────\n"
-                . "✍️ Penulis : *{$article->user->name}*\n"
-                . "📰 Judul   : *{$article->title}*\n"
-                . "📅 Tanggal : " . now()->format('d-m-Y H:i') . "\n"
-                . "───────────────────────\n"
-                . "⚠️ Status : *Belum Dipublikasikan*\n\n"
-                . "👉 Silakan cek & review di dashboard admin:\n"
-                . url("/admin/articles/");
 
-            FonnteService::send($adminPhone, $msg);
-        }
+        // Notifikasi jika writer
+        // if (auth()->user()->hasRole('writer')) {
+        //     $adminPhone = config('services.fonnte.admin_phone');
+        //     $msg = "📢 *Notifikasi Berita Baru*\n"
+        //         . "───────────────────────\n"
+        //         . "✍️ Penulis : *{$article->user->name}*\n"
+        //         . "📰 Judul   : *{$article->title}*\n"
+        //         . "📅 Tanggal : " . now()->format('d-m-Y H:i') . "\n"
+        //         . "───────────────────────\n"
+        //         . "⚠️ Status : *" . strtoupper($article->status) . "*\n\n"
+        //         . "👉 Silakan cek & review di dashboard admin:\n"
+        //         . url("/admin/articles/");
+
+        //     FonnteService::send($adminPhone, $msg);
+        // }
+
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil ditambahkan!');
     }
+
 
     public function edit(Article $article)
     {
@@ -149,42 +148,41 @@ class AdminArticleController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
-            'content' => 'required',
+            'content' => ['required', new RequiredHtmlContent()],
             'category_id' => 'required|exists:categories,id',
             'delete_images' => 'nullable|array',
             'delete_images.*' => 'exists:media,id',
             'is_breaking' => 'nullable|boolean',
             'lokasi_short' => 'nullable|string|max:255',
             'location_short' => 'nullable|string|max:255',
-            'publish_option' => 'nullable|in:now,schedule',
+            'status' => 'required|in:draft,published,scheduled',
             'scheduled_at' => 'nullable|date',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
+            'tags.*' => 'string',
             'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
 
-        $user = auth()->user();
-        $isAdminOrEditor = $user->hasRole(['admin', 'editor']);
-        $isPublished = false;
-        $scheduledAt = null;
-        if ($isAdminOrEditor) {
-            if ($request->input('publish_option') === 'now') {
-                $isPublished = true;
-                $scheduledAt = now();
-            } elseif ($request->input('publish_option') === 'schedule') {
-                $isPublished = false;
-                $scheduledAt = $request->filled('scheduled_at')
-                    ? \Carbon\Carbon::parse($request->input('scheduled_at'))
-                    : null;
+        // Handle status & scheduled_at
+        if ($validated['status'] === 'published') {
+            $validated['scheduled_at'] = now();
+        } elseif ($validated['status'] === 'scheduled') {
+            if (!$request->filled('scheduled_at')) {
+                return back()->withErrors(['scheduled_at' => 'Tanggal terbit wajib diisi untuk jadwal publikasi.']);
             }
+            $validated['scheduled_at'] = \Carbon\Carbon::parse($request->input('scheduled_at'));
+        } else {
+            $validated['scheduled_at'] = null;
         }
+
+        // Update artikel
         $article->update([
             'title' => $validated['title'],
-            'is_published' => $isPublished,
-            'scheduled_at' => $scheduledAt,
+            'status' => $validated['status'],
+            'scheduled_at' => $validated['scheduled_at'],
             'content' => $validated['content'],
-            'excerpt' => Str::limit(strip_tags($validated['content']), 150),
+            'excerpt' => Str::words(strip_tags($validated['content']), 150, '...'),
             'lokasi_short' => $validated['lokasi_short'] ?? null,
+            'location_short' => $validated['location_short'] ?? null,
             'category_id' => $validated['category_id'],
             'slug' => Str::slug($validated['title']),
             'is_breaking' => $request->has('is_breaking') ? $validated['is_breaking'] : false,
@@ -192,7 +190,19 @@ class AdminArticleController extends Controller
         ]);
 
         // Sinkronisasi tags
-        $article->tags()->sync($validated['tags'] ?? []);
+        $tags = collect($validated['tags'] ?? [])->map(function ($tag) {
+            if (is_numeric($tag)) {
+                return (int) $tag;
+            } else {
+                $slug = Str::slug($tag);
+                $newTag = \App\Models\Tag::firstOrCreate(
+                    ['slug' => $slug],
+                    ['name' => $tag]
+                );
+                return $newTag->id;
+            }
+        })->toArray();
+        $article->tags()->sync($tags);
 
         // Hapus gambar lama
         if (!empty($validated['delete_images'])) {
@@ -215,6 +225,7 @@ class AdminArticleController extends Controller
 
         return redirect()->route('admin.articles.index')->with('success', 'Berita berhasil diperbarui!');
     }
+
 
 
 
