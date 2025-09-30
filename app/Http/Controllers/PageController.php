@@ -10,10 +10,10 @@ class PageController extends Controller
     public function show($slug)
     {
         $categories = Category::whereHas('articles', function ($q) {
-            $q->where('is_published', true);
+            $q->where('status', 'published');
         })
             ->withCount(['articles' => function ($q) {
-                $q->where('is_published', true);
+                $q->where('status', 'published');
             }])
             ->get();
         $page = Page::where('slug', $slug)
