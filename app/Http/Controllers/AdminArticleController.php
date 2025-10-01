@@ -359,7 +359,7 @@ class AdminArticleController extends Controller
         }
 
         $article->update([
-            'is_published' => false,
+            'status' => 'draft',
             'scheduled_at' => null,
         ]);
 
