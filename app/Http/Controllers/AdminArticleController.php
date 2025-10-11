@@ -197,7 +197,11 @@ class AdminArticleController extends Controller
 
         // Handle status & scheduled_at
         if ($validated['status'] === 'published') {
-            $validated['scheduled_at'] = now();
+            if ($article->status !== 'published') {
+                $validated['scheduled_at'] = now();
+            } else {
+                $validated['scheduled_at'] = $article->scheduled_at;
+            }
         } elseif ($validated['status'] === 'scheduled') {
             if (!$request->filled('scheduled_at')) {
                 return back()->withErrors(['scheduled_at' => 'Tanggal terbit wajib diisi untuk jadwal publikasi.']);
@@ -207,6 +211,7 @@ class AdminArticleController extends Controller
             $validated['scheduled_at'] = null;
             $validated['status'] = 'draft';
         }
+
         // Update artikel
         $data = [
             'title' => $validated['title'],
