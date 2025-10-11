@@ -15,7 +15,8 @@ class HomeController extends Controller
         // 1. Mengambil artikel hero (artikel terbaru pertama)
         $hero = Article::with(['category'])
             ->published()
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->first();
         // 2. Mengambil artikel terbaru (kecuali artikel hero)
         $latestArticles = Article::with(relations: ['category'])
@@ -23,7 +24,9 @@ class HomeController extends Controller
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('id', '!=', $hero->id);
             })
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
+
             ->paginate(10)
             ->withQueryString();
         // 2.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
@@ -32,7 +35,8 @@ class HomeController extends Controller
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('id', '!=', $hero->id);
             })
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->take(5)
             ->get();
         // 3. Mengambil artikel terpopuler berdasarkan views
@@ -57,7 +61,8 @@ class HomeController extends Controller
         $breakingNews = Article::with(['category'])
             ->where('status', 'published')
             ->where('is_breaking', true)
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->take(5)
             ->get();
 
@@ -76,28 +81,31 @@ class HomeController extends Controller
 
         // 2. Mengambil artikel hero dari kategori yang dipilih
         $hero = Article::with(['category'])
-        ->where('category_id', $category->id)
-        ->where('status', 'published')
-        ->latest()
-        ->first();
+            ->where('category_id', $category->id)
+            ->where('status', 'published')
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
+            ->first();
 
         // 3. Mengambil artikel terbaru (kecuali hero) dari kategori yang dipilih
         $latestArticles = Article::with(['category'])
-        ->where('category_id', $category->id)
-        ->where('status', operator: "published")
-        ->when($hero, callback: function ($query) use ($hero) {
-            return $query->where('id', '!=', $hero->id);
-        })
-        ->latest()
-        ->paginate(1)
-        ->withQueryString();
+            ->where('category_id', $category->id)
+            ->where('status', operator: "published")
+            ->when($hero, callback: function ($query) use ($hero) {
+                return $query->where('id', '!=', $hero->id);
+            })
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
+            ->paginate(1)
+            ->withQueryString();
         // 3.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
         $latestFive = Article::with(['category'])
             ->where('status', operator: 'published')
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('id', '!=', $hero->id);
             })
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->take(5)
             ->get();
         // 4. Mengambil 5 berita terpopuler
@@ -111,7 +119,8 @@ class HomeController extends Controller
         $breakingNews = Article::with(['category'])
             ->where('status', 'published')
             ->where('is_breaking', true)
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->take(5)
             ->get();
 
@@ -129,7 +138,8 @@ class HomeController extends Controller
         $hero = $tag->articles()
             ->with(['category'])
             ->where('status', 'published')
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->first();
 
         // 2. Artikel terbaru kecuali hero
@@ -139,7 +149,8 @@ class HomeController extends Controller
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('articles.id', '!=', $hero->id);
             })
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->paginate(10)
             ->withQueryString();
         // 2.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
@@ -149,7 +160,8 @@ class HomeController extends Controller
             ->when($hero, function ($query) use ($hero) {
                 return $query->where('articles.id', '!=', $hero->id);
             })
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->take(5)
             ->get();
         // 3. Artikel terpopuler (trending)
@@ -175,7 +187,8 @@ class HomeController extends Controller
             ->with(['category', 'user', 'tags'])
             ->where('status', 'published')
             ->where('is_breaking', true)
-            ->latest()
+            ->orderByDesc('scheduled_at')
+            ->orderByDesc('created_at')
             ->take(5)
             ->get();
         return view('home', compact('hero', 'latestArticles', 'latestFive', 'trending', 'categories', 'breakingNews', 'tag'));
