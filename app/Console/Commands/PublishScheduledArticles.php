@@ -15,12 +15,12 @@ class PublishScheduledArticles extends Command
     {
         $now = Carbon::now();
         $articles = Article::whereNotNull('scheduled_at')
-            ->where('is_published', false)
+            ->where('status', 'scheduled')
             ->where('scheduled_at', '<=', $now)
             ->get();
 
         foreach ($articles as $article) {
-            $article->update(['is_published' => true]);
+            $article->update(['status' => "published", 'scheduled_at' => now()]);
             $this->info("Artikel '{$article->title}' telah dipublikasikan.");
         }
     }
