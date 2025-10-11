@@ -4,7 +4,7 @@
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
         @foreach ($popular as $index => $pop)
             <a href="{{ route('articles.show', $pop->slug) }}"
-                class="flex items-start space-x-3 py-3 px-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700 
+                class="flex items-start space-x-3 py-3 px-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700
                       transform hover:scale-105 hover:shadow-lg transition-all duration-200 ease-in-out">
                 <span
                     class="bg-silet-red text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-1">

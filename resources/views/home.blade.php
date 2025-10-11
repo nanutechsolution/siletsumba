@@ -75,7 +75,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
-                            {{ $article->created_at->diffForHumans() }}
+                            {{ $article->scheduled_at ? $article->scheduled_at->diffForHumans() : $article->created_at->diffForHumans() }}
                         </span>
                         @auth
                         <span class="flex items-center">
@@ -148,7 +148,7 @@
                         <h3 class="font-medium text-sm hover:text-red-600 cursor-pointer line-clamp-2">
                             {{ $article->title }}
                         </h3>
-                        <p class="text-xs text-gray-500">{{ $article->created_at->diffForHumans() }}</p>
+                        <p class="text-xs text-gray-500">{{ $article->scheduled_at->diffForHumans() }}</p>
                     </div>
                 </a>
                 @endforeach
