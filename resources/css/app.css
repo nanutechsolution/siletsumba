@@ -1,127 +1,122 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  [x-cloak] {
-            display: none !important;
-        }
-        * {
-            font-family: 'Inter', sans-serif;
-        }
+[x-cloak] {
+    display: none !important;
+}
+* {
+    font-family: "Inter", sans-serif;
+}
 
-      .breaking-news {
-  display: inline-block;
-  white-space: nowrap;
-  animation: scroll 25s linear infinite; /* sesuaikan durasi untuk kecepatan */
+.breaking-news {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll 25s linear infinite; /* sesuaikan durasi untuk kecepatan */
 }
 
 @keyframes scroll {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 /* Optional: lebih cepat di mobile */
 @media (max-width: 768px) {
-  .breaking-news {
-    animation: scroll 25s linear infinite;
-  }
+    .breaking-news {
+        animation: scroll 45s linear infinite;
+    }
 }
 
-        .article-card {
-            transition: all 0.3s ease;
-        }
+.article-card {
+    transition: all 0.3s ease;
+}
 
-        .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
+.article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
-        .category-tab {
-            transition: all 0.3s ease;
-        }
+.category-tab {
+    transition: all 0.3s ease;
+}
 
-        .category-tab.active {
-            background-color: #E41E2D;
-            color: white;
-        }
+.category-tab.active {
+    background-color: #e41e2d;
+    color: white;
+}
 
+.article-content p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    color: #333;
+}
 
+.article-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1.5rem 0 1rem 0;
+    color: #0054a6;
+}
 
-            .article-content p {
-                margin-bottom: 1rem;
-                line-height: 1.8;
-                color: #333;
-            }
+.article-content blockquote {
+    border-left: 4px solid #e21a1a;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #666;
+}
 
-            .article-content h2 {
-                font-size: 1.5rem;
-                font-weight: 700;
-                margin: 1.5rem 0 1rem 0;
-                color: #0054A6;
-            }
+.dark .article-content p {
+    color: #e5e7eb;
+}
 
-            .article-content blockquote {
-                border-left: 4px solid #E21A1A;
-                padding-left: 1rem;
-                margin: 1.5rem 0;
-                font-style: italic;
-                color: #666;
-            }
+.dark .article-content h2 {
+    color: #60a5fa;
+}
 
-            .dark .article-content p {
-                color: #e5e7eb;
-            }
+.search-result-card {
+    transition: all 0.3s ease;
+}
 
-            .dark .article-content h2 {
-                color: #60a5fa;
-            }
+.search-result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
 
-             .search-result-card {
-            transition: all 0.3s ease;
-        }
+.job-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid #e41e2d;
+}
 
-        .search-result-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
+.job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
-           .job-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid #E41E2D;
-        }
+.job-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
 
-        .job-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
+.job-card:hover {
+    transform: translateY(-2px);
+    border-left-color: #e41e2d;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
-        
-        .job-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
+.team-card {
+    transition: all 0.3s ease;
+}
 
-        .job-card:hover {
-            transform: translateY(-2px);
-            border-left-color: #E41E2D;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
+.team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+}
 
-        .team-card {
-            transition: all 0.3s ease;
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
-        }
-
-
-
-        /* Dark mode Tom Select */
+/* Dark mode Tom Select */
 .dark .ts-control {
     background-color: #1f2937; /* bg-gray-800 */
     color: #f9fafb; /* text-gray-100 */
@@ -143,4 +138,3 @@
     background-color: transparent;
     color: #f9fafb;
 }
-
