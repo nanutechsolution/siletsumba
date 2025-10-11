@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- Favicon --}}
     @php
-        $faviconUrl =
-            $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
+    $faviconUrl =
+    $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
     @endphp
 
     <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/x-icon">
@@ -22,11 +22,11 @@
                 document.documentElement.classList.add('dark');
             }
         })();
+
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
-        media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     </noscript>
@@ -36,31 +36,30 @@
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
     <div x-data="appHandler()" x-init="init()">
-        <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }"
-            class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
+        <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
             {{-- Header + Breaking News --}}
             <header class="bg-white dark:bg-gray-900 shadow-md">
                 @include('partials.frontend-navbar-darkmode')
             </header>
-            @if (request()->routeIs('home'))
-                <div class="bg-red-600 text-white py-2 overflow-hidden">
-                    <div class="container mx-auto px-4 flex items-center">
-                        <span class="bg-white text-red-600 px-3 py-1 rounded font-bold mr-4 whitespace-nowrap">
-                            <i class="fas fa-bolt mr-1"></i>BREAKING NEWS
-                        </span>
-                        <div class="flex-1 overflow-hidden">
-                            <div class="breaking-news whitespace-nowrap">
-                                @foreach ($breakingNews as $news)
-                                    <span class="mx-6">
-                                        <a href="{{ route('articles.show', $news->slug) }}" class="hover:underline">
-                                            {{ $news->title }}
-                                        </a>
-                                    </span>
-                                @endforeach
-                            </div>
+            @if (request()->routeIs('home') && $breakingNews->isNotEmpty())
+            <div class="bg-red-600 text-white py-2 overflow-hidden">
+                <div class="container mx-auto px-4 flex items-center">
+                    <span class="bg-white text-red-600 px-3 py-1 rounded font-bold mr-4 whitespace-nowrap">
+                        <i class="fas fa-bolt mr-1"></i>BREAKING NEWS
+                    </span>
+                    <div class="flex-1 overflow-hidden">
+                        <div class="breaking-news whitespace-nowrap">
+                            @foreach ($breakingNews as $news)
+                            <span class="mx-6">
+                                <a href="{{ route('articles.show', $news->slug) }}" class="hover:underline">
+                                    {{ $news->title }}
+                                </a>
+                            </span>
+                            @endforeach
                         </div>
                     </div>
                 </div>
+            </div>
             @endif
         </div>
         <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;">
@@ -69,8 +68,7 @@
         {{-- Footer --}}
         @include('partials.frontend-footer')
         {{-- Dark Mode Toggle --}}
-        <button @click="toggleDarkMode()"
-            class="fixed bottom-5 left-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-full shadow-lg z-50">
+        <button @click="toggleDarkMode()" class="fixed bottom-5 left-5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-full shadow-lg z-50">
             <span x-show="!darkMode">🌞</span>
             <span x-show="darkMode">🌙</span>
         </button>
@@ -78,9 +76,9 @@
     <script>
         function appHandler() {
             return {
-                lastScroll: 0,
-                offset: 0,
-                darkMode: localStorage.getItem('theme') === 'dark',
+                lastScroll: 0
+                , offset: 0
+                , darkMode: localStorage.getItem('theme') === 'dark',
 
                 init() {
                     this.headerHeight = this.$refs.headerWrapper.offsetHeight;
@@ -114,6 +112,7 @@
                 }
             }
         }
+
     </script>
 
 </body>
