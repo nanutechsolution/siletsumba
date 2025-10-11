@@ -117,7 +117,7 @@
                             </svg>
                         </button>
                         <!-- Modal Share -->
-                        <div x-show="open" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div x-show="open" x-transition.opacity x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                             <div @click.outside="open = false" x-transition.scale class="bg-white dark:bg-gray-800 rounded-xl p-5 w-80 sm:w-96 shadow-xl transform transition-all">
 
                                 <!-- Header Modal -->
