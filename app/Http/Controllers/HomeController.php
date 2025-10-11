@@ -68,7 +68,6 @@ class HomeController extends Controller
     {
         // 1. Temukan kategori berdasarkan slug
         $category = Category::where('slug', $slug)->firstOrFail();
-
         // Cek apakah slug adalah 'karir' untuk view khusus
         if ($slug === 'karir') {
             $categories = Category::all();
@@ -77,21 +76,21 @@ class HomeController extends Controller
 
         // 2. Mengambil artikel hero dari kategori yang dipilih
         $hero = Article::with(['category'])
-            ->where('category_id', $category->id)
-            ->where('status', 'published')
-            ->latest()
-            ->first();
+        ->where('category_id', $category->id)
+        ->where('status', 'published')
+        ->latest()
+        ->first();
 
         // 3. Mengambil artikel terbaru (kecuali hero) dari kategori yang dipilih
         $latestArticles = Article::with(['category'])
-            ->where('category_id', $category->id)
-            ->where('status', true)
-            ->when($hero, function ($query) use ($hero) {
-                return $query->where('id', '!=', $hero->id);
-            })
-            ->latest()
-            ->paginate(1)
-            ->withQueryString();
+        ->where('category_id', $category->id)
+        ->where('status', operator: "published")
+        ->when($hero, callback: function ($query) use ($hero) {
+            return $query->where('id', '!=', $hero->id);
+        })
+        ->latest()
+        ->paginate(1)
+        ->withQueryString();
         // 3.a Mengambil 5 artikel terbaru untuk sidebar (kecuali hero)
         $latestFive = Article::with(['category'])
             ->where('status', operator: 'published')
