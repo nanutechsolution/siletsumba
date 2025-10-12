@@ -108,7 +108,7 @@ class ArticleController extends Controller
         // ===============================
         // 🟡 SISIPKAN IKLAN DI TENGAH ARTIKEL (Quill content)
         // ===============================
-        $paragraphs = explode('</p>', $article->full_content);
+        $paragraphs = preg_split('/<\/p>/i', $article->full_content);
         $insertAfter = floor(count($paragraphs) / 2); // sisipkan di tengah artikel
 
         $newContent = '';
