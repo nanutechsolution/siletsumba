@@ -28,53 +28,15 @@ class ArticleController extends Controller
         return view('welcome', compact('articles', 'tags', 'categories'));
     }
 
-    // public function show($slug, Request $request)
-    // {
-    //     $article = Article::where('slug', $slug)
-    //         ->where('status', 'published')
-    //         ->with(['category', 'tags'])
-    //         ->firstOrFail();
-    //     $ip = $request->ip();
-    //     $expiresAt = now()->addHours(24);
-    //     $cacheKey = 'article_view_' . $article->id . '_' . $ip;
-    //     // update jumlah views
-    //     if (!Cache::has($cacheKey)) {
-    //         if (!$this->isBot(request()->header('User-Agent'))) {
-    //             $article->increment('views');
-    //         }
-    //         Cache::put($cacheKey, true, $expiresAt);
-    //     }
-    //     $categories = Category::whereHas('articles', function ($q) {
-    //         $q->where('status', 'published');
-    //     })->get();
-    //     // ambil artikel terkait (misal kategori sama)
-    //     $related = Article::where('category_id', $article->category_id)
-    //         ->where('id', '!=', $article->id)
-    //         ->where('status', 1)
-    //         ->latest()
-    //         ->take(5)
-    //         ->get();
-    //     $popular = Article::where('status', 'published')
-    //         ->orderBy('views', 'desc')
-    //         ->take(5)
-    //         ->get();
-    //     $latest = Article::where('status', 'published')
-    //         ->latest()
-    //         ->take(5)
-    //         ->get();
-    //     return view('articles.show', compact('article', 'related', 'latest', 'popular', 'categories'));
-    // }
     public function show($slug, Request $request)
     {
         $article = Article::where('slug', $slug)
             ->where('status', 'published')
             ->with(['category', 'tags'])
             ->firstOrFail();
-
         $ip = $request->ip();
         $expiresAt = now()->addHours(24);
         $cacheKey = 'article_view_' . $article->id . '_' . $ip;
-
         // update jumlah views
         if (!Cache::has($cacheKey)) {
             if (!$this->isBot(request()->header('User-Agent'))) {
@@ -82,11 +44,9 @@ class ArticleController extends Controller
             }
             Cache::put($cacheKey, true, $expiresAt);
         }
-
         $categories = Category::whereHas('articles', function ($q) {
             $q->where('status', 'published');
         })->get();
-
         // ambil artikel terkait (misal kategori sama)
         $related = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
@@ -94,50 +54,17 @@ class ArticleController extends Controller
             ->latest()
             ->take(5)
             ->get();
-
         $popular = Article::where('status', 'published')
             ->orderBy('views', 'desc')
             ->take(5)
             ->get();
-
         $latest = Article::where('status', 'published')
             ->latest()
             ->take(5)
             ->get();
-
-        // ===============================
-        // 🟡 SISIPKAN IKLAN DI TENGAH ARTIKEL (Quill content)
-        // ===============================
-        $paragraphs = preg_split('/<\/p>/i', $article->full_content);
-        $insertAfter = floor(count($paragraphs) / 2); // sisipkan di tengah artikel
-
-        $newContent = '';
-        foreach ($paragraphs as $index => $p) {
-            if (trim($p) !== '') {
-                $newContent .= $p . '</p>';
-            }
-
-            if ($index == $insertAfter) {
-                $newContent .= '
-                <div style="margin:20px 0;">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176"
-                        crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle"
-                        style="display:block; text-align:center;"
-                        data-ad-layout="in-article"
-                        data-ad-format="fluid"
-                        data-ad-client="ca-pub-1183290597740176"
-                        data-ad-slot="6029088503"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>';
-            }
-        }
-
-        $article->full_content = $newContent;
-        // ===============================
-
         return view('articles.show', compact('article', 'related', 'latest', 'popular', 'categories'));
     }
+
 
     /**
      * Cek apakah User-Agent adalah bot.
