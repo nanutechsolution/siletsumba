@@ -31,7 +31,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     </noscript>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
