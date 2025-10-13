@@ -90,7 +90,7 @@
                                     </a>
 
                                     {{-- Draft (hanya admin/editor) --}}
-                                    @if (auth()->user()->hasRole(['admin','editor']))
+                                    @if (auth()->user()->hasRole(['admin','editor','super-admin']))
                                     <form action="{{ route('admin.articles.unpublish', $article->slug) }}" method="POST" onsubmit="return confirm('Yakin ingin mengembalikan ke draft?')" class="inline-block">
                                         @csrf
                                         @method('PUT')
