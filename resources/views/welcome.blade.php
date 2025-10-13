@@ -62,6 +62,20 @@
                 </div>
             </div>
             @endif
+            {{-- Iklan Display di bawah header --}}
+            @if (request()->routeIs('home'))
+            <div class="container mx-auto px-4 my-4 text-center">
+                <div class="inline-block w-full md:w-3/4 lg:w-2/3">
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
+                    <!-- display_home_top -->
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+
+                    </script>
+                </div>
+            </div>
+            @endif
         </div>
         <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;">
             @yield('content')

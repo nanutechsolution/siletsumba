@@ -47,6 +47,18 @@
         </div>
         @endif
 
+        {{-- ✅ Tambahkan iklan di sini --}}
+        <div class="my-6 text-center">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
+            <!-- display_home_top -->
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+
+            </script>
+        </div>
+        {{-- ✅ Akhir iklan --}}
+
         {{-- Latest Articles Grid --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
             @foreach ($latestArticles as $article)
