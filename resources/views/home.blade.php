@@ -103,6 +103,16 @@
                 </div>
 
             </a>
+            {{-- 🔸 Iklan di tengah daftar berita --}}
+            @if ($loop->iteration == 3 || $loop->iteration == 6)
+            <div class="col-span-full my-6 text-center">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+
+                </script>
+            </div>
+            @endif
             @endforeach
         </div>
 
@@ -110,7 +120,14 @@
         <div class="mt-6">
             {{ $latestArticles->links() }}
         </div>
+        {{-- 🔹 Iklan bawah halaman --}}
+        <div class="mt-8 text-center">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
 
+            </script>
+        </div>
     </div>
 
     {{-- Sidebar (1/3) --}}
@@ -133,6 +150,14 @@
                 </a>
                 @endforeach
             </div>
+        </div>
+        {{-- 🔹 Iklan di sidebar --}}
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 text-center">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+
+            </script>
         </div>
 
         {{-- Latest News --}}

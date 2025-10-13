@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="mx-auto py-2">
+
+
     @if(!$article->is_published)
     <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded">
         <div class="font-semibold">⚠️ Mode Preview</div>
