@@ -215,7 +215,8 @@
 
 
                     <div class="prose dark:prose-invert max-w-none">
-                        {!! $article->full_content_with_ads !!}
+                        {{-- {!! $article->full_content_with_ads !!} --}}
+                        {!! $article->full_content !!}
                     </div>
                     <!-- Tags -->
                     <section aria-label="tags">
