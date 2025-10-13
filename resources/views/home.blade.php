@@ -48,7 +48,7 @@
         @endif
 
         {{-- ✅ Tambahkan iklan di sini --}}
-        <div class="my-6 text-center">
+        {{-- <div class="my-6 text-center">
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
             <!-- display_home_top -->
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -56,7 +56,7 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
 
             </script>
-        </div>
+        </div> --}}
         {{-- ✅ Akhir iklan --}}
 
         {{-- Latest Articles Grid --}}
@@ -121,13 +121,13 @@
             {{ $latestArticles->links() }}
         </div>
         {{-- 🔹 Iklan bawah halaman --}}
-        <div class="mt-8 text-center">
+        {{-- <div class="mt-8 text-center">
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
 
             </script>
-        </div>
+        </div> --}}
     </div>
 
     {{-- Sidebar (1/3) --}}
@@ -152,13 +152,13 @@
             </div>
         </div>
         {{-- 🔹 Iklan di sidebar --}}
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 text-center">
+        {{-- <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 text-center">
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
 
             </script>
-        </div>
+        </div> --}}
 
         {{-- Latest News --}}
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">

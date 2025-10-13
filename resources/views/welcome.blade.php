@@ -63,7 +63,7 @@
             </div>
             @endif
             {{-- Iklan Display di bawah header --}}
-            @if (request()->routeIs('home'))
+            {{-- @if (request()->routeIs('home'))
             <div class="container mx-auto px-4 my-4 text-center">
                 <div class="inline-block w-full md:w-3/4 lg:w-2/3">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
@@ -75,7 +75,7 @@
                     </script>
                 </div>
             </div>
-            @endif
+            @endif --}}
         </div>
         <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;">
             @yield('content')
