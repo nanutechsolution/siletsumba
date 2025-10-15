@@ -48,12 +48,15 @@ class ArticleController extends Controller
             $q->where('status', 'published');
         })->get();
         // ambil artikel terkait (misal kategori sama)
-        $related = Article::where('category_id', $article->category_id)
+        $related = Article::whereHas('tags', function ($q) use ($article) {
+            $q->whereIn('id', $article->tags->pluck('id')); // Ambil artikel dengan tag yang sama
+        })
             ->where('id', '!=', $article->id)
-            ->where('status', 1)
+            ->where('status', 'published')
             ->latest()
-            ->take(1)
+            ->take(2)
             ->get();
+
         $popular = Article::where('status', 'published')
             ->orderBy('views', 'desc')
             ->take(5)
