@@ -52,7 +52,7 @@ class ArticleController extends Controller
             ->where('id', '!=', $article->id)
             ->where('status', 'published')
             ->latest()
-            ->take(5)
+            ->take(1)
             ->get();
         $popular = Article::where('status', 'published')
             ->orderBy('views', 'desc')
