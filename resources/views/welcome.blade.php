@@ -37,7 +37,6 @@
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
     <div x-data="appHandler()">
-        {{-- <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform"> --}}
         <div x-ref="headerWrapper" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
             {{-- Header + Breaking News --}}
             <header class="bg-white dark:bg-gray-900 shadow-md">
@@ -63,23 +62,7 @@
                 </div>
             </div>
             @endif
-            {{-- Iklan Display di bawah header --}}
-            {{-- @if (request()->routeIs('home'))
-            <div class="container mx-auto px-4 my-4 text-center">
-                <div class="inline-block w-full md:w-3/4 lg:w-2/3">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
-                    <!-- display_home_top -->
-                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-
-                    </script>
-                </div>
-            </div>
-            @endif --}}
         </div>
-        {{-- <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;"> --}}
-        {{-- <main class="container mx-auto px-4 py-6 pt-[220px]"> --}}
         @php
         $hasBreakingNews = request()->routeIs('home') && $breakingNews->isNotEmpty();
         $mainPaddingTop = $hasBreakingNews ? 'pt-[220px]' : 'pt-[168px]'; // sesuaikan dengan nilai real saat tanpa breaking
@@ -96,39 +79,11 @@
             <span x-show="darkMode">🌙</span>
         </button>
     </div>
-    <script>
+    <script defer>
         function appHandler() {
             return {
-                // lastScroll: 0
-                // , offset: 0
-                // ,
-                darkMode: localStorage.getItem('theme') === 'dark',
-
-                // init() {
-                //     this.headerHeight = this.$refs.headerWrapper.offsetHeight;
-                //     this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
-
-                //     window.addEventListener('scroll', () => {
-                //         window.requestAnimationFrame(() => {
-                //             let currentScroll = window.pageYOffset;
-                //             let delta = currentScroll - this.lastScroll;
-                //             this.offset = Math.min(Math.max(this.offset + delta, 0), this.headerHeight);
-                //             this.lastScroll = currentScroll;
-
-                //             // pakai transform, bukan marginTop
-                //             this.$refs.headerWrapper.style.transform = `translateY(${-this.offset}px)`;
-                //         });
-                //     });
-
-                //     window.addEventListener('resize', () => {
-                //         this.headerHeight = this.$refs.headerWrapper.offsetHeight;
-                //         this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
-                //     });
-
-                //     if (this.darkMode) document.documentElement.classList.add('dark');
-                // },
-
-                toggleDarkMode() {
+                darkMode: localStorage.getItem('theme') === 'dark'
+                , toggleDarkMode() {
                     this.darkMode = !this.darkMode;
                     localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
                     if (this.darkMode) document.documentElement.classList.add('dark');
@@ -138,7 +93,6 @@
         }
 
     </script>
-
 </body>
 
 </html>
