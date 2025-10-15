@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     {{-- Favicon --}}
     @php
-    $faviconUrl =
-    $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
+    $faviconUrl = $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
     @endphp
-
-    <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/x-icon">
+    <link rel="icon" href="{{ $faviconUrl }}" type="image/png">
 
     @include('partials._meta')
-    {{-- Dark mode script sebelum CSS --}}
+
+    {{-- Dark mode init (super ringan) --}}
     <script>
         (function() {
-            const theme = localStorage.getItem('theme');
+            const t = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (theme === 'dark' || (!theme && prefersDark)) {
-                document.documentElement.classList.add('dark');
-            }
+            if (t === 'dark' || (!t && prefersDark)) document.documentElement.classList.add('dark');
         })();
 
     </script>
+    @include('partials._meta')
+
+    {{-- Preconnect Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    {{-- Async load Google Fonts (tanpa blocking render) --}}
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" media="print" onload="this.media='all'">
     <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
-    </noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"></noscript>
+
+    {{-- Vite Build --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
+    {{-- Prefetch assets JS berat agar disiapkan lebih awal --}}
+    <link rel="prefetch" href="{{ mix('resources/js/app.js') }}" as="script">
+
+    {{-- Google Ads → Lazy Load pakai requestIdleCallback --}}
+    <script>
+        window.addEventListener('load', () => {
+            requestIdleCallback(() => {
+                const s = document.createElement('script');
+                s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176";
+                s.async = true;
+                s.crossOrigin = "anonymous";
+                document.body.appendChild(s);
+            });
+        });
+
+    </script>
+
+    {{-- Funding Choices → juga dimuat saat idle --}}
+    <script>
+        window.addEventListener('load', () => {
+            requestIdleCallback(() => {
+                const fc = document.createElement('script');
+                fc.src = "https://fundingchoicesmessages.google.com/i/pub-1183290597740176?ers=2";
+                fc.async = true;
+                document.body.appendChild(fc);
+            });
+        });
+
+    </script>
 </head>
+
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
     <div x-data="appHandler()">
