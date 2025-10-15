@@ -76,9 +76,9 @@
 
                 {{-- Konten berita --}}
                 <div class="p-3 md:p-4 flex flex-col justify-start min-h-[180px] bg-white dark:bg-gray-800 rounded shadow dark:shadow-lg transition-colors duration-300">
-                    <h3 class="font-bold text-base md:text-lg text-gray-800 dark:text-white line-clamp-2 leading-6 mb-1">
+                    <div class="font-bold text-base md:text-lg text-gray-800 dark:text-white line-clamp-2 leading-6 mb-1">
                         {{ $article->title }}
-                    </h3>
+                    </div>
                     <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 leading-5 mb-2">
                         {{ strip_tags($article->content) }}
                     </p>
