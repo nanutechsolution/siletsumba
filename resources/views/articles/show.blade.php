@@ -57,9 +57,22 @@
                 </h1>
                 {{-- Detail Article --}}
                 @if ($article->hasMedia('images'))
-                <div class="w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
-                    <img src="{{ $article->getFirstMediaUrl('images', 'detail') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-auto object-contain object-center rounded-lg" loading="lazy" decoding="async">
-                </div>
+                @if ($article->hasMedia('images'))
+<div class="w-full mx-auto rounded-xl overflow-hidden shadow-md bg-gray-50 dark:bg-gray-800">
+    <img 
+        src="{{ $article->getFirstMediaUrl('images', 'detail') }}" 
+        srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" 
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+        alt="{{ $article->title }}"
+        class="w-full h-auto object-cover object-center transition-transform duration-300 hover:scale-[1.02]"
+        loading="lazy" decoding="async"
+    >
+</div>
+@endif
+
+                {{-- <div class="w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
+                    <img src="{{ $article->getFirstMediaUrl('images', 'detail') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-auto object-contain object-center rounded-lg" loading="lazy" decoding="async"> --}}
+                {{-- </div> --}}
                 @endif
                 <!-- Interaction Bar -->
                 <div class="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2 shadow-sm rounded-lg mt-4">
