@@ -27,7 +27,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center text-gray-300 text-xs mt-2 gap-1 sm:gap-2">
                             <span class="flex items-center">
                                 @if ($hero->user?->hasMedia('profile_photos'))
-                                <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-2 object-cover">
+                                <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-2 object-contain">
                                 @else
                                 <i class="fas fa-user mr-2 text-gray-300"></i>
                                 @endif
@@ -67,11 +67,11 @@
                 <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
                     @if ($article->hasMedia('images'))
                     @php $media = $article->getFirstMedia('images'); @endphp
-                    <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-cover object-center" />
+                    <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-contain object-center" />
                     @endif
                     {{-- <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white" style="background-color: {{ $article->category->color ?? '#FF0000' }}">
-                        {{ $article->category->name ?? 'Umum' }}
-                </span> --}}
+                    {{ $article->category->name ?? 'Umum' }}
+                    </span> --}}
                 </div>
 
                 {{-- Konten berita --}}
@@ -173,9 +173,9 @@
                         @php
                         $media = $article->getFirstMedia('images');
                         @endphp
-                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="80px" width="100" height="80" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" class="w-full h-full object-cover object-center" />
+                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="80px" width="100" height="80" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" class="w-full h-full object-contain object-center" />
                         @else
-                        <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}" loading="lazy" class="w-full h-full object-cover" />
+                        <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}" loading="lazy" class="w-full h-full object-contain" />
                         @endif
                     </div>
 

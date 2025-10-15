@@ -67,7 +67,12 @@
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="md:w-1/4">
                         @if ($item->hasMedia('images'))
-                        <img src="{{ $item->getFirstMedia('images')->getUrl('responsive') }}" class="w-full h-full object-cover object-center" loading="eager" fetchpriority="high" decoding="async" srcset="{{ $item->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $item->title }}">
+                        @php
+                        $media = $item->getFirstMedia('images');
+                        @endphp
+                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $item->name ?? 'Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-contain object-center" />
+                        @else
+                        <img src="https://via.placeholder.com/100x80" alt="{{ $item->title }}" loading="lazy" class="w-full h-full object-contain" />
                         @endif
                     </div>
                     <div class="md:w-3/4 flex flex-col justify-between">
