@@ -9,7 +9,7 @@
             <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca berita: {{ $hero->title }}" class="block w-full h-full">
                 {{-- Hero Image --}}
                 @if ($hero->hasMedia('images'))
-                <img src="{{ $hero->getFirstMedia('images')->getUrl('responsive') }}" class="w-full h-full object-cover object-center z-0" loading="eager" fetchpriority="high" decoding="async" srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $hero->title }}">
+                <img src="{{ $hero->getFirstMedia('images')->getUrl('responsive') }}" class="w-full h-full object-contain object-center" loading="eager" fetchpriority="high" decoding="async" srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $hero->title }}">
                 @endif
                 {{-- Overlay --}}
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent flex flex-col justify-end p-2 sm:p-4">
