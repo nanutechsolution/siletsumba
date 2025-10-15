@@ -225,28 +225,40 @@
                     {{-- <div class="prose dark:prose-invert max-w-none">
                         {!! $article->full_content !!}
                     </div> --}}
-                    <div class="prose dark:prose-invert max-w-none">
-                        @foreach ($content as $index => $paragraph)
-                        <p>{!! $paragraph !!}</p>
+                    @if (!$bacaJugaInserted && $index == 2)
+<div class="baca-juga my-10 border-t border-gray-300 dark:border-gray-700 pt-6">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 uppercase tracking-wide">
+        Baca Juga
+    </h2>
 
-                        {{-- Sisipkan "Baca Juga" setelah paragraf ke-3 --}}
-                        @if (!$bacaJugaInserted && $index == 2)
-                        <div class="baca-juga my-6">
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Baca Juga:</h2>
-                            <ul class="list-disc list-inside space-y-2">
-                                @foreach($related as $relatedArticle)
-                                <li>
-                                    <a href="{{ route('articles.show', $relatedArticle->slug) }}" class="text-gray-800 dark:text-white hover:text-silet-red transition duration-200">
-                                        {{ $relatedArticle->title }}
-                                    </a>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @php $bacaJugaInserted = true; @endphp
-                        @endif
-                        @endforeach
-                    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+        @foreach($related as $relatedArticle)
+        <a href="{{ route('articles.show', $relatedArticle->slug) }}" 
+           class="group block rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-silet-red transition duration-300 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md">
+           
+            @if ($relatedArticle->hasMedia('images'))
+            <div class="aspect-[16/9] overflow-hidden">
+                <img src="{{ $relatedArticle->getFirstMediaUrl('images', 'thumb') }}" 
+                     alt="{{ $relatedArticle->title }}" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            </div>
+            @endif
+
+            <div class="p-4">
+                <h3 class="font-semibold text-gray-800 dark:text-white group-hover:text-silet-red line-clamp-2">
+                    {{ $relatedArticle->title }}
+                </h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    {{ $relatedArticle->created_at->translatedFormat('d F Y') }}
+                </p>
+            </div>
+        </a>
+        @endforeach
+    </div>
+</div>
+@php $bacaJugaInserted = true; @endphp
+@endif
+
                     <!-- Tags -->
                     <section aria-label="tags">
                         @if ($article->tags->count())
