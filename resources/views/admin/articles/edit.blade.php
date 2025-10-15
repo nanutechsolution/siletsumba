@@ -211,19 +211,14 @@
                 theme: 'snow'
                 , placeholder: 'Tulis konten berita di sini...'
                 , modules: {
-                    toolbar: [
-                        [{
-                            'header': [1, 2, false]
-                        }]
-                        , ['bold', 'italic', 'underline']
-                        , ['link', 'image', 'video']
-                        , [{
-                            'list': 'ordered'
-                        }, {
-                            'list': 'bullet'
-                        }]
-                        , ['clean']
-                    ]
+                     toolbar: [
+  [{ header: [1, 2, false] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['link', 'image'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['blockquote', 'code-block'], 
+  ['clean']
+]
                 }
             });
 
