@@ -69,9 +69,9 @@
                     @php $media = $article->getFirstMedia('images'); @endphp
                     <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-cover object-center" />
                     @endif
-                    <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white" style="background-color: {{ $article->category->color ?? '#FF0000' }}">
+                    {{-- <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white" style="background-color: {{ $article->category->color ?? '#FF0000' }}">
                         {{ $article->category->name ?? 'Umum' }}
-                    </span>
+                    </span> --}}
                 </div>
 
                 {{-- Konten berita --}}
