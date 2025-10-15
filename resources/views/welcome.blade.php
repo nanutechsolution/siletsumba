@@ -36,7 +36,7 @@
 </head>
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-    <div x-data="appHandler()" x-init="init()">
+    <div x-data="appHandler()">
         {{-- <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform"> --}}
         <div x-ref="headerWrapper" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
             {{-- Header + Breaking News --}}
