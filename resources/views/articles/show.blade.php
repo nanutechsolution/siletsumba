@@ -225,39 +225,17 @@
                     {{-- <div class="prose dark:prose-invert max-w-none">
                         {!! $article->full_content !!}
                     </div> --}}
-                    @if (!$bacaJugaInserted && $index == 2)
-<div class="baca-juga my-10 border-t border-gray-300 dark:border-gray-700 pt-6">
-    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 uppercase tracking-wide">
-        Baca Juga
-    </h2>
-
-    <div class="grid gap-4 sm:grid-cols-2">
-        @foreach($related as $relatedArticle)
-        <a href="{{ route('articles.show', $relatedArticle->slug) }}" 
-           class="group block rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-silet-red transition duration-300 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md">
-           
-            @if ($relatedArticle->hasMedia('images'))
-            <div class="aspect-[16/9] overflow-hidden">
-                <img src="{{ $relatedArticle->getFirstMediaUrl('images', 'thumb') }}" 
-                     alt="{{ $relatedArticle->title }}" 
-                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-            </div>
-            @endif
-
-            <div class="p-4">
-                <h3 class="font-semibold text-gray-800 dark:text-white group-hover:text-silet-red line-clamp-2">
-                    {{ $relatedArticle->title }}
-                </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {{ $relatedArticle->created_at->translatedFormat('d F Y') }}
-                </p>
-            </div>
-        </a>
-        @endforeach
-    </div>
+                    @if (!$bacaJugaInserted && $index == 2 && $related->isNotEmpty())
+<div class="baca-juga my-8 border-l-4 border-silet-red bg-silet-red/5 px-4 py-3 rounded-md">
+    <span class="font-semibold text-silet-red uppercase text-sm">Baca Juga:</span>
+    <a href="{{ route('articles.show', $related[0]->slug) }}" 
+       class="block text-lg font-medium text-gray-800 dark:text-gray-100 hover:text-silet-red transition duration-200 mt-1 leading-snug">
+        {{ $related[0]->title }}
+    </a>
 </div>
 @php $bacaJugaInserted = true; @endphp
 @endif
+
 
                     <!-- Tags -->
                     <section aria-label="tags">
