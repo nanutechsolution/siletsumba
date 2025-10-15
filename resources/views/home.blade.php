@@ -60,7 +60,7 @@
         {{-- ✅ Akhir iklan --}}
 
         {{-- Latest Articles Grid --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
             @foreach ($latestArticles as $article)
             <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita: {{ $article->title }}" class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
                 {{-- Image wrapper --}}
