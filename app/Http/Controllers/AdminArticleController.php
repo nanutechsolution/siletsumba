@@ -29,7 +29,7 @@ class AdminArticleController extends Controller
         // Cek role: penulis artikel, admin, atau editor
         if (
             auth()->id() !== $article->user_id &&
-            !auth()->user()->hasRole(['admin', 'editor','super-admin'])
+            !auth()->user()->hasRole(['admin', 'editor', 'super-admin'])
         ) {
             abort(403, 'Anda tidak punya akses untuk preview artikel ini.');
         }

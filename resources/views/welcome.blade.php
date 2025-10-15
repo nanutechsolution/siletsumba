@@ -37,12 +37,13 @@
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
     <div x-data="appHandler()" x-init="init()">
-        <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
+        {{-- <div x-ref="headerWrapper" :style="{ transform: `translateY(-${offset}px)` }" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform"> --}}
+        <div x-ref="headerWrapper" class="fixed top-0 left-0 w-full z-50 transition-transform duration-200 will-change-transform">
             {{-- Header + Breaking News --}}
             <header class="bg-white dark:bg-gray-900 shadow-md">
                 @include('partials.frontend-navbar-darkmode')
             </header>
-            @if (request()->routeIs('home') && $breakingNews->isNotEmpty())
+            @if (request()->routeIs('home') )
             <div class="bg-red-600 text-white py-2 overflow-hidden">
                 <div class="container mx-auto px-4 flex items-center">
                     <span class="bg-white text-red-600 px-3 py-1 rounded font-bold mr-4 whitespace-nowrap">
@@ -77,7 +78,8 @@
             </div>
             @endif --}}
         </div>
-        <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;">
+        {{-- <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;"> --}}
+        <main class="container mx-auto px-4 py-6 pt-[220px]">
             @yield('content')
         </main>
         {{-- Footer --}}
@@ -91,33 +93,34 @@
     <script>
         function appHandler() {
             return {
-                lastScroll: 0
-                , offset: 0
-                , darkMode: localStorage.getItem('theme') === 'dark',
+                // lastScroll: 0
+                // , offset: 0
+                // ,
+                darkMode: localStorage.getItem('theme') === 'dark',
 
-                init() {
-                    this.headerHeight = this.$refs.headerWrapper.offsetHeight;
-                    this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
+                // init() {
+                //     this.headerHeight = this.$refs.headerWrapper.offsetHeight;
+                //     this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
 
-                    window.addEventListener('scroll', () => {
-                        window.requestAnimationFrame(() => {
-                            let currentScroll = window.pageYOffset;
-                            let delta = currentScroll - this.lastScroll;
-                            this.offset = Math.min(Math.max(this.offset + delta, 0), this.headerHeight);
-                            this.lastScroll = currentScroll;
+                //     window.addEventListener('scroll', () => {
+                //         window.requestAnimationFrame(() => {
+                //             let currentScroll = window.pageYOffset;
+                //             let delta = currentScroll - this.lastScroll;
+                //             this.offset = Math.min(Math.max(this.offset + delta, 0), this.headerHeight);
+                //             this.lastScroll = currentScroll;
 
-                            // pakai transform, bukan marginTop
-                            this.$refs.headerWrapper.style.transform = `translateY(${-this.offset}px)`;
-                        });
-                    });
+                //             // pakai transform, bukan marginTop
+                //             this.$refs.headerWrapper.style.transform = `translateY(${-this.offset}px)`;
+                //         });
+                //     });
 
-                    window.addEventListener('resize', () => {
-                        this.headerHeight = this.$refs.headerWrapper.offsetHeight;
-                        this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
-                    });
+                //     window.addEventListener('resize', () => {
+                //         this.headerHeight = this.$refs.headerWrapper.offsetHeight;
+                //         this.$refs.mainContent.style.marginTop = this.headerHeight + 'px';
+                //     });
 
-                    if (this.darkMode) document.documentElement.classList.add('dark');
-                },
+                //     if (this.darkMode) document.documentElement.classList.add('dark');
+                // },
 
                 toggleDarkMode() {
                     this.darkMode = !this.darkMode;
