@@ -10,7 +10,6 @@
     @endphp
     <link rel="icon" href="{{ $faviconUrl }}" type="image/png">
 
-    @include('partials._meta')
 
     {{-- Dark mode init (super ringan) --}}
     <script>
