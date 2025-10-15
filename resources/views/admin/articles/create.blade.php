@@ -310,18 +310,14 @@
                 , theme: 'snow'
                 , modules: {
                     toolbar: [
-                        [{
-                            header: [1, 2, false]
-                        }]
-                        , ['bold', 'italic', 'underline', 'strike']
-                        , ['link', 'image']
-                        , [{
-                            list: 'ordered'
-                        }, {
-                            list: 'bullet'
-                        }]
-                        , ['clean']
-                    ]
+  [{ header: [1, 2, false] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['link', 'image'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['blockquote', 'code-block'], 
+  ['clean']
+]
+
                 }
             });
             const contentTextarea = document.getElementById('content');
