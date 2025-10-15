@@ -43,7 +43,7 @@
             <header class="bg-white dark:bg-gray-900 shadow-md">
                 @include('partials.frontend-navbar-darkmode')
             </header>
-            @if (request()->routeIs('home') )
+            @if (request()->routeIs('home')&& $breakingNews->isNotEmpty() )
             <div class="bg-red-600 text-white py-2 overflow-hidden">
                 <div class="container mx-auto px-4 flex items-center">
                     <span class="bg-white text-red-600 px-3 py-1 rounded font-bold mr-4 whitespace-nowrap">
@@ -79,7 +79,13 @@
             @endif --}}
         </div>
         {{-- <main x-ref="mainContent" class="container mx-auto px-4 py-6" style="padding-top: 20px;"> --}}
-        <main class="container mx-auto px-4 py-6 pt-[220px]">
+        {{-- <main class="container mx-auto px-4 py-6 pt-[220px]"> --}}
+        @php
+        $hasBreakingNews = request()->routeIs('home') && $breakingNews->isNotEmpty();
+        $mainPaddingTop = $hasBreakingNews ? 'pt-[220px]' : 'pt-[168px]'; // sesuaikan dengan nilai real saat tanpa breaking
+        @endphp
+        <main class="container mx-auto px-4 py-6 {{ $mainPaddingTop }}">
+
             @yield('content')
         </main>
         {{-- Footer --}}
