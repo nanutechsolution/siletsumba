@@ -50,7 +50,7 @@ class ArticleController extends Controller
         // ambil artikel terkait (misal kategori sama)
         $related = Article::where('category_id', $article->category_id)
             ->where('id', '!=', $article->id)
-            ->where('status', 'published')
+            ->where('status', 1)
             ->latest()
             ->take(1)
             ->get();
