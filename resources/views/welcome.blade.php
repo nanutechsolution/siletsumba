@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- Favicon --}}
+
+    {{-- ✅ Favicon --}}
     @php
-    $faviconUrl =
-    $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
+    $faviconUrl = $settings['site_logo_url']?->getFirstMediaUrl('site_logo_url', 'thumb') ?? asset('default-favicon.png');
     @endphp
+    <link rel="icon" href="{{ $faviconUrl }}" type="image/png">
 
-    <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/x-icon">
-
+    {{-- ✅ Meta --}}
     @include('partials._meta')
-    {{-- Dark mode script sebelum CSS --}}
+
+    {{-- 🌗 Dark mode script — inline kecil, tapi defer rendering --}}
     <script>
-        (function() {
+        (() => {
             const theme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (theme === 'dark' || (!theme && prefersDark)) {
@@ -24,15 +24,34 @@
         })();
 
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    {{-- 💤 Font preload dan async load --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" media="print" onload="this.media='all'">
     <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
-    </noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"></noscript>
+
+    <link rel="preload" href="{{ Vite::asset('resources/js/app.js') }}" as="script">
+    <link rel="preload" href="{{ Vite::asset('resources/css/app.css') }}" as="style">
+
+    {{-- 🎯 Load asset Vite (sudah minified + code splitting aktif) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
+    {{-- 💸 Ads script: lazy-load agar tidak blocking render --}}
+    <script>
+        window.addEventListener('load', () => {
+            requestIdleCallback(() => {
+                const s = document.createElement('script');
+                s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176";
+                s.async = true;
+                s.crossOrigin = "anonymous";
+                document.body.appendChild(s);
+            });
+        });
+
+    </script>
 </head>
 
 <body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
