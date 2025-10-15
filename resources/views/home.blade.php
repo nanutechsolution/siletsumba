@@ -71,7 +71,7 @@
                     @endif
                     {{-- <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white" style="background-color: {{ $article->category->color ?? '#FF0000' }}">
                         {{ $article->category->name ?? 'Umum' }}
-                    </span> --}}
+                </span> --}}
                 </div>
 
                 {{-- Konten berita --}}
@@ -79,7 +79,7 @@
                     <div class="font-bold text-base md:text-lg text-gray-800 dark:text-white line-clamp-3 leading-6 mb-1">
                         {{ $article->title }}
                     </div>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 leading-5 mb-2">
+                    <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 leading-6 mb-2">
                         {{ strip_tags($article->content) }}
                     </p>
                     <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">

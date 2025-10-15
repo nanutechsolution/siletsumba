@@ -30,6 +30,8 @@
             @php
             $metaTitle = $article->title . ' - Silet Sumba';
             $shareUrl = url()->current();
+            $content = explode('</p>', $article->full_content); // Pisahkan konten menjadi paragraf
+            $bacaJugaInserted = false;
             @endphp
 
             <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -210,11 +212,41 @@
                 </div>
                 <!-- Content -->
                 <div class="px-4  space-y-6">
-
-
-                    <div class="prose dark:prose-invert max-w-none">
-                        {{-- {!! $article->full_content_with_ads !!} --}}
+                    {{-- <div class="prose dark:prose-invert max-w-none">
                         {!! $article->full_content !!}
+                    </div> --}}
+                    <div class="prose dark:prose-invert max-w-none">
+                        @foreach ($content as $index => $paragraph)
+                        <p>{!! $paragraph !!}</p>
+
+                        {{-- Sisipkan "Baca Juga" setelah paragraf ke-3 --}}
+                        @if (!$bacaJugaInserted && $index == 2)
+                        <div class="baca-juga my-6">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Baca Juga:</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                @foreach($related as $relatedArticle)
+                                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
+                                    <a href="{{ route('articles.show', $relatedArticle->slug) }}" class="block">
+                                        {{-- Gambar Thumbnail --}}
+                                        @if ($relatedArticle->hasMedia('images'))
+                                        <img src="{{ $relatedArticle->getFirstMediaUrl('images', 'thumb') }}" alt="{{ $relatedArticle->title }}" class="w-full h-48 object-cover object-center transform transition duration-500 hover:scale-105">
+                                        @else
+                                        <div class="h-48 bg-gray-300 dark:bg-gray-600"></div>
+                                        @endif
+
+                                        {{-- Konten Artikel Terkait --}}
+                                        <div class="p-4">
+                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ $relatedArticle->title }}</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">{{ \Str::limit(strip_tags($relatedArticle->content), 100) }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @php $bacaJugaInserted = true; @endphp
+                        @endif
+                        @endforeach
                     </div>
                     <!-- Tags -->
                     <section aria-label="tags">

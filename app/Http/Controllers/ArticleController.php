@@ -62,6 +62,7 @@ class ArticleController extends Controller
             ->latest()
             ->take(5)
             ->get();
+
         return view('articles.show', compact('article', 'related', 'latest', 'popular', 'categories'));
     }
 
