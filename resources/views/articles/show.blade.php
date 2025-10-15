@@ -56,24 +56,11 @@
                     {!! $article->title !!}
                 </h1>
                 {{-- Detail Article --}}
-               @if ($article->hasMedia('images'))
-<div class="w-full max-w-5xl mx-auto rounded-xl overflow-hidden shadow-md bg-gray-50 dark:bg-gray-800">
-    <div class="aspect-[16/9] w-full">
-        <img 
-            src="{{ $article->getFirstMediaUrl('images', 'detail') }}" 
-            srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" 
-            alt="{{ $article->title }}"
-            class="w-full h-full object-cover object-center"
-            loading="lazy" decoding="async"
-        >
-    </div>
-</div>
-@endif
-
-
-                {{-- <div class="w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
-                    <img src="{{ $article->getFirstMediaUrl('images', 'detail') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-auto object-contain object-center rounded-lg" loading="lazy" decoding="async"> --}}
-                {{-- </div> --}}
+                @if ($article->hasMedia('images'))
+                <div class="w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
+                    <img src="{{ $article->getFirstMediaUrl('images', 'detail') }}" srcset="{{ $article->getFirstMedia('images')->getSrcset('detail') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $article->title }}" class="w-full h-auto object-contain object-center rounded-lg" loading="lazy" decoding="async">
+                </div>
+                @endif
                 <!-- Interaction Bar -->
                 <div class="bg-white dark:bg-gray-800 flex items-center justify-between px-4 py-2 shadow-sm rounded-lg mt-4">
                     <!-- Left: Views, Likes, Comments -->
@@ -221,36 +208,42 @@
                     </div>
                 </div>
                 <!-- Content -->
-                <div class="px-4  space-y-6">
-                    {{-- <div class="prose dark:prose-invert max-w-none">
-                        {!! $article->full_content !!}
-                    </div> --}}
-                    @if (!$bacaJugaInserted && $index == 2 && $related->isNotEmpty())
-<div class="baca-juga my-8 border-l-4 border-silet-red bg-silet-red/5 px-4 py-3 rounded-md">
-    <span class="font-semibold text-silet-red uppercase text-sm">Baca Juga:</span>
-    <a href="{{ route('articles.show', $related[0]->slug) }}" 
-       class="block text-lg font-medium text-gray-800 dark:text-gray-100 hover:text-silet-red transition duration-200 mt-1 leading-snug">
-        {{ $related[0]->title }}
-    </a>
-</div>
-@php $bacaJugaInserted = true; @endphp
-@endif
+               <div class="px-4 space-y-6">
+    <div class="prose dark:prose-invert max-w-none">
+        @php $bacaJugaInserted = false; @endphp
 
+        @foreach ($content as $paragraph)
+            <p>{!! $paragraph !!}</p>
 
-                    <!-- Tags -->
-                    <section aria-label="tags">
-                        @if ($article->tags->count())
-                        <div class="flex flex-wrap gap-2 py-4">
-                            @foreach ($article->tags as $tag)
-                            <a href="{{ route('tags.show', $tag->slug) }}" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
-                                #{{ $tag->name }}
-                            </a>
-                            @endforeach
-                        </div>
-                        @endif
-                    </section>
-
+            {{-- Sisipkan Baca Juga setelah paragraf ke-3 --}}
+            @if (!$bacaJugaInserted && $loop->iteration === 3 && $related->isNotEmpty())
+                <div class="baca-juga my-8 border-l-4 border-silet-red bg-silet-red/5 px-4 py-3 rounded-md">
+                    <span class="font-semibold text-silet-red uppercase text-sm">Baca Juga:</span>
+                    <a href="{{ route('articles.show', $related[0]->slug) }}" 
+                       class="block text-lg font-medium text-gray-800 dark:text-gray-100 hover:text-silet-red transition duration-200 mt-1 leading-snug">
+                        {{ $related[0]->title }}
+                    </a>
                 </div>
+                @php $bacaJugaInserted = true; @endphp
+            @endif
+        @endforeach
+    </div>
+
+    <!-- Tags -->
+    <section aria-label="tags">
+        @if ($article->tags->count())
+            <div class="flex flex-wrap gap-2 py-4">
+                @foreach ($article->tags as $tag)
+                    <a href="{{ route('tags.show', $tag->slug) }}" 
+                       class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
+                        #{{ $tag->name }}
+                    </a>
+                @endforeach
+            </div>
+        @endif
+    </section>
+</div>
+
             </article>
             <!-- Comments -->
             @include('partials.article-comments', ['article' => $article])
