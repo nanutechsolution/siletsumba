@@ -41,7 +41,13 @@ class AdminArticleController extends Controller
             ->latest()
             ->take(5)
             ->get();
-        return view('articles.show', compact('article', 'popular', 'latest'));
+        $related = Article::where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->where('status', 'published')
+            ->latest()
+            ->take(1)
+            ->get();
+        return view('articles.show', compact('article', 'popular', 'latest','related'));
     }
     public function index()
     {
