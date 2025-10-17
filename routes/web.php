@@ -33,6 +33,7 @@ Route::get('/kategori/{slug}', [HomeController::class, 'getArticlesByCategory'])
 Route::post('comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/tags/{slug}', [HomeController::class, 'getByTag'])->name('tags.show');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
+Route::get('/artikel/{slug}/next', [ArticleController::class, 'nextPart'])->name('articles.next_part');
 
 Route::get('/sitemap.xml', function () {
     return Cache::remember('sitemap', now()->addHours(6), function () {

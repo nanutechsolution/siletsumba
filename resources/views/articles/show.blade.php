@@ -30,7 +30,7 @@
             @php
             $metaTitle = $article->title . ' - Silet Sumba';
             $shareUrl = url()->current();
-            $content = explode('</p>', $article->full_content); // Pisahkan konten menjadi paragraf
+            $content = explode('</p>', $article->full_content_with_ads); // Pisahkan konten menjadi paragraf
             $bacaJugaInserted = false;
             @endphp
 
@@ -219,7 +219,7 @@
             @if (!$bacaJugaInserted && $loop->iteration === 3 && $related->isNotEmpty())
                 <div class="baca-juga my-8 border-l-4 border-silet-red bg-silet-red/5 px-4 py-3 rounded-md">
                     <span class="font-semibold text-silet-red uppercase text-sm">Baca Juga:</span>
-                    <a href="{{ route('articles.show', $related[0]->slug) }}" 
+                    <a href="{{ route('articles.show', $related[0]->slug) }}"
                        class="block text-lg font-medium text-gray-800 dark:text-gray-100 hover:text-silet-red transition duration-200 mt-1 leading-snug">
                         {{ $related[0]->title }}
                     </a>
@@ -234,7 +234,7 @@
         @if ($article->tags->count())
             <div class="flex flex-wrap gap-2 py-4">
                 @foreach ($article->tags as $tag)
-                    <a href="{{ route('tags.show', $tag->slug) }}" 
+                    <a href="{{ route('tags.show', $tag->slug) }}"
                        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
                         #{{ $tag->name }}
                     </a>

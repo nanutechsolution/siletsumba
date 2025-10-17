@@ -195,4 +195,23 @@ class ArticleController extends Controller
 
         return back()->with('success', 'Artikel berhasil disukai!');
     }
+
+
+    public function nextPart($slug)
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+
+        // Misal kita simpan posisi terakhir yang dibaca lewat query param
+        $offset = request()->get('offset', 5);
+
+        $paragraphs = explode('</p>', $article->full_content);
+        $nextContent = array_slice($paragraphs, $offset, 5); // ambil 5 paragraf berikutnya
+
+        return view('articles.show_next', [
+            'article' => $article,
+            'content' => $nextContent,
+            'nextOffset' => $offset + 5,
+        ]);
+    }
+
 }
