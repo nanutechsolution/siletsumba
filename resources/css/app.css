@@ -8,12 +8,9 @@
     font-family: "Inter", sans-serif;
 }
 
-.breaking-news {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll 25s linear infinite; /* sesuaikan durasi untuk kecepatan */
+.breaking-news:hover {
+    animation-play-state: paused;
 }
-
 @keyframes scroll {
     0% {
         transform: translateX(100%);
@@ -22,12 +19,21 @@
         transform: translateX(-100%);
     }
 }
-
-/* Optional: lebih cepat di mobile */
-@media (max-width: 768px) {
-    .breaking-news {
-        animation: scroll 45s linear infinite;
+.marquee {
+    display: inline-block;
+    animation: marquee 15s linear infinite;
+}
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
     }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+.marquee {
+    display: inline-block;
+    animation: marquee 15s linear infinite;
 }
 
 .article-card {

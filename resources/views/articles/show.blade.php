@@ -10,7 +10,7 @@
     </div>
     @endif
     <!-- Breadcrumb -->
-    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4" aria-label="Breadcrumb">
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4 px-4" aria-label="Breadcrumb">
         <a href="{{ url('/') }}" class="hover:text-silet-red">Home</a>
         @if ($article->category?->parent)
         <span> &gt; </span>
@@ -30,7 +30,7 @@
             @php
             $metaTitle = $article->title . ' - Silet Sumba';
             $shareUrl = url()->current();
-            $content = explode('</p>', $article->full_content_with_ads); // Pisahkan konten menjadi paragraf
+            $content = explode('</p>', $article->full_content_with_ads);
             $bacaJugaInserted = false;
             @endphp
 
@@ -208,41 +208,39 @@
                     </div>
                 </div>
                 <!-- Content -->
-               <div class="px-4 space-y-6">
-    <div class="prose dark:prose-invert max-w-none">
-        @php $bacaJugaInserted = false; @endphp
+                <div class="px-4 space-y-6">
+                    <div class="prose dark:prose-invert max-w-none">
+                        @php $bacaJugaInserted = false; @endphp
 
-        @foreach ($content as $paragraph)
-            <p>{!! $paragraph !!}</p>
+                        @foreach ($content as $paragraph)
+                        <p>{!! $paragraph !!}</p>
 
-            {{-- Sisipkan Baca Juga setelah paragraf ke-3 --}}
-            @if (!$bacaJugaInserted && $loop->iteration === 3 && $related->isNotEmpty())
-                <div class="baca-juga my-8 border-l-4 border-silet-red bg-silet-red/5 px-4 py-3 rounded-md">
-                    <span class="font-semibold text-silet-red uppercase text-sm">Baca Juga:</span>
-                    <a href="{{ route('articles.show', $related[0]->slug) }}"
-                       class="block text-lg font-medium text-gray-800 dark:text-gray-100 hover:text-silet-red transition duration-200 mt-1 leading-snug">
-                        {{ $related[0]->title }}
-                    </a>
+                        {{-- Sisipkan Baca Juga setelah paragraf ke-3 --}}
+                        @if (!$bacaJugaInserted && $loop->iteration === 3 && $related->isNotEmpty())
+                        <div class="baca-juga my-8 border-l-4 border-silet-red bg-silet-red/5 px-4 py-3 rounded-md">
+                            <span class="font-semibold text-silet-red uppercase text-sm">Baca Juga:</span>
+                            <a href="{{ route('articles.show', $related[0]->slug) }}" class="block text-lg font-medium text-gray-800 dark:text-gray-100 hover:text-silet-red transition duration-200 mt-1 leading-snug">
+                                {{ $related[0]->title }}
+                            </a>
+                        </div>
+                        @php $bacaJugaInserted = true; @endphp
+                        @endif
+                        @endforeach
+                    </div>
+
+                    <!-- Tags -->
+                    <section aria-label="tags">
+                        @if ($article->tags->count())
+                        <div class="flex flex-wrap gap-2 py-4">
+                            @foreach ($article->tags as $tag)
+                            <a href="{{ route('tags.show', $tag->slug) }}" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
+                                #{{ $tag->name }}
+                            </a>
+                            @endforeach
+                        </div>
+                        @endif
+                    </section>
                 </div>
-                @php $bacaJugaInserted = true; @endphp
-            @endif
-        @endforeach
-    </div>
-
-    <!-- Tags -->
-    <section aria-label="tags">
-        @if ($article->tags->count())
-            <div class="flex flex-wrap gap-2 py-4">
-                @foreach ($article->tags as $tag)
-                    <a href="{{ route('tags.show', $tag->slug) }}"
-                       class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white">
-                        #{{ $tag->name }}
-                    </a>
-                @endforeach
-            </div>
-        @endif
-    </section>
-</div>
 
             </article>
             <!-- Comments -->

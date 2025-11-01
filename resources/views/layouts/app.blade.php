@@ -22,6 +22,7 @@
         } else {
             document.documentElement.classList.remove('dark')
         }
+
     </script>
     @livewireStyles
 </head>
@@ -32,15 +33,15 @@
 
         <!-- Page Heading -->
         @isset($header)
-            <header class="bg-white dark:bg-gray-800 shadow pt-16">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+        <header class="bg-white dark:bg-gray-800 shadow pt-16">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
         @endisset
 
         <!-- Page Content -->
-        <main>
+        <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             {{ $slot }}
         </main>
     </div>
