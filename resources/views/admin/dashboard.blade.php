@@ -4,10 +4,8 @@
             {{ __('Dashboard Admin') }}
         </h2>
     </x-slot>
-
     <div class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-
+        <div class="mx-auto sm:px-6 lg:px-8 space-y-6">
             {{-- Welcome Card --}}
             <div
                 class="bg-white dark:bg-gray-800 shadow-lg sm:rounded-xl p-6 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
@@ -37,7 +35,6 @@
                     </p>
                 </div>
             </div>
-
             {{-- Quick Action Buttons --}}
             <div class="flex flex-wrap gap-4">
                 @can('buat_artikel')
