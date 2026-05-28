@@ -66,42 +66,103 @@ Route::get('/sitemap.xml', function () {
     });
 });
 
-Route::middleware(['auth', 'role:admin|editor|writer|super-admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data');
-    Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
-    Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
-    Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
-    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users/{user}/roles', [UserController::class, 'assignRoles'])->name('users.roles');
-    Route::post('/users/{user}/permissions', [UserController::class, 'assignPermissions'])->name('users.permissions');
-    Route::post('users', [UserController::class, 'store'])->name('users.store');
-    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::resource('categories', AdminCategoryController::class);
-    Route::delete('berita/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
-    Route::post('berita/{slug}/like', [ArticleController::class, 'like'])->name('articles.like');
-    Route::post('berita/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content'); // Tambahkan baris ini
-    Route::resource('prompts', PromptController::class);
-    Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
-    Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
-    Route::post('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
-    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
-    Route::resource('tags', TagController::class);
-    Route::resource('ads', AdController::class);
-    Route::resource('pages', AdminPageController::class);
-    Route::resource('articles', AdminArticleController::class);
-    Route::put('articles/{article:slug}/unpublish', [AdminArticleController::class, 'unpublish'])
-        ->name('articles.unpublish');
+// Route::middleware(['auth', 'role:admin|editor|writer|super-admin'])->prefix('admin')->name('admin.')->group(function () {
+//     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+//     Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data');
+//     Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
+//     Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+//     Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+//     Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+//     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+//     Route::post('/users/{user}/roles', [UserController::class, 'assignRoles'])->name('users.roles');
+//     Route::post('/users/{user}/permissions', [UserController::class, 'assignPermissions'])->name('users.permissions');
+//     Route::post('users', [UserController::class, 'store'])->name('users.store');
+//     Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+//     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+//     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+//     Route::resource('categories', AdminCategoryController::class);
+//     Route::delete('berita/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
+//     Route::post('berita/{slug}/like', [ArticleController::class, 'like'])->name('articles.like');
+//     Route::post('berita/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content'); // Tambahkan baris ini
+//     Route::resource('prompts', PromptController::class);
+//     Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
+//     Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
+//     Route::post('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
+//     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+//     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+//     Route::resource('tags', TagController::class);
+//     Route::resource('ads', AdController::class);
+//     Route::resource('pages', AdminPageController::class);
+//     Route::resource('articles', AdminArticleController::class);
+//     Route::put('articles/{article:slug}/unpublish', [AdminArticleController::class, 'unpublish'])
+//         ->name('articles.unpublish');
+//     Route::get('/articles/preview/{slug}', [AdminArticleController::class, 'preview'])
+//         ->name('articles.preview');
 
-    Route::get('/articles/preview/{slug}', [AdminArticleController::class, 'preview'])
-        ->name('articles.preview');
+// });
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
+    // ========================================================
+    // 1. AKSES UMUM (Semua Role: Admin, Super-Admin, Editor, Writer)
+    // ========================================================
+    Route::middleware(['role:admin|editor|writer|super-admin'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+        // Manajemen Artikel & Kategori & Tag
+        Route::resource('articles', AdminArticleController::class);
+        Route::resource('categories', AdminCategoryController::class);
+        Route::resource('tags', TagController::class);
+
+        // Fitur Spesifik Artikel
+        Route::delete('berita/mass-delete', [AdminArticleController::class, 'massDestroy'])->name('articles.destroy.mass');
+        Route::post('berita/{slug}/like', [ArticleController::class, 'like'])->name('articles.like');
+        Route::post('berita/generate-content', [AdminArticleController::class, 'generateContent'])->name('articles.generate-content');
+        Route::put('articles/{article:slug}/unpublish', [AdminArticleController::class, 'unpublish'])->name('articles.unpublish');
+        Route::get('/articles/preview/{slug}', [AdminArticleController::class, 'preview'])->name('articles.preview');
+    });
+
+    // ========================================================
+    // 2. AKSES MENENGAH (Hanya Admin, Super-Admin, & Editor)
+    // * Writer TIDAK BISA mengakses grup ini
+    // ========================================================
+    Route::middleware(['role:admin|super-admin|editor'])->group(function () {
+        // Halaman, Iklan, & Prompts
+        Route::resource('pages', AdminPageController::class);
+        Route::resource('ads', AdController::class);
+        Route::resource('prompts', PromptController::class);
+
+        // Moderasi Komentar
+        Route::resource('comments', AdminCommentController::class)->except(['show', 'create', 'store']);
+        Route::post('comments/{comment}/approve', [AdminCommentController::class, 'approve'])->name('comments.approve');
+        Route::post('comments/{comment}/reject', [AdminCommentController::class, 'reject'])->name('comments.reject');
+    });
+
+    // ========================================================
+    // 3. AKSES STRICT (Hanya Admin & Super-Admin)
+    // * Writer & Editor TIDAK BISA mengakses grup ini
+    // ========================================================
+    Route::middleware(['role:admin|super-admin'])->group(function () {
+        // User Management
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::post('users', [UserController::class, 'store'])->name('users.store');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::post('/users/{user}/roles', [UserController::class, 'assignRoles'])->name('users.roles');
+        Route::post('/users/{user}/permissions', [UserController::class, 'assignPermissions'])->name('users.permissions');
+
+        // Role & Permission Management
+        Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data');
+        Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
+        Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+        Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+
+        // Settings
+        Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+    });
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
