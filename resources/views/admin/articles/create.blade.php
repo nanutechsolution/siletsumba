@@ -76,14 +76,14 @@
                             </label>
                             <input type="text" name="location" id="location" value="{{ old('location') }}" placeholder="Desa / Kecamatan / Kota, Sumba" class="w-full border rounded-lg px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                Masukkan lokasi lengkap 
+                                Masukkan lokasi lengkap
                             </p>
                             @error('location')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
-
+                    @hasanyrole('admin|super-admin')
                     {{-- Fakta / Kronologi --}}
                     <div class="mb-5">
                         <label for="facts" class="block font-semibold text-gray-700 dark:text-gray-200 mb-1">
@@ -98,6 +98,7 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    @endhasanyrole
 
                     {{-- Kutipan / Narasumber --}}
                     <div class="mb-5">
