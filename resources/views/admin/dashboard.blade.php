@@ -11,9 +11,9 @@
                 class="bg-white dark:bg-gray-800 shadow-lg sm:rounded-xl p-6 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
 
                 {{-- Foto profil atau placeholder --}}
-                 @if (Auth::user()->hasMedia('profile_photos'))
-                <img src="{{ Storage::url(Auth::user()->getFirstMediaUrl('profile_photos')) }}" alt="{{ Auth::user()->name }}"
-                    class="h-16 w-16 object-cover rounded-full flex-shrink-0">
+                @if (Auth::user()->hasMedia('profile_photos'))
+                <img src="{{ Auth::user()->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ Auth::user()->name }}"
+                    class="h-16 w-16 object-cover rounded-full flex-shrink-0" loading="lazy" type="image/webp">
                 @else
                 <div
                     class="h-16 w-16 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 flex-shrink-0">
