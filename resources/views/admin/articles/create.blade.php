@@ -232,6 +232,7 @@
                     <input type="hidden" name="status" value="draft">
                     @endrole
 
+                    @hasanyrole('admin|super-admin')
                     {{-- Tombol AI --}}
                     <div class="mb-5">
                         <label class="block font-semibold text-gray-700 dark:text-gray-200 mb-2">
@@ -248,6 +249,7 @@
                             @endforeach
                         </div>
                     </div>
+                    @endhasanyrole
 
                     {{-- Konten Artikel --}}
                     <div class="mb-5">
@@ -277,16 +279,15 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script>
         new TomSelect("#tags", {
-            plugins: ['remove_button']
-            , create: true
-            , sortField: {
-                field: "text"
-                , direction: "asc"
+            plugins: ['remove_button'],
+            create: true,
+            sortField: {
+                field: "text",
+                direction: "asc"
             },
             // load old tags jika ada
-            items: @json(old('tags', []))
-        , });
-
+            items: @json(old('tags', [])),
+        });
     </script>
 
     {{-- Quill --}}
@@ -300,23 +301,29 @@
             const firstError = document.querySelector('.text-red-500.text-sm');
             if (firstError) {
                 firstError.scrollIntoView({
-                    behavior: 'smooth'
-                    , block: 'center'
+                    behavior: 'smooth',
+                    block: 'center'
                 });
             }
             // ====== Quill Editors ======
             const editorQuill = new Quill('#editor', {
-                placeholder: 'Tulis isi berita disini...'
-                , theme: 'snow'
-                , modules: {
+                placeholder: 'Tulis isi berita disini...',
+                theme: 'snow',
+                modules: {
                     toolbar: [
-  [{ header: [1, 2, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  ['link', 'image'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['blockquote', 'code-block'], 
-  ['clean']
-]
+                        [{
+                            header: [1, 2, false]
+                        }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['link', 'image'],
+                        [{
+                            list: 'ordered'
+                        }, {
+                            list: 'bullet'
+                        }],
+                        ['blockquote', 'code-block'],
+                        ['clean']
+                    ]
 
                 }
             });
@@ -359,12 +366,12 @@
                 setButtonLoading(button, true);
                 try {
                     const res = await fetch("{{ route('admin.articles.generate-content') }}", {
-                        method: 'POST'
-                        , headers: {
-                            'Content-Type': 'application/json'
-                            , 'X-CSRF-TOKEN': csrfToken
-                        }
-                        , body: JSON.stringify({
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
                             prompt
                         })
                     });
@@ -450,18 +457,17 @@
                 e.preventDefault();
             }
         });
-
     </script>
 
 
     <script>
         function imageUploader() {
             return {
-                file: null
-                , preview: null
-                , fileName: ''
-                , fileSize: ''
-                , dragOver: false,
+                file: null,
+                preview: null,
+                fileName: '',
+                fileSize: '',
+                dragOver: false,
 
                 handleFile(event) {
                     const f = event.target.files[0];
@@ -507,6 +513,5 @@
                 }
             }
         }
-
     </script>
 </x-app-layout>
