@@ -28,9 +28,7 @@
                             <img class="h-full w-full object-cover" loading="lazy" src="{{ Auth::user()->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ Auth::user()->name }}">
                             @else
                             <span class="flex h-full w-full items-center justify-center">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             </span>
                             @endif
                         </span>
@@ -90,16 +88,12 @@
         {{-- Cari: tombol (mobile) --}}
         <button type="button" @click="searchOpen = true; $nextTick(() => $refs.mobileSearch.focus())" aria-label="Buka pencarian"
             class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-stone-300 text-stone-700 dark:border-stone-700 dark:text-stone-200 md:hidden">
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
         </button>
 
         {{-- Cari: form (desktop) --}}
         <form action="{{ route('articles.search') }}" method="GET" class="relative hidden w-64 flex-shrink-0 transition-all duration-300 focus-within:w-96 md:block">
-            <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             <input type="search" name="q" x-model="query" placeholder="Cari berita" autocomplete="off"
                 class="w-full rounded-full border-stone-300 bg-white py-2 pl-10 pr-4 text-sm shadow-sm focus:border-silet-red focus:ring-silet-red dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100">
         </form>
@@ -111,9 +105,7 @@
             <div class="flex items-center justify-between">
                 <p class="font-serif text-xl font-bold">Cari berita</p>
                 <button type="button" @click="searchOpen = false" aria-label="Tutup pencarian" class="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 dark:border-stone-700">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
             <form action="{{ route('articles.search') }}" method="GET" class="mt-4">
@@ -172,9 +164,7 @@
         <button type="button" @click="$dispatch('buka-cari')" aria-label="Cari berita"
             class="ml-2 flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-stone-300 text-stone-700 transition-all duration-300 dark:border-stone-700 dark:text-stone-200"
             :class="scrolled ? 'opacity-100' : 'pointer-events-none w-0 border-0 opacity-0'">
-            <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
         </button>
     </div>
 </nav>

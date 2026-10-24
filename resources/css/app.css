@@ -14,6 +14,7 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
@@ -24,15 +25,13 @@ body {
 .tenun-strip {
     height: 6px;
     background:
-        repeating-linear-gradient(
-            90deg,
+        repeating-linear-gradient(90deg,
             #7a2418 0 18px,
             #d97706 18px 24px,
             #1c1917 24px 30px,
             #d97706 30px 36px,
             #7a2418 36px 54px,
-            #faf8f5 54px 58px
-        );
+            #faf8f5 54px 58px);
 }
 
 /* Placeholder ketika berita belum punya gambar */
@@ -41,6 +40,7 @@ body {
     background-image:
         repeating-linear-gradient(45deg, rgba(122, 36, 24, 0.12) 0 8px, transparent 8px 16px);
 }
+
 .dark .img-placeholder {
     background-color: #292524;
     background-image:
@@ -55,6 +55,7 @@ body {
     background-repeat: no-repeat;
     transition: background-size 0.25s ease;
 }
+
 a:hover .headline-link,
 .headline-link:hover {
     background-size: 100% 1px;
@@ -64,26 +65,32 @@ a:hover .headline-link,
 .breaking-news:hover {
     animation-play-state: paused;
 }
+
 @keyframes marquee {
     0% {
         transform: translateX(100%);
     }
+
     100% {
         transform: translateX(-100%);
     }
 }
+
 @keyframes scroll {
     0% {
         transform: translateX(100%);
     }
+
     100% {
         transform: translateX(-100%);
     }
 }
+
 .marquee {
     display: inline-block;
     animation: marquee 30s linear infinite;
 }
+
 @media (prefers-reduced-motion: reduce) {
     .marquee {
         animation: none;
@@ -180,9 +187,12 @@ a:hover .headline-link,
 
 /* Dark mode Tom Select */
 .dark .ts-control {
-    background-color: #1f2937; /* bg-gray-800 */
-    color: #f9fafb; /* text-gray-100 */
-    border-color: #374151; /* border-gray-700 */
+    background-color: #1f2937;
+    /* bg-gray-800 */
+    color: #f9fafb;
+    /* text-gray-100 */
+    border-color: #374151;
+    /* border-gray-700 */
 }
 
 .dark .ts-dropdown {
@@ -192,7 +202,8 @@ a:hover .headline-link,
 
 .dark .ts-dropdown .ts-option:hover,
 .dark .ts-dropdown .ts-option.ts-selected {
-    background-color: #2563eb; /* bg-blue-600 */
+    background-color: #2563eb;
+    /* bg-blue-600 */
     color: #fff;
 }
 
