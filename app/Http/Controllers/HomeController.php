@@ -67,6 +67,7 @@ class HomeController extends Controller
             ->get();
 
 
+
         return view('home', compact('hero', 'latestArticles', 'latestFive', 'trending', 'categories', 'breakingNews'));
     }
     public function getArticlesByCategory(string $slug): View

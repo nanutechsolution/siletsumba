@@ -1,17 +1,70 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 [x-cloak] {
     display: none !important;
 }
-* {
-    font-family: "Inter", sans-serif;
+
+body {
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* ===== Redesign: Silet Sumba editorial ===== */
+
+/* Garis motif tenun Sumba (dekoratif, di bawah masthead) */
+.tenun-strip {
+    height: 6px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #7a2418 0 18px,
+            #d97706 18px 24px,
+            #1c1917 24px 30px,
+            #d97706 30px 36px,
+            #7a2418 36px 54px,
+            #faf8f5 54px 58px
+        );
+}
+
+/* Placeholder ketika berita belum punya gambar */
+.img-placeholder {
+    background-color: #e7e0d6;
+    background-image:
+        repeating-linear-gradient(45deg, rgba(122, 36, 24, 0.12) 0 8px, transparent 8px 16px);
+}
+.dark .img-placeholder {
+    background-color: #292524;
+    background-image:
+        repeating-linear-gradient(45deg, rgba(217, 119, 6, 0.14) 0 8px, transparent 8px 16px);
+}
+
+/* Judul berita: hover garis bawah tipis */
+.headline-link {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.25s ease;
+}
+a:hover .headline-link,
+.headline-link:hover {
+    background-size: 100% 1px;
+}
+
+/* Marquee breaking news */
 .breaking-news:hover {
     animation-play-state: paused;
 }
-@keyframes scroll {
+@keyframes marquee {
     0% {
         transform: translateX(100%);
     }
@@ -19,8 +72,7 @@
         transform: translateX(-100%);
     }
 }
-
-@keyframes marquee {
+@keyframes scroll {
     0% {
         transform: translateX(100%);
     }
@@ -32,7 +84,14 @@
     display: inline-block;
     animation: marquee 30s linear infinite;
 }
+@media (prefers-reduced-motion: reduce) {
+    .marquee {
+        animation: none;
+        transform: none;
+    }
+}
 
+/* ===== Gaya lama yang masih dipakai halaman lain ===== */
 .article-card {
     transition: all 0.3s ease;
 }
@@ -140,4 +199,18 @@
 .dark .ts-control input {
     background-color: transparent;
     color: #f9fafb;
+}
+
+
+/* Ruang untuk bilah aksi bawah (HP) di halaman detail berita */
+@media (max-width: 1023px) {
+    body.has-bottom-bar footer {
+        padding-bottom: 4.5rem;
+    }
+}
+
+/* Iklan di dalam isi berita: beri jarak dan jangan melebihi lebar kolom */
+.prose ins.adsbygoogle {
+    max-width: 100%;
+    overflow: hidden;
 }

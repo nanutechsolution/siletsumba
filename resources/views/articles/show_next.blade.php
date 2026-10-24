@@ -1,11 +1,12 @@
 @foreach ($content as $paragraph)
-<p>{!! $paragraph !!}</p>
+    @if (preg_match('/<p[\s>]/', $paragraph)){!! $paragraph !!}</p>@else{!! $paragraph !!}@endif
 @endforeach
 
 @if ($nextOffset < count(explode('</p>', $article->full_content)))
-    <div class="my-6 text-center">
-        <a href="{{ route('articles.next_part', $article->slug) }}?offset={{ $nextOffset }}" class="inline-block bg-silet-red text-white px-4 py-2 rounded hover:bg-red-700 transition">
-            Baca Selanjutnya →
-        </a>
-    </div>
-    @endif
+<div class="not-prose my-6 text-center">
+    <a href="{{ route('articles.next_part', $article->slug) }}?offset={{ $nextOffset }}"
+        class="inline-flex h-11 items-center rounded-full bg-silet-red px-6 text-sm font-semibold text-white hover:bg-red-700">
+        Baca selanjutnya
+    </a>
+</div>
+@endif

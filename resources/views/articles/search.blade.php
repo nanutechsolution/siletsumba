@@ -1,156 +1,141 @@
 @extends('welcome')
 @section('content')
-<!-- Breadcrumb -->
-<div class="bg-silet-gray dark:bg-gray-800 py-2">
-    <div class="container mx-auto px-4">
-        <nav class="text-sm text-gray-600 dark:text-gray-400">
-            <a href="/" class="hover:text-silet-red">Beranda</a> &gt;
-            <span class="text-silet-red">Hasil Pencarian</span>
-        </nav>
-    </div>
-</div>
-<div class="mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-8">
-    <!-- Main Content -->
-    <div class="lg:col-span-3 space-y-6">
-        <!-- Search Header -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Hasil Pencarian</h1>
-            <!-- Search Form -->
-            <form action="{{ route('articles.search') }}" method="GET" class="mb-6">
-                <div class="relative">
-                    <input type="text" name="q" value="{{ $query }}" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-silet-red focus:border-transparent dark:bg-gray-700 dark:text-white pr-12" placeholder="Cari berita...">
-                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 bg-silet-red text-white p-2 rounded-lg hover:bg-red-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                            <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
-                        </svg>
+@php
+    $urutan = request('sort') === 'oldest' ? 'oldest' : 'latest';
+@endphp
 
-                    </button>
-                </div>
-            </form>
+<nav aria-label="Breadcrumb" class="mb-4 text-xs text-stone-500 dark:text-stone-400">
+    <a href="{{ url('/') }}" class="hover:text-silet-red">Beranda</a>
+    <span aria-hidden="true">/</span>
+    <span class="font-medium text-stone-700 dark:text-stone-200">Pencarian</span>
+</nav>
 
-            <!-- Search Info -->
-            <div class="flex flex-wrap items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>Menampilkan {{ $articles->total() }} hasil untuk "{{ $query }}"</span>
-                <span>Waktu pencarian: {{ $searchTime }} detik</span>
+<div class="grid gap-10 lg:grid-cols-12">
+    <div class="lg:col-span-8">
+        <h1 class="font-serif text-3xl font-bold">Pencarian berita</h1>
+
+        {{-- Satu form untuk kata kunci, kategori, dan urutan --}}
+        <form action="{{ route('articles.search') }}" method="GET" class="mt-4 space-y-3">
+            <div class="relative">
+                <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                <input type="search" name="q" value="{{ $query }}" placeholder="Ketik kata kunci" autocomplete="off"
+                    class="w-full rounded-full border-stone-300 bg-white py-3 pl-12 pr-28 text-base shadow-sm focus:border-silet-red focus:ring-silet-red dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100">
+                <button type="submit" class="absolute right-1.5 top-1/2 h-9 -translate-y-1/2 rounded-full bg-silet-red px-5 text-sm font-semibold text-white hover:bg-red-700">Cari</button>
             </div>
 
-            <!-- Filters -->
-            <div class="flex flex-wrap gap-4 mt-4">
-                <select name="sort" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
-                    <option value="">Urutkan: Relevansi</option>
-                    <option value="latest">Terbaru</option>
-                    <option value="oldest">Terlama</option>
-                </select>
-
-                <select name="category" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
-                    <option value="">Semua Kategori</option>
+            <div class="grid grid-cols-2 gap-3">
+                <select name="category" onchange="this.form.submit()" aria-label="Filter kategori"
+                    class="rounded-lg border-stone-300 bg-white py-2.5 text-sm focus:border-silet-red focus:ring-silet-red dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100">
+                    <option value="">Semua kategori</option>
                     @foreach ($categories as $cat)
-                    <option value="{{ $cat->slug }}" {{ request('category') == $cat->slug ? 'selected' : '' }}>
-                        {{ $cat->name }}
-                    </option>
+                    <option value="{{ $cat->slug }}" @selected(request('category') == $cat->slug)>{{ $cat->name }}</option>
                     @endforeach
                 </select>
-
-                <select class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white">
-                    <option>Semua Waktu</option>
-                    <option>24 Jam Terakhir</option>
-                    <option>Minggu Ini</option>
-                    <option>Bulan Ini</option>
+                <select name="sort" onchange="this.form.submit()" aria-label="Urutkan hasil"
+                    class="rounded-lg border-stone-300 bg-white py-2.5 text-sm focus:border-silet-red focus:ring-silet-red dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100">
+                    <option value="latest" @selected($urutan === 'latest')>Terbaru</option>
+                    <option value="oldest" @selected($urutan === 'oldest')>Terlama</option>
                 </select>
             </div>
-        </div>
+        </form>
 
-        <!-- Search Results -->
-        <div class="space-y-6">
+        <p class="mt-4 text-sm text-stone-500 dark:text-stone-400">
+            @if ($query)
+            {{ number_format($articles->total()) }} hasil untuk “{{ $query }}”
+            @else
+            {{ number_format($articles->total()) }} berita
+            @endif
+            · {{ $searchTime }} detik
+        </p>
+
+        {{-- Hasil --}}
+        <div class="mt-2 divide-y divide-stone-200 dark:divide-stone-800">
             @forelse ($articles as $item)
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="md:w-1/4">
+            <article>
+                <a href="{{ route('articles.show', $item->slug) }}" class="group flex gap-4 py-5">
+                    <div class="img-placeholder h-24 w-32 flex-shrink-0 overflow-hidden rounded-lg sm:h-28 sm:w-44">
                         @if ($item->hasMedia('images'))
-                        @php
-                        $media = $item->getFirstMedia('images');
-                        @endphp
-                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $item->name ?? 'Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-contain object-center" />
-                        @else
-                        <img src="https://via.placeholder.com/100x80" alt="{{ $item->title }}" loading="lazy" class="w-full h-full object-contain" />
+                        @php $media = $item->getFirstMedia('images'); @endphp
+                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="(max-width: 640px) 128px, 176px"
+                            alt="{{ strip_tags($item->title) }}" loading="lazy" width="176" height="112"
+                            class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]">
                         @endif
                     </div>
-                    <div class="md:w-3/4 flex flex-col justify-between">
-                        <div>
-                            <span class="bg-silet-red text-white px-2 py-1 rounded text-xs font-medium">
-                                {{ $item->category->name }}</span>
-                            <h2 class="text-xl font-bold text-gray-800 dark:text-white mt-2 hover:text-silet-red cursor-pointer line-clamp-2">
-                                {{ $item->title }}
-                            </h2>
-                            <p class="text-gray-600 dark:text-gray-300 mt-2 line-clamp-3">
-                                {{ Str::limit(strip_tags($item->content), 150) }}
-                            </p>
-                        </div>
-
-                        <div class="flex items-center justify-between mt-3 text-sm text-gray-500 dark:text-gray-400">
-                            <span><i class="far fa-clock mr-1"></i> {{ $item->created_at->diffForHumans() }}</span>
-                            <span><i class="fas fa-eye mr-1"></i> {{ number_format($item->views) }} kali
-                                dilihat</span>
-                        </div>
-
-                        <a href="{{ route('articles.show', $item->slug) }}" class="text-silet-red mt-2 font-medium inline-block">Baca selengkapnya</a>
+                    <div class="min-w-0 flex-1">
+                        <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-stone-600 dark:text-stone-300">
+                            <span class="h-2 w-2 rounded-sm" style="background-color: {{ $item->category->color ?? '#E41E2D' }}"></span>
+                            {{ $item->category->name ?? 'Umum' }}
+                        </span>
+                        <h2 class="mt-1 line-clamp-3 font-serif text-lg font-bold leading-snug sm:text-xl"><span class="headline-link">{{ strip_tags($item->title) }}</span></h2>
+                        <p class="mt-1.5 hidden text-sm leading-relaxed text-stone-600 dark:text-stone-300 sm:block">
+                            <span class="line-clamp-2">{{ $item->excerpt ?: Str::limit(strip_tags($item->content), 150) }}</span>
+                        </p>
+                        <p class="mt-2 text-xs text-stone-500 dark:text-stone-400">
+                            {{ ($item->scheduled_at ?? $item->created_at)->diffForHumans() }} · {{ number_format($item->views) }} dibaca
+                        </p>
                     </div>
-                </div>
-            </div>
+                </a>
+            </article>
             @empty
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center">
-                <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
-                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Tidak ada hasil ditemukan</h3>
-                <p class="text-gray-600 dark:text-gray-300">Coba gunakan kata kunci yang berbeda atau filter yang
-                    lebih spesifik</p>
+            <div class="py-12 text-center">
+                <p class="font-serif text-xl font-bold">Tidak ada hasil ditemukan</p>
+                <p class="mx-auto mt-2 max-w-sm text-sm text-stone-600 dark:text-stone-300">Coba kata kunci yang lebih umum atau ganti filter kategori.</p>
+                @if ($popularSearches->isNotEmpty())
+                <div class="mt-5 flex flex-wrap justify-center gap-2">
+                    @foreach ($popularSearches as $item)
+                    <a href="{{ route('articles.search', ['q' => $item->query]) }}" class="rounded-full bg-stone-200 px-3 py-1.5 text-sm hover:bg-silet-red hover:text-white dark:bg-stone-800">{{ $item->query }}</a>
+                    @endforeach
+                </div>
+                @endif
             </div>
             @endforelse
         </div>
 
-        <!-- Pagination -->
-        <div class="flex justify-center mt-8">
-            {{ $articles->links() }}
-        </div>
+        <div class="mt-6">{{ $articles->links() }}</div>
     </div>
 
-    <!-- Sidebar -->
-    <div class="lg:col-span-1 space-y-6">
-        <!-- Popular Searches -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">PENCARIAN POPULER</h2>
-            <div class="space-y-2">
+    <aside class="space-y-10 lg:col-span-4">
+        @if ($popularSearches->isNotEmpty())
+        <section>
+            <div class="border-t-2 border-silet-red pt-3">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Pencarian populer</h2>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2">
                 @foreach ($popularSearches as $item)
-                <a href="{{ route('articles.search', ['q' => $item->query]) }}" class="block text-sm text-gray-600 dark:text-gray-300 hover:text-silet-red line-clamp-2">
-                    <i class="fas fa-search mr-2 text-xs"></i>{{ $item->query }}
-                </a>
+                <a href="{{ route('articles.search', ['q' => $item->query]) }}" class="rounded-full bg-stone-200 px-3 py-1.5 text-sm hover:bg-silet-red hover:text-white dark:bg-stone-800">{{ $item->query }}</a>
                 @endforeach
             </div>
-        </div>
+        </section>
+        @endif
 
-        <!-- Trending Topics -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">TRENDING TOPICS</h2>
-            <div class="flex flex-wrap gap-2">
+        @if ($trendingTags->isNotEmpty())
+        <section>
+            <div class="border-t-2 border-stone-900 pt-3 dark:border-stone-100">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Topik hangat</h2>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2">
                 @foreach ($trendingTags as $tagName => $count)
-                <a href="{{ route('tags.show', $tagName) }}" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm hover:bg-silet-red hover:text-white cursor-pointer line-clamp-1">
-                    #{{ $tagName }} ({{ $count }})
-                </a>
+                <a href="{{ route('tags.show', Str::slug($tagName)) }}" class="rounded-full bg-stone-200 px-3 py-1.5 text-sm hover:bg-silet-red hover:text-white dark:bg-stone-800">#{{ $tagName }}</a>
                 @endforeach
             </div>
-        </div>
-        <!-- Recent News -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">Trending</h2>
-            <div class="space-y-3">
-                @foreach ($trendingArticles as $item)
-                <a href="{{ route('articles.show', $item->slug) }}" aria-label="Baca berita trending: {{ $item->title }}" class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                    <div class="text-sm font-medium text-gray-800 dark:text-white hover:text-silet-red cursor-pointer line-clamp-2">
-                        {{ $item->title }}
-                    </div>
-                </a>
-                @endforeach
+        </section>
+        @endif
+
+        <section>
+            <div class="border-t-2 border-silet-red pt-3">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Terpopuler bulan ini</h2>
             </div>
-        </div>
-    </div>
+            <ol class="divide-y divide-stone-200 dark:divide-stone-800">
+                @foreach ($trendingArticles as $index => $item)
+                <li>
+                    <a href="{{ route('articles.show', $item->slug) }}" class="flex gap-4 py-3.5">
+                        <span class="w-7 flex-shrink-0 font-serif text-2xl font-bold leading-none text-sumba-gold">{{ $index + 1 }}</span>
+                        <span class="line-clamp-3 font-serif text-base font-semibold leading-snug">{{ strip_tags($item->title) }}</span>
+                    </a>
+                </li>
+                @endforeach
+            </ol>
+        </section>
+    </aside>
 </div>
 @endsection

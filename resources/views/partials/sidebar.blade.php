@@ -1,32 +1,30 @@
-<!-- Popular News -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">BERITA POPULER</h2>
-    <div class="divide-y divide-gray-200 dark:divide-gray-700">
-        @foreach ($popular as $index => $pop)
-            <a href="{{ route('articles.show', $pop->slug) }}"
-                class="flex items-start space-x-3 py-3 px-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700
-                      transform hover:scale-105 hover:shadow-lg transition-all duration-200 ease-in-out">
-                <span
-                    class="bg-silet-red text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-1">
-                    {{ $index + 1 }}
-                </span>
-                <p class="text-sm font-medium text-gray-800 dark:text-white truncate w-48">
-                    {{ $pop->title }}
-                </p>
-            </a>
-        @endforeach
-    </div>
-</div>
+<div class="space-y-10 lg:sticky lg:top-20">
+    <section aria-label="Terpopuler">
+        <div class="border-t-2 border-silet-red pt-3">
+            <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Terpopuler</h2>
+        </div>
+        <ol class="divide-y divide-stone-200 dark:divide-stone-800">
+            @foreach ($popular as $index => $pop)
+            <li>
+                <a href="{{ route('articles.show', $pop->slug) }}" class="flex gap-4 py-3.5">
+                    <span class="w-7 flex-shrink-0 font-serif text-2xl font-bold leading-none text-sumba-gold">{{ $index + 1 }}</span>
+                    <span class="line-clamp-3 font-serif text-base font-semibold leading-snug">{{ strip_tags($pop->title) }}</span>
+                </a>
+            </li>
+            @endforeach
+        </ol>
+    </section>
 
-<!-- Latest News -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 border-b pb-2">TERBARU</h2>
-    <div class="divide-y divide-gray-200 dark:divide-gray-700">
-        @foreach ($latest as $news)
-            <a href="{{ route('articles.show', $news->slug) }}"
-                class="block py-2 text-sm font-medium text-gray-800 dark:text-white hover:text-silet-red truncate">
-                {{ $news->title }}
+    <section aria-label="Terbaru" class="hidden lg:block">
+        <div class="border-t-2 border-stone-900 pt-3 dark:border-stone-100">
+            <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Terbaru</h2>
+        </div>
+        <div class="divide-y divide-stone-200 dark:divide-stone-800">
+            @foreach ($latest as $news)
+            <a href="{{ route('articles.show', $news->slug) }}" class="block py-3.5 font-serif text-base font-semibold leading-snug hover:text-silet-red">
+                {{ strip_tags($news->title) }}
             </a>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+    </section>
 </div>

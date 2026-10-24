@@ -1,196 +1,151 @@
 @extends('welcome')
 @section('content')
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2 space-y-6">
+@php
+    $waktu = fn ($a) => ($a->scheduled_at ?? $a->created_at)->diffForHumans();
+    $ringkas = fn ($a, $n = 150) => $a->excerpt ?: Str::limit(strip_tags($a->content), $n);
+@endphp
 
-        {{-- Hero Section --}}
-        @if ($hero)
-        <div class="relative w-full aspect-[4/3] md:aspect-[16/9] rounded-lg overflow-hidden shadow-md bg-gray-200">
-            <a href="{{ route('articles.show', $hero->slug) }}" aria-label="Baca berita: {{ $hero->title }}" class="block w-full h-full">
-                {{-- Hero Image --}}
+{{-- Judul halaman kategori (dipakai saat route kategori memakai view ini) --}}
+@isset($category)
+<div class="mb-6 border-b-2 border-stone-900 pb-3 dark:border-stone-100">
+    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">Kategori</p>
+    <h1 class="font-serif text-3xl font-bold">{{ $category->name }}</h1>
+</div>
+@endisset
+
+@if (!$hero)
+<div class="rounded-lg border border-dashed border-stone-300 p-10 text-center text-stone-500 dark:border-stone-700">
+    Belum ada berita yang terbit.
+</div>
+@else
+
+{{-- ===== Baris 1: berita utama + terbaru ===== --}}
+<section class="grid gap-8 lg:grid-cols-12">
+    <article class="lg:col-span-8">
+        <a href="{{ route('articles.show', $hero->slug) }}" class="group block" aria-label="Baca berita: {{ $hero->title }}">
+            <div class="img-placeholder relative aspect-[16/10] overflow-hidden rounded-lg">
                 @if ($hero->hasMedia('images'))
-                <img src="{{ $hero->getFirstMedia('images')->getUrl('responsive') }}" class="w-full h-full object-contain object-center" loading="eager" fetchpriority="high" decoding="async" srcset="{{ $hero->getFirstMedia('images')->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px" alt="{{ $hero->title }}">
+                @php $heroMedia = $hero->getFirstMedia('images'); @endphp
+                <img src="{{ $heroMedia->getUrl('responsive') }}" srcset="{{ $heroMedia->getSrcset('responsive') }}"
+                    sizes="(max-width: 1024px) 100vw, 800px" alt="{{ $hero->title }}"
+                    class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                    loading="eager" fetchpriority="high" decoding="async">
                 @endif
-                {{-- Overlay --}}
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent flex flex-col justify-end p-2 sm:p-4">
-
-                    {{-- Konten hero --}}
-                    <div class="p-6 text-white">
-                        <span class="inline-block text-xs font-semibold px-2 py-1 rounded mb-3" style="background-color: {{ $hero->category->color ?? '#FF0000' }};">
-                            {{ $hero->category->name ?? 'Umum' }}
-                        </span>
-
-                        <h2 class="text-base sm:text-lg md:text-2xl font-bold line-clamp-2">
-                            {{ $hero->title }}
-                        </h2>
-
-                        <div class="flex flex-col sm:flex-row sm:items-center text-gray-300 text-xs mt-2 gap-1 sm:gap-2">
-                            <span class="flex items-center">
-                                @if ($hero->user?->hasMedia('profile_photos'))
-                                <img src="{{ $hero->user->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ $hero->user->name }}" class="w-5 h-5 rounded-full mr-2 object-contain">
-                                @else
-                                <i class="fas fa-user mr-2 text-gray-300"></i>
-                                @endif
-                                {{ $hero->user->name ?? 'Penulis' }}
-                            </span>
-
-                            <span class="flex items-center">
-                                <i class="fas fa-clock mr-2"></i>
-                                {{ $hero->scheduled_at ? $hero->scheduled_at->diffForHumans() : $hero->created_at->diffForHumans() }}
-                            </span>
-
-                        </div>
-                    </div>
-
-                </div>
-            </a>
-        </div>
-        @endif
-
-        {{-- ✅ Tambahkan iklan di sini --}}
-        {{-- <div class="my-6 text-center">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1183290597740176" crossorigin="anonymous"></script>
-            <!-- display_home_top -->
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-
-            </script>
-        </div> --}}
-        {{-- ✅ Akhir iklan --}}
-
-        {{-- Latest Articles Grid --}}
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-            @foreach ($latestArticles as $article)
-            <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita: {{ $article->title }}" class="group block bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                {{-- Image wrapper --}}
-                <div class="relative w-full aspect-[16/9] bg-gray-200 dark:bg-gray-700">
-                    @if ($article->hasMedia('images'))
-                    @php $media = $article->getFirstMedia('images'); @endphp
-                    <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="300px" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" width="400" height="225" class="w-full h-full object-contain object-center" />
-                    @endif
-                    {{-- <span class="absolute top-2 left-2 text-xs px-2 py-1 rounded font-semibold text-white" style="background-color: {{ $article->category->color ?? '#FF0000' }}">
-                    {{ $article->category->name ?? 'Umum' }}
-                    </span> --}}
-                </div>
-
-                {{-- Konten berita --}}
-                <div class="p-3 md:p-4 flex flex-col justify-start min-h-[180px] bg-white dark:bg-gray-800 rounded shadow dark:shadow-lg transition-colors duration-300">
-                    <div class="font-bold text-base md:text-lg text-gray-800 dark:text-white line-clamp-3 leading-6 mb-1">
-                        {{ $article->title }}
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 leading-6 mb-2">
-                        {{ strip_tags($article->content) }}
+            </div>
+            <div class="mt-4">
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-stone-600 dark:text-stone-300">
+                    <span class="h-2 w-2 rounded-sm" style="background-color: {{ $hero->category->color ?? '#E41E2D' }}"></span>
+                    {{ $hero->category->name ?? 'Umum' }}
+                </span>
+                <h2 class="mt-2 font-serif text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">
+                    <span class="headline-link">{{ $hero->title }}</span>
+                </h2>
+                <div class="hidden sm:block">
+                    <p class="mt-3 line-clamp-3 text-base leading-relaxed text-stone-600 dark:text-stone-300">
+                        {{ $ringkas($hero, 220) }}
                     </p>
-                    <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                        <span class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                            {{ $article->scheduled_at ? $article->scheduled_at->diffForHumans() : $article->created_at->diffForHumans() }}
-                        </span>
-                        @auth
-                        {{-- <span class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                            {{ number_format($article->views) }} dibaca
-                        </span> --}}
-                        @endauth
+                </div>
+                <p class="mt-3 text-xs text-stone-500 dark:text-stone-400">
+                    @if ($hero->user?->name)<span class="font-medium text-stone-700 dark:text-stone-200">{{ $hero->user->name }}</span> · @endif
+                    {{ $waktu($hero) }}
+                </p>
+            </div>
+        </a>
+    </article>
 
-                    </div>
+    <aside class="lg:col-span-4">
+        <div class="border-t-2 border-silet-red pt-3">
+            <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Terbaru</h2>
+        </div>
+        <div class="divide-y divide-stone-200 dark:divide-stone-800">
+            @foreach ($latestFive as $article)
+            <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita: {{ $article->title }}" class="group flex gap-3 py-4">
+                <div class="img-placeholder h-16 w-24 flex-shrink-0 overflow-hidden rounded">
+                    @if ($article->hasMedia('images'))
+                    @php $m = $article->getFirstMedia('images'); @endphp
+                    <img src="{{ $m->getUrl('thumb') }}" srcset="{{ $m->getSrcset('thumb') }}" sizes="96px" width="96" height="64"
+                        alt="{{ $article->title }}" loading="lazy" class="h-full w-full object-cover">
+                    @endif
+                </div>
+                <div class="min-w-0">
+                    <p class="text-[11px] font-semibold uppercase tracking-wider text-stone-500 dark:text-stone-400">{{ $article->category->name ?? 'Umum' }}</p>
+                    <h3 class="mt-0.5 line-clamp-2 font-serif text-base font-semibold leading-snug"><span class="headline-link">{{ $article->title }}</span></h3>
+                    <p class="mt-1 text-xs text-stone-500 dark:text-stone-400">{{ $waktu($article) }}</p>
                 </div>
             </a>
-            {{-- 🔸 Iklan di tengah daftar berita --}}
-            @if ($loop->iteration == 3 || $loop->iteration == 6)
-            <div class="col-span-full my-6 text-center">
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
+            @endforeach
+        </div>
+    </aside>
+</section>
+@endif
 
-                </script>
+{{-- ===== Baris 2: daftar berita + terpopuler ===== --}}
+<section class="mt-12 grid gap-8 lg:grid-cols-12">
+    <div class="lg:col-span-8">
+        <div class="border-t-2 border-stone-900 pt-3 dark:border-stone-100">
+            <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Berita lainnya</h2>
+        </div>
+
+        <div class="mt-5 grid gap-x-6 gap-y-8 sm:grid-cols-2">
+            @foreach ($latestArticles as $article)
+            <article>
+                <a href="{{ route('articles.show', $article->slug) }}" class="group block" aria-label="Baca berita: {{ $article->title }}">
+                    <div class="img-placeholder aspect-[16/10] overflow-hidden rounded-lg">
+                        @if ($article->hasMedia('images'))
+                        @php $media = $article->getFirstMedia('images'); @endphp
+                        <img src="{{ $media->getUrl('responsive') }}" srcset="{{ $media->getSrcset('responsive') }}" sizes="(max-width: 640px) 100vw, 380px"
+                            alt="{{ $article->title }}" loading="lazy" width="400" height="250"
+                            class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]">
+                        @endif
+                    </div>
+                    <span class="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-stone-600 dark:text-stone-300">
+                        <span class="h-2 w-2 rounded-sm" style="background-color: {{ $article->category->color ?? '#E41E2D' }}"></span>
+                        {{ $article->category->name ?? 'Umum' }}
+                    </span>
+                    <h3 class="mt-1 line-clamp-3 font-serif text-xl font-bold leading-snug"><span class="headline-link">{{ $article->title }}</span></h3>
+                    <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{{ $ringkas($article) }}</p>
+                    <p class="mt-2 text-xs text-stone-500 dark:text-stone-400">{{ $waktu($article) }}</p>
+                </a>
+            </article>
+
+            {{-- Slot iklan di sela daftar --}}
+            @if ($loop->iteration == 3 || $loop->iteration == 6)
+            <div class="col-span-full text-center">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
             @endif
             @endforeach
         </div>
 
-        {{-- Pagination --}}
-        <div class="mt-6">
-            {{ $latestArticles->links() }}
-        </div>
-        {{-- 🔹 Iklan bawah halaman --}}
-        {{-- <div class="mt-8 text-center">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-
-            </script>
-        </div> --}}
+        <div class="mt-8">{{ $latestArticles->links() }}</div>
     </div>
 
-    {{-- Sidebar (1/3) --}}
-    <aside class="space-y-6 lg:col-span-1">
-        {{-- Trending News --}}
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-            <h2 class="font-bold text-lg mb-4 text-red-600 border-b pb-2">
-                <i class="fas fa-fire mr-2"></i> TRENDING
-            </h2>
-            <div class="space-y-3">
+    <aside class="lg:col-span-4">
+        <div class="lg:sticky lg:top-20">
+            <div class="border-t-2 border-silet-red pt-3">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.14em]">Terpopuler</h2>
+            </div>
+            <ol class="divide-y divide-stone-200 dark:divide-stone-800">
                 @foreach ($trending as $index => $article)
-                <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita trending: {{ $article->title }}" class="flex items-start space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition">
-                    <span class="bg-red-600 text-white text-xs px-2 py-1 rounded mt-1">{{ $index + 1 }}</span>
-                    <div>
-                        <h3 class="font-medium hover:text-red-600 cursor-pointer line-clamp-2">
-                            {{ $article->title }}
-                        </h3>
-                        <p class="text-xs text-gray-500">{{ number_format($article->views) }} dibaca</p>
-                    </div>
-                </a>
+                <li>
+                    <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita populer: {{ $article->title }}" class="group flex gap-4 py-4">
+                        <span class="w-8 flex-shrink-0 font-serif text-3xl font-bold leading-none text-sumba-gold">{{ $index + 1 }}</span>
+                        <div class="min-w-0">
+                            <h3 class="line-clamp-3 font-serif text-base font-semibold leading-snug"><span class="headline-link">{{ $article->title }}</span></h3>
+                            <p class="mt-1 text-xs text-stone-500 dark:text-stone-400">{{ number_format($article->views) }} dibaca</p>
+                        </div>
+                    </a>
+                </li>
                 @endforeach
-            </div>
-        </div>
-        {{-- 🔹 Iklan di sidebar --}}
-        {{-- <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 text-center">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
+            </ol>
 
-            </script>
-        </div> --}}
-
-        {{-- Latest News --}}
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-            <h2 class="font-bold text-lg mb-4 text-red-600 border-b pb-2">
-                <i class="fas fa-clock mr-2"></i> TERBARU
-            </h2>
-            <div class="space-y-4">
-                @foreach ($latestFive as $article)
-                <a href="{{ route('articles.show', $article->slug) }}" aria-label="Baca berita terbaru: {{ $article->title }}" class="flex space-x-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-2 transition-colors">
-
-                    <div class="w-20 aspect-[5/4] flex-shrink-0 overflow-hidden rounded">
-                        @if ($article->hasMedia('images'))
-                        @php
-                        $media = $article->getFirstMedia('images');
-                        @endphp
-                        <img src="{{ $media->getUrl('thumb') }}" srcset="{{ $media->getSrcset('thumb') }}" sizes="80px" width="100" height="80" alt="{{ $article->name ?? 'Hero Image' }}" loading="lazy" class="w-full h-full object-contain object-center" />
-                        @else
-                        <img src="https://via.placeholder.com/100x80" alt="{{ $article->title }}" loading="lazy" class="w-full h-full object-contain" />
-                        @endif
-                    </div>
-
-
-                    <div class="flex-1">
-                        <h3 class="font-medium text-sm hover:text-red-600 cursor-pointer line-clamp-2">
-                            {{ $article->title }}
-                        </h3>
-                        <p class="text-xs text-gray-500">{{ $article->scheduled_at->diffForHumans() }}</p>
-                    </div>
-                </a>
-                @endforeach
-            </div>
+            {{-- Slot iklan sidebar (aktifkan bila perlu) --}}
+            {{-- <div class="mt-6 text-center">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1183290597740176" data-ad-slot="4322923461" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div> --}}
         </div>
     </aside>
-
-</div>
+</section>
 @endsection

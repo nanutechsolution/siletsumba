@@ -11,7 +11,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+                sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                serif: ['"Source Serif 4"', 'Georgia', 'Cambria', 'serif'],
             },
             fontSize: {
                 'fluid-h1': 'clamp(1.5rem, 5vw, 3rem)',
@@ -20,12 +21,15 @@ export default {
                 silet: {
                     red: '#E41E2D',
                     dark: '#1a1a1a',
-                    gray: '#f5f5f5'
+                    gray: '#f5f5f5',
+                    ink: '#1c1917',
+                    paper: '#faf8f5',
                 },
                 sumba: {
                     green: '#16a34a',
                     gold: '#d97706',
-                    brown: '#78350f'
+                    brown: '#78350f',
+                    maroon: '#7a2418',
                 },
                 primary: {
                     50: '#faf5ff',
@@ -40,7 +44,7 @@ export default {
                     900: '#581c87',
                     red: '#E21B1B',
                     dark: '#1A1A1A',
-                    blue: '#1E40AF'
+                    blue: '#1E40AF',
                 },
                 'silet-primary': 'var(--color-silet-primary)',
                 'silet-secondary': 'var(--color-silet-secondary)',
@@ -48,6 +52,5 @@ export default {
             },
         },
     },
-    plugins: [forms, require('@tailwindcss/typography'),
-    ],
+    plugins: [forms, require('@tailwindcss/typography')],
 };
