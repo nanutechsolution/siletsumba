@@ -28,7 +28,9 @@
                             <img class="h-full w-full object-cover" loading="lazy" src="{{ Auth::user()->getFirstMediaUrl('profile_photos', 'small') }}" alt="{{ Auth::user()->name }}">
                             @else
                             <span class="flex h-full w-full items-center justify-center">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
                             </span>
                             @endif
                         </span>
@@ -63,7 +65,8 @@
             return this.recent.filter(r => r.toLowerCase().includes(q));
         }
     }"
-    @keydown.escape.window="searchOpen = false">
+    @keydown.escape.window="searchOpen = false"
+    @buka-cari.window="searchOpen = true; $nextTick(() => $refs.mobileSearch.focus())">
 
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:py-5">
         <a href="{{ url('/') }}" class="flex min-w-0 items-center gap-3">
@@ -87,24 +90,30 @@
         {{-- Cari: tombol (mobile) --}}
         <button type="button" @click="searchOpen = true; $nextTick(() => $refs.mobileSearch.focus())" aria-label="Buka pencarian"
             class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-stone-300 text-stone-700 dark:border-stone-700 dark:text-stone-200 md:hidden">
-            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
         </button>
 
         {{-- Cari: form (desktop) --}}
         <form action="{{ route('articles.search') }}" method="GET" class="relative hidden w-64 flex-shrink-0 transition-all duration-300 focus-within:w-96 md:block">
-            <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             <input type="search" name="q" x-model="query" placeholder="Cari berita" autocomplete="off"
                 class="w-full rounded-full border-stone-300 bg-white py-2 pl-10 pr-4 text-sm shadow-sm focus:border-silet-red focus:ring-silet-red dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100">
         </form>
     </div>
 
     {{-- Overlay pencarian (mobile) --}}
-    <div x-show="searchOpen" x-cloak x-transition.opacity class="fixed inset-0 z-[60] bg-silet-paper p-4 dark:bg-stone-950 md:hidden">
+    <div x-show="searchOpen" x-cloak x-transition.opacity class="fixed inset-0 z-[80] bg-silet-paper p-4 dark:bg-stone-950">
         <div class="mx-auto max-w-md">
             <div class="flex items-center justify-between">
                 <p class="font-serif text-xl font-bold">Cari berita</p>
                 <button type="button" @click="searchOpen = false" aria-label="Tutup pencarian" class="flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 dark:border-stone-700">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
             <form action="{{ route('articles.search') }}" method="GET" class="mt-4">
@@ -125,11 +134,28 @@
     <div class="tenun-strip" aria-hidden="true"></div>
 </header>
 
-{{-- ===== Menu kategori (sticky) ===== --}}
+{{-- ===== Menu kategori (sticky) + nama media saat scroll ===== --}}
 @php $currentSlug = request()->route('slug'); @endphp
-<nav aria-label="Kategori berita" class="sticky top-0 z-40 border-b border-stone-200 bg-silet-paper/95 backdrop-blur dark:border-stone-800 dark:bg-stone-950/95">
-    <div class="mx-auto max-w-7xl px-4">
-        <div class="scrollbar-hide -mx-1 flex gap-1 overflow-x-auto whitespace-nowrap text-sm font-medium">
+<nav aria-label="Kategori berita"
+    x-data="{ scrolled: false }"
+    x-init="scrolled = $el.previousElementSibling.getBoundingClientRect().bottom <= 0"
+    @scroll.window.passive="scrolled = $el.previousElementSibling.getBoundingClientRect().bottom <= 0"
+    class="sticky top-0 z-40 border-b border-stone-200 bg-silet-paper/95 backdrop-blur dark:border-stone-800 dark:bg-stone-950/95"
+    :class="scrolled ? 'shadow-md' : ''">
+    <div class="mx-auto flex max-w-7xl items-center px-4">
+
+        {{-- Nama media: tampil saat header utama sudah tergulung --}}
+        <a href="{{ url('/') }}" aria-label="Ke beranda {{ $settings['site_name']->value ?? 'Silet Sumba' }}"
+            class="flex flex-shrink-0 items-center gap-2 overflow-hidden whitespace-nowrap transition-all duration-300"
+            :class="scrolled ? 'mr-3 max-w-[11rem] opacity-100' : 'mr-0 max-w-0 opacity-0'"
+            :tabindex="scrolled ? 0 : -1" :aria-hidden="scrolled ? 'false' : 'true'">
+            @if ($logoUrl)
+            <img src="{{ $logoUrl }}" alt="" class="h-7 w-7 flex-shrink-0 rounded object-cover">
+            @endif
+            <span class="font-serif text-lg font-bold leading-none tracking-tight text-silet-red">{{ $settings['site_name']->value ?? 'Silet Sumba' }}</span>
+        </a>
+
+        <div class="scrollbar-hide -mx-1 flex min-w-0 flex-1 gap-1 overflow-x-auto whitespace-nowrap text-sm font-medium">
             <a href="{{ url('/') }}"
                 class="flex-shrink-0 border-b-2 px-3 py-3 {{ request()->is('/') ? 'border-silet-red text-silet-red' : 'border-transparent text-stone-600 hover:text-silet-red dark:text-stone-300' }}">
                 Beranda
@@ -141,5 +167,14 @@
             </a>
             @endforeach
         </div>
+
+        {{-- Tombol cari: muncul saat scroll --}}
+        <button type="button" @click="$dispatch('buka-cari')" aria-label="Cari berita"
+            class="ml-2 flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border border-stone-300 text-stone-700 transition-all duration-300 dark:border-stone-700 dark:text-stone-200"
+            :class="scrolled ? 'opacity-100' : 'pointer-events-none w-0 border-0 opacity-0'">
+            <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.3-4.3M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </button>
     </div>
 </nav>
